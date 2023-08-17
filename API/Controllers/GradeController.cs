@@ -87,9 +87,9 @@ namespace API.Controllers
         }
 
         [HttpPut]
-        public IActionResult Update(GradeDto GradeDto)
+        public IActionResult Update(GradeDto gradeDto)
         {
-            var result = _gradeService.Update(GradeDto);
+            var result = _gradeService.Update(gradeDto);
 
             if (result is -1)
             {

@@ -87,9 +87,9 @@ namespace API.Controllers
         }
 
         [HttpPut]
-        public IActionResult Update(InterviewDto InterviewDto)
+        public IActionResult Update(InterviewDto interviewDto)
         {
-            var result = _interviewService.Update(InterviewDto);
+            var result = _interviewService.Update(interviewDto);
 
             if (result is -1)
             {

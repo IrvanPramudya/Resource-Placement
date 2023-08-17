@@ -87,9 +87,9 @@ namespace API.Controllers
         }
 
         [HttpPut]
-        public IActionResult Update(AccountDto AccountDto)
+        public IActionResult Update(AccountDto accountDto)
         {
-            var result = _accountService.Update(AccountDto);
+            var result = _accountService.Update(accountDto);
 
             if (result is -1)
             {

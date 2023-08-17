@@ -87,9 +87,9 @@ namespace API.Controllers
         }
 
         [HttpPut]
-        public IActionResult Update(PositionDto PositionDto)
+        public IActionResult Update(PositionDto positionDto)
         {
-            var result = _positionService.Update(PositionDto);
+            var result = _positionService.Update(positionDto);
 
             if (result is -1)
             {
