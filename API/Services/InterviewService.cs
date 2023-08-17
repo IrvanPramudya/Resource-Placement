@@ -1,4 +1,5 @@
 ﻿using API.Contracts;
+using API.DTOs.Interviews;
 using API.Models;
 using API.Repositories;
 

@@ -1,4 +1,5 @@
 ﻿using API.Contracts;
+using API.DTOs.Placements;
 using API.Models;
 using API.Repositories;
 

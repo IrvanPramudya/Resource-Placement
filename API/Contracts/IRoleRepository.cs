@@ -4,5 +4,6 @@ namespace API.Contracts
 {
     public interface IRoleRepository : IGeneralRepository<Role>
     {
+        public bool IsNotExist(string value);
     }
 }

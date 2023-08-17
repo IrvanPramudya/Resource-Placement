@@ -1,5 +1,7 @@
 ﻿using API.Contracts;
+using API.DTOs.Employees;
 using API.Models;
+using API.Utilities.Handlers;
 
 namespace API.Services
 {
@@ -43,7 +45,7 @@ namespace API.Services
         public EmployeeDto? Create(NewEmployeeDto newEmployeeDto)
         {
             Employee toCreate = newEmployeeDto;
-            toCreate.NIK = GenerateHandler.Nik(_employeeRepository.GetLastNik());
+            toCreate.NIK = GenerateHandler.LastNik(_employeeRepository.GetLastNik());
 
             var employee = _employeeRepository.Create(toCreate);
             if (employee is null)
@@ -54,7 +56,7 @@ namespace API.Services
             return (EmployeeDto)employee; // Employee is found;
         }
 
-        public int Update(EmployeeDto employeeDto)
+        public int Update(UpdateEmployeeDto employeeDto)
         {
             var employee = _employeeRepository.GetByGuid(employeeDto.Guid);
             if (employee is null)
@@ -63,6 +65,7 @@ namespace API.Services
             }
 
             Employee toUpdate = employeeDto;
+            toUpdate.NIK = employee.NIK;
             toUpdate.CreatedDate = employee.CreatedDate;
             var result = _employeeRepository.Update(toUpdate);
 

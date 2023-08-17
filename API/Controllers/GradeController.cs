@@ -1,4 +1,6 @@
-﻿using API.Services;
+﻿using API.DTOs.Grades;
+using API.Services;
+using API.Utilities.Handlers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -7,7 +9,7 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/grades")]
-    [Authorize]
+    /*[Authorize]*/
     public class GradeController : ControllerBase
     {
         private readonly GradeService _gradeService;

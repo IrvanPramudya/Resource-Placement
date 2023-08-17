@@ -1,4 +1,5 @@
 ﻿using API.Contracts;
+using API.DTOs.AccountRoles;
 using API.Models;
 
 namespace API.Services
@@ -37,7 +38,7 @@ namespace API.Services
                 return null; // AccountRole is null or not found;
             }
 
-            return (accountRoleDto)accountRole; // AccountRole is found;
+            return (AccountRoleDto)accountRole; // AccountRole is found;
         }
 
         public AccountRoleDto? Create(NewAccountRoleDto newAccountRoleDto)

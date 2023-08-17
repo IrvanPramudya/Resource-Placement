@@ -1,4 +1,5 @@
 ﻿using API.Contracts;
+using API.DTOs.Grades;
 using API.Models;
 
 namespace API.Services

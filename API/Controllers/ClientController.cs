@@ -1,4 +1,6 @@
-﻿using API.Services;
+﻿using API.DTOs.Clients;
+using API.Services;
+using API.Utilities.Handlers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -7,7 +9,7 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/clients")]
-    [Authorize]
+    /*[Authorize]*/
     public class ClientController : ControllerBase
     {
         private readonly ClientService _clientService;

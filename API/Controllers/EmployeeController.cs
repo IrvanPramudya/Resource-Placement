@@ -1,4 +1,6 @@
-﻿using API.Services;
+﻿using API.DTOs.Employees;
+using API.Services;
+using API.Utilities.Handlers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -7,7 +9,7 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/employees")]
-    [Authorize]
+    /*[Authorize]*/
     public class EmployeeController : ControllerBase
     {
         private readonly EmployeeService _employeeService;
@@ -87,13 +89,13 @@ namespace API.Controllers
         }
 
         [HttpPut]
-        public IActionResult Update(EmployeeDto employeeDto)
+        public IActionResult Update(UpdateEmployeeDto employeeDto)
         {
             var result = _employeeService.Update(employeeDto);
 
             if (result is -1)
             {
-                return NotFound(new ResponseHandler<EmployeeDto>
+                return NotFound(new ResponseHandler<UpdateEmployeeDto>
                 {
                     Code = StatusCodes.Status404NotFound,
                     Status = HttpStatusCode.NotFound.ToString(),
@@ -103,7 +105,7 @@ namespace API.Controllers
 
             if (result is 0)
             {
-                return StatusCode(500, new ResponseHandler<EmployeeDto>
+                return StatusCode(500, new ResponseHandler<UpdateEmployeeDto>
                 {
                     Code = StatusCodes.Status500InternalServerError,
                     Status = HttpStatusCode.InternalServerError.ToString(),
@@ -111,7 +113,7 @@ namespace API.Controllers
                 });
             }
 
-            return Ok(new ResponseHandler<EmployeeDto>
+            return Ok(new ResponseHandler<UpdateEmployeeDto>
             {
                 Code = StatusCodes.Status200OK,
                 Status = HttpStatusCode.OK.ToString(),

@@ -1,4 +1,6 @@
-﻿using API.Services;
+﻿using API.DTOs.Positions;
+using API.Services;
+using API.Utilities.Handlers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -7,7 +9,7 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/positions")]
-    [Authorize]
+    /*[Authorize]*/
     public class PositionController : ControllerBase
     {
         private readonly PositionService _positionService;

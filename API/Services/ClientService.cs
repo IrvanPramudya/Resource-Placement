@@ -1,4 +1,5 @@
 ﻿using API.Contracts;
+using API.DTOs.Clients;
 using API.Models;
 
 namespace API.Services
