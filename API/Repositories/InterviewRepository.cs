@@ -1,6 +1,6 @@
 ﻿namespace API.Repositories
 {
-    public class AccountRepository
+    public class InterviewRepository
     {
     }
 }
