@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(PlacementDbContext))]
-    [Migration("20230817045310_BuildTable")]
-    partial class BuildTable
+    [Migration("20230817064310_NewTable")]
+    partial class NewTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -154,10 +154,6 @@ namespace API.Migrations
                         .HasColumnType("int")
                         .HasColumnName("gender");
 
-                    b.Property<Guid>("GradeGuid")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("grade_guid");
-
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(100)")
                         .HasColumnName("last_name");
@@ -186,9 +182,6 @@ namespace API.Migrations
 
                     b.HasKey("Guid");
 
-                    b.HasIndex("GradeGuid")
-                        .IsUnique();
-
                     b.HasIndex("NIK", "Email", "PhoneNumber")
                         .IsUnique();
 
@@ -198,7 +191,6 @@ namespace API.Migrations
             modelBuilder.Entity("API.Models.Grade", b =>
                 {
                     b.Property<Guid>("Guid")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("guid");
 
@@ -358,29 +350,29 @@ namespace API.Migrations
                         new
                         {
                             Guid = new Guid("ae259a90-e2e8-442f-ce18-08db91a71ab9"),
-                            CreatedDate = new DateTime(2023, 8, 17, 11, 53, 10, 617, DateTimeKind.Local).AddTicks(2279),
-                            ModifiedDate = new DateTime(2023, 8, 17, 11, 53, 10, 617, DateTimeKind.Local).AddTicks(2289),
+                            CreatedDate = new DateTime(2023, 8, 17, 13, 43, 10, 753, DateTimeKind.Local).AddTicks(840),
+                            ModifiedDate = new DateTime(2023, 8, 17, 13, 43, 10, 753, DateTimeKind.Local).AddTicks(853),
                             Name = "Employee"
                         },
                         new
                         {
                             Guid = new Guid("4ec90656-e89c-4871-d9e5-08db8a7d0f37"),
-                            CreatedDate = new DateTime(2023, 8, 17, 11, 53, 10, 617, DateTimeKind.Local).AddTicks(2294),
-                            ModifiedDate = new DateTime(2023, 8, 17, 11, 53, 10, 617, DateTimeKind.Local).AddTicks(2294),
+                            CreatedDate = new DateTime(2023, 8, 17, 13, 43, 10, 753, DateTimeKind.Local).AddTicks(858),
+                            ModifiedDate = new DateTime(2023, 8, 17, 13, 43, 10, 753, DateTimeKind.Local).AddTicks(859),
                             Name = "Trainer"
                         },
                         new
                         {
                             Guid = new Guid("c0689b0a-5c87-46f1-ce19-08db91a71ab9"),
-                            CreatedDate = new DateTime(2023, 8, 17, 11, 53, 10, 617, DateTimeKind.Local).AddTicks(2296),
-                            ModifiedDate = new DateTime(2023, 8, 17, 11, 53, 10, 617, DateTimeKind.Local).AddTicks(2297),
+                            CreatedDate = new DateTime(2023, 8, 17, 13, 43, 10, 753, DateTimeKind.Local).AddTicks(862),
+                            ModifiedDate = new DateTime(2023, 8, 17, 13, 43, 10, 753, DateTimeKind.Local).AddTicks(863),
                             Name = "Operasional"
                         },
                         new
                         {
                             Guid = new Guid("5fb9adc0-7d08-45d4-cd66-08db9c7a678f"),
-                            CreatedDate = new DateTime(2023, 8, 17, 11, 53, 10, 617, DateTimeKind.Local).AddTicks(2300),
-                            ModifiedDate = new DateTime(2023, 8, 17, 11, 53, 10, 617, DateTimeKind.Local).AddTicks(2300),
+                            CreatedDate = new DateTime(2023, 8, 17, 13, 43, 10, 753, DateTimeKind.Local).AddTicks(866),
+                            ModifiedDate = new DateTime(2023, 8, 17, 13, 43, 10, 753, DateTimeKind.Local).AddTicks(866),
                             Name = "Admin"
                         });
                 });
@@ -415,15 +407,15 @@ namespace API.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("API.Models.Employee", b =>
+            modelBuilder.Entity("API.Models.Grade", b =>
                 {
-                    b.HasOne("API.Models.Grade", "Grade")
-                        .WithOne("Employee")
-                        .HasForeignKey("API.Models.Employee", "GradeGuid")
+                    b.HasOne("API.Models.Employee", "Employee")
+                        .WithOne("Grade")
+                        .HasForeignKey("API.Models.Grade", "Guid")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Grade");
+                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("API.Models.Interview", b =>
@@ -493,14 +485,11 @@ namespace API.Migrations
                 {
                     b.Navigation("Account");
 
+                    b.Navigation("Grade");
+
                     b.Navigation("Interview");
 
                     b.Navigation("Placement");
-                });
-
-            modelBuilder.Entity("API.Models.Grade", b =>
-                {
-                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("API.Models.Role", b =>

@@ -64,7 +64,7 @@ namespace API.Data
             modelBuilder.Entity<Employee>()
                         .HasOne(Employee => Employee.Account)
                         .WithOne(Account => Account.Employee)
-                        .HasForeignKey<Account>(Employee => Employee.Guid);
+                        .HasForeignKey<Account>(Account => Account.Guid);
             modelBuilder.Entity<Employee>()
                         .HasOne(Employee => Employee.Interview)
                         .WithOne(Interview => Interview.Employee)
@@ -76,7 +76,7 @@ namespace API.Data
             modelBuilder.Entity<Employee>()
                         .HasOne(Employee => Employee.Grade)
                         .WithOne(Grade => Grade.Employee)
-                        .HasForeignKey<Employee>(Employee => Employee.GradeGuid);
+                        .HasForeignKey<Grade>(Grade => Grade.Guid);
             modelBuilder.Entity<Employee>()
                         .HasOne(Employee => Employee.Placement)
                         .WithOne(Placement => Placement.Employee)

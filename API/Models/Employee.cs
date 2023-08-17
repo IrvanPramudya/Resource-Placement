@@ -22,8 +22,8 @@ namespace API.Models
         public StatusLevel Status { get; set; }
         [Column("skill")]
         public string? Skill { get; set; }
-        [Column("grade_guid")]
-        public Guid GradeGuid { get; set; }
+        /*[Column("grade_guid")]
+        public Guid GradeGuid { get; set; }*/
 /*        [Column("client_guid")]
         public Guid ClientGuid { get; set; }*/
 
