@@ -348,29 +348,29 @@ namespace API.Migrations
                         new
                         {
                             Guid = new Guid("ae259a90-e2e8-442f-ce18-08db91a71ab9"),
-                            CreatedDate = new DateTime(2023, 8, 17, 15, 21, 57, 962, DateTimeKind.Local).AddTicks(2577),
-                            ModifiedDate = new DateTime(2023, 8, 17, 15, 21, 57, 962, DateTimeKind.Local).AddTicks(2591),
+                            CreatedDate = new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4537),
+                            ModifiedDate = new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4547),
                             Name = "Employee"
                         },
                         new
                         {
                             Guid = new Guid("4ec90656-e89c-4871-d9e5-08db8a7d0f37"),
-                            CreatedDate = new DateTime(2023, 8, 17, 15, 21, 57, 962, DateTimeKind.Local).AddTicks(2596),
-                            ModifiedDate = new DateTime(2023, 8, 17, 15, 21, 57, 962, DateTimeKind.Local).AddTicks(2596),
+                            CreatedDate = new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4550),
+                            ModifiedDate = new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4551),
                             Name = "Trainer"
                         },
                         new
                         {
                             Guid = new Guid("c0689b0a-5c87-46f1-ce19-08db91a71ab9"),
-                            CreatedDate = new DateTime(2023, 8, 17, 15, 21, 57, 962, DateTimeKind.Local).AddTicks(2603),
-                            ModifiedDate = new DateTime(2023, 8, 17, 15, 21, 57, 962, DateTimeKind.Local).AddTicks(2604),
+                            CreatedDate = new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4555),
+                            ModifiedDate = new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4555),
                             Name = "Operasional"
                         },
                         new
                         {
                             Guid = new Guid("5fb9adc0-7d08-45d4-cd66-08db9c7a678f"),
-                            CreatedDate = new DateTime(2023, 8, 17, 15, 21, 57, 962, DateTimeKind.Local).AddTicks(2606),
-                            ModifiedDate = new DateTime(2023, 8, 17, 15, 21, 57, 962, DateTimeKind.Local).AddTicks(2607),
+                            CreatedDate = new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4558),
+                            ModifiedDate = new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4559),
                             Name = "Admin"
                         });
                 });

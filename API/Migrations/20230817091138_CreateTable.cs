@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace API.Migrations
 {
-    public partial class NewTable : Migration
+    public partial class CreateTable : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -214,10 +214,10 @@ namespace API.Migrations
                 columns: new[] { "guid", "created_date", "modified_date", "name" },
                 values: new object[,]
                 {
-                    { new Guid("4ec90656-e89c-4871-d9e5-08db8a7d0f37"), new DateTime(2023, 8, 17, 13, 43, 10, 753, DateTimeKind.Local).AddTicks(858), new DateTime(2023, 8, 17, 13, 43, 10, 753, DateTimeKind.Local).AddTicks(859), "Trainer" },
-                    { new Guid("5fb9adc0-7d08-45d4-cd66-08db9c7a678f"), new DateTime(2023, 8, 17, 13, 43, 10, 753, DateTimeKind.Local).AddTicks(866), new DateTime(2023, 8, 17, 13, 43, 10, 753, DateTimeKind.Local).AddTicks(866), "Admin" },
-                    { new Guid("ae259a90-e2e8-442f-ce18-08db91a71ab9"), new DateTime(2023, 8, 17, 13, 43, 10, 753, DateTimeKind.Local).AddTicks(840), new DateTime(2023, 8, 17, 13, 43, 10, 753, DateTimeKind.Local).AddTicks(853), "Employee" },
-                    { new Guid("c0689b0a-5c87-46f1-ce19-08db91a71ab9"), new DateTime(2023, 8, 17, 13, 43, 10, 753, DateTimeKind.Local).AddTicks(862), new DateTime(2023, 8, 17, 13, 43, 10, 753, DateTimeKind.Local).AddTicks(863), "Operasional" }
+                    { new Guid("4ec90656-e89c-4871-d9e5-08db8a7d0f37"), new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4550), new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4551), "Trainer" },
+                    { new Guid("5fb9adc0-7d08-45d4-cd66-08db9c7a678f"), new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4558), new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4559), "Admin" },
+                    { new Guid("ae259a90-e2e8-442f-ce18-08db91a71ab9"), new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4537), new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4547), "Employee" },
+                    { new Guid("c0689b0a-5c87-46f1-ce19-08db91a71ab9"), new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4555), new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4555), "Operasional" }
                 });
 
             migrationBuilder.CreateIndex(
