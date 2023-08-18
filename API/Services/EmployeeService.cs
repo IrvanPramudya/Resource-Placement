@@ -11,13 +11,38 @@ namespace API.Services
     public class EmployeeService
     {
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IInterviewRepository _interviewRepository;
+        private readonly IPositionRepository _positionRepository;
+        private readonly IClientRepository _clientRepository;
 
-        public EmployeeService(IEmployeeRepository employeeRepository)
+        public EmployeeService(IEmployeeRepository employeeRepository, IInterviewRepository interviewRepository, IPositionRepository positionRepository, IClientRepository clientRepository)
         {
             _employeeRepository = employeeRepository;
-
+            _interviewRepository = interviewRepository;
+            _positionRepository = positionRepository;
+            _clientRepository = clientRepository;
         }
-
+        public GetEmployeeNotification? GetNotification(Guid guid)
+        {
+            var merging = from employee     in _employeeRepository.GetAll()
+                          join interview    in _interviewRepository.GetAll() on employee.Guid equals interview.Guid
+                          join client       in _clientRepository.GetAll() on interview.ClientGuid equals client.Guid
+                          join position     in _positionRepository.GetAll() on client.Guid equals position.ClientGuid
+                          where employee.Guid == guid && client.IsAvailable == true
+                          select new GetEmployeeNotification
+                          {
+                              ClientName = client.Name,
+                              PositionName  = position.Name,
+                              CapacityClient = client.Capacity,
+                              InterviewDate = interview.InterviewDate,
+                              Note = interview.Text
+                          };
+            if(!merging.Any())
+            {
+                return null;
+            }
+            return merging.FirstOrDefault();
+        }
         public int CountEmployee()
         {
             var data = _employeeRepository.GetAll();

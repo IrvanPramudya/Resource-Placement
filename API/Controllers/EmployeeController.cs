@@ -19,6 +19,27 @@ namespace API.Controllers
         {
             _employeeService = employeeService;
         }
+        [HttpGet("GetEmployeeNotification/{guid}")]
+        public IActionResult GetEmployeeNotification(Guid guid)
+        {
+            var data = _employeeService.GetNotification(guid);
+            if (data == null)
+            {
+                return StatusCode(404, new ResponseHandler<GetEmployeeNotification>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data is not Found",
+                });
+            }
+            return Ok(new ResponseHandler<GetEmployeeNotification>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Data Success Retrieved",
+                Data = data
+            });
+        }
         [HttpGet("CountEmployee")]
         public IActionResult CountEmployee()
         {
