@@ -1,7 +1,10 @@
 ﻿using API.Contracts;
 using API.DTOs.Employees;
 using API.Models;
+using API.Repositories;
 using API.Utilities.Handlers;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 
 namespace API.Services
 {
@@ -12,7 +15,9 @@ namespace API.Services
         public EmployeeService(IEmployeeRepository employeeRepository)
         {
             _employeeRepository = employeeRepository;
+
         }
+
         public int CountEmployee()
         {
             var data = _employeeRepository.GetAll();
@@ -23,6 +28,7 @@ namespace API.Services
             }
             return counter;
         }
+
         public GetCountedGender? CountGender()
         {
             var data = _employeeRepository.GetAll();
@@ -46,6 +52,7 @@ namespace API.Services
                 CountMale = countmale
             };
         }
+
         public GetCountedStatus? CountStatus()
         {
             var data = _employeeRepository.GetAll();
@@ -69,6 +76,8 @@ namespace API.Services
                 CountSite = countsite
             };
         }
+
+        
         public IEnumerable<EmployeeDto> GetAll()
         {
             var employees = _employeeRepository.GetAll();

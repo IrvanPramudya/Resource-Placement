@@ -5,10 +5,14 @@ using API.Services;
 using API.Utilities.Handlers;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.Net;
 using System.Reflection;
+using System.Text;
+using TokenHandler = API.Utilities.Handlers.TokenHandler;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -58,14 +62,20 @@ builder.Services.AddScoped<AccountRoleService>();
 builder.Services.AddScoped<EmployeeService>();
 builder.Services.AddScoped<GradeService>();
 
+// Add SmtpClient to the container.
+builder.Services.AddTransient<IEmailHandler, EmailHandler>(_ => new EmailHandler(
+    builder.Configuration["EmailService:SmtpServer"],
+    int.Parse(builder.Configuration["EmailService:SmtpPort"]),
+    builder.Configuration["EmailService:FromEmailAddress"]
+));
 
 //Register Fluent Validation
 builder.Services.AddFluentValidationAutoValidation().AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+// Register Token Handler
+builder.Services.AddScoped<ITokenHandler, TokenHandler>();
 
+// CORS Configuration
 builder.Services.AddCors(
             option =>
             {
@@ -78,6 +88,31 @@ builder.Services.AddCors(
                     });
             });
 
+//JWT Configuration
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+       .AddJwtBearer(options =>
+       {
+           options.RequireHttpsMetadata = false;
+           options.SaveToken = true;
+           options.TokenValidationParameters = new TokenValidationParameters
+           {
+               ValidateIssuerSigningKey = true,
+               IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["JWTConfig:SecretKey"])),
+               ValidateIssuer = true,
+               //Usually, this is your application base URL
+               ValidIssuer = builder.Configuration["JWTConfig:Issuer"],
+               ValidateAudience = false,
+               //If the JWT is created using a web service, then this would be the consumer URL.
+               ValidAudience = builder.Configuration["JWTConfig:Audience"],
+               ValidateLifetime = true,
+               ClockSkew = TimeSpan.Zero
+           };
+       });
+
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -88,6 +123,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 app.UseCors();
 
 app.UseAuthentication();
