@@ -1,16 +1,66 @@
 ﻿using API.Contracts;
 using API.DTOs.Accounts;
 using API.Models;
+using API.Repositories;
+using API.Utilities.Handlers;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 
 namespace API.Services
 {
     public class AccountService
     {
         private readonly IAccountRepository _accountRepository;
+        private readonly IAccountRoleRepository _accountRoleRepository;
+        private readonly IEmployeeRepository _employeeRepository;
+        private readonly ITokenHandler _tokenHandler;
 
-        public AccountService(IAccountRepository accountRepository)
+        public AccountService(IAccountRepository accountRepository, IAccountRoleRepository accountRoleRepository, IEmployeeRepository employeeRepository, ITokenHandler tokenHandler)
         {
             _accountRepository = accountRepository;
+            _accountRoleRepository = accountRoleRepository;
+            _employeeRepository = employeeRepository;
+            _tokenHandler = tokenHandler;
+        }
+
+        public string Login(LoginDto loginDto)
+        {
+            var getEmployee = _employeeRepository.GetByEmail(loginDto.Email);
+
+
+            if (getEmployee is null)
+            {
+                return "-1"; // Employee not found
+            }
+
+            var getAccount = _accountRepository.GetByGuid(getEmployee.Guid);
+
+            if (!HashingHandler.ValidateHash(loginDto.Password, getAccount.Password))
+            {
+                return "-1"; // Login gagal
+            }
+
+            var getRoles = _accountRoleRepository.GetRoleNamesByAccountGuid(getEmployee.Guid);
+
+            var claims = new List<Claim>
+            {
+                new Claim("Guid", getEmployee.Guid.ToString()),
+                new Claim("Fullname", $"{getEmployee.FirstName}{getEmployee.LastName}"),
+                new Claim("Email", getEmployee.Email)
+            };
+
+            foreach (var role in getRoles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
+            var generatedToken = _tokenHandler.GenerateToken(claims);
+            if (generatedToken is null)
+            {
+                return "-2";
+            }
+            return generatedToken;
+
         }
 
         public IEnumerable<AccountDto> GetAll()
