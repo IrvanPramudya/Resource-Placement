@@ -18,6 +18,46 @@ namespace API.Controllers
         {
             _accountService = accountService;
         }
+
+        [HttpPost("login")]
+        [AllowAnonymous]
+        public IActionResult Login(LoginDto loginDto)
+        {
+            var result = _accountService.Login(loginDto);
+
+            if (result is "-1")
+            {
+                return NotFound(new ResponseHandler<LoginDto>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Email or Password is incorrect"
+                });
+            }
+
+            if (result is "-2")
+            {
+                return StatusCode(500, new ResponseHandler<LoginDto>
+                {
+                    Code = StatusCodes.Status500InternalServerError,
+                    Status = HttpStatusCode.InternalServerError.ToString(),
+                    Message = "Error when generated token"
+                });
+            }
+
+            return Ok(new ResponseHandler<object>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Login Success",
+                Data = new TokenDto
+                {
+                    Token = result
+                }
+            }); ;
+        }
+
+
         [AllowAnonymous]
         [HttpPost("Register")]
         public IActionResult Register(RegisterDto register)
@@ -49,6 +89,7 @@ namespace API.Controllers
                 Data = data
             });
         }
+
         [HttpGet]
         public IActionResult GetAll()
         {
