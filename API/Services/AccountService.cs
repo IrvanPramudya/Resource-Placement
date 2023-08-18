@@ -17,13 +17,17 @@ namespace API.Services
         private readonly IAccountRoleRepository _accountRoleRepository;
         private readonly IEmployeeRepository _employeeRepository;
         private readonly ITokenHandler _tokenHandler;
+        private readonly PlacementDbContext _dbContext;
+        private readonly IEmailHandler _emailHandler;
 
-        public AccountService(IAccountRepository accountRepository, IAccountRoleRepository accountRoleRepository, IEmployeeRepository employeeRepository, ITokenHandler tokenHandler)
+        public AccountService(IAccountRepository accountRepository, IAccountRoleRepository accountRoleRepository, IEmployeeRepository employeeRepository, ITokenHandler tokenHandler,PlacementDbContext dbContext, IEmailHandler emailHandler)
         {
             _accountRepository = accountRepository;
             _accountRoleRepository = accountRoleRepository;
             _employeeRepository = employeeRepository;
             _tokenHandler = tokenHandler;
+            _dbContext = dbContext;
+            _emailHandler = emailHandler;
         }
 
         public string Login(LoginDto loginDto)
@@ -63,30 +67,20 @@ namespace API.Services
                 return "-2";
             }
             return generatedToken;
-
-        private readonly IEmployeeRepository _employeerepository;
-        private readonly IAccountRoleRepository _accountrolerepository;
-        private readonly PlacementDbContext _dbContext;
-
-        public AccountService(IAccountRepository accountRepository, IEmployeeRepository employeerepository, IAccountRoleRepository accountrolerepository, PlacementDbContext dbContext)
+        } 
+       
+        public int Register(RegisterDto register)
         {
-            _accountRepository = accountRepository;
-            _employeerepository = employeerepository;
-            _accountrolerepository = accountrolerepository;
-            _dbContext = dbContext;
-        }
-        public int register(RegisterDto register)
-        {
-            if (!_employeerepository.IsNotExist(register.Email)
-                || !_employeerepository.IsNotExist(register.PhoneNumber))
+            if (!_employeeRepository.IsNotExist(register.Email)
+                || !_employeeRepository.IsNotExist(register.PhoneNumber))
             {
                 return 0;
             }
             using var transaction = _dbContext.Database.BeginTransaction();
             try
             {
-                var NewNik = GenerateHandler.LastNik(_employeerepository.GetLastNik());
-                var employee = _employeerepository.Create(new Employee
+                var NewNik = GenerateHandler.LastNik(_employeeRepository.GetLastNik());
+                var employee = _employeeRepository.Create(new Employee
                 {
                     Guid = new Guid(),
                     NIK = NewNik,
@@ -109,10 +103,10 @@ namespace API.Services
                     CreatedDate = DateTime.Now,
                     ModifiedDate = DateTime.Now
                 });
-                var accountrole = _accountrolerepository.GetAll();
+                var accountrole = _accountRoleRepository.GetAll();
                 if (!accountrole.Any())// Jika Account Role Kosong maka Inputan Register pertama akan menjadi Admin
                 {
-                    var accountroleadmin = _accountrolerepository.Create(new NewAccountRoleDto
+                    var accountroleadmin = _accountRoleRepository.Create(new NewAccountRoleDto
                     {
                         AccountGuid = account.Guid,
                         RoleGuid = Guid.Parse("5FB9ADC0-7D08-45D4-CD66-08DB9C7A678F")
@@ -120,7 +114,7 @@ namespace API.Services
                     transaction.Commit();
                     return 1;
                 }
-                var accountroleemployee = _accountrolerepository.Create(new NewAccountRoleDto
+                var accountroleemployee = _accountRoleRepository.Create(new NewAccountRoleDto
                 {
                     AccountGuid = account.Guid,
                     RoleGuid = Guid.Parse("ae259a90-e2e8-442f-ce18-08db91a71ab9")
@@ -135,6 +129,94 @@ namespace API.Services
             }
 
         }
+
+        public int ForgotPassword(ForgotPassword forgotPasswordDto)
+        {
+            var otp = new Random().Next(111111, 999999);
+            var getAccountDetail = (from e in _employeeRepository.GetAll()
+                                    join a in _accountRepository.GetAll() on e.Guid equals a.Guid
+                                    where e.Email == forgotPasswordDto.Email
+                                    select a).FirstOrDefault();
+
+            if (getAccountDetail is null)
+            {
+                return 0; // no email found
+            }
+
+            _accountRepository.Clear();
+
+            var hashedPassword = HashingHandler.GenerateHash(getAccountDetail.Password);
+            var isUpdated = _accountRepository.Update(new Account
+
+
+            {
+                Guid = getAccountDetail.Guid,
+                Password = hashedPassword,
+                //ExpiredTime = DateTime.Now.AddMinutes(5),
+                OTP = otp,
+                IsUsed = false,
+                CreatedDate = getAccountDetail.CreatedDate,
+                ModifiedDate = getAccountDetail.ModifiedDate
+            });
+
+            if (!isUpdated)
+            {
+                return -1; // error update
+            }
+
+            _emailHandler.SendEmail(forgotPasswordDto.Email, "OTP", $"Your OTP id : {otp}");
+            return 1;
+        }
+
+        public int ChangePassword(ChangePassword changePasswordDto)
+        {
+            var getAccount = (from e in _employeeRepository.GetAll()
+                              join a in _accountRepository.GetAll() on e.Guid equals a.Guid
+                              where e.Email == changePasswordDto.Email
+                              select a).FirstOrDefault();
+
+            if (getAccount is null)
+            {
+                return 0;
+            }
+            var hashedPassword = HashingHandler.GenerateHash(changePasswordDto.Password);
+            var account = new Account
+            {
+                Guid = getAccount.Guid,
+                IsUsed = true,
+                ModifiedDate = DateTime.Now,
+                CreatedDate = getAccount.CreatedDate,
+                OTP = getAccount.OTP,
+                //ExpiredTime = getAccount.ExpiredTime,
+                Password = hashedPassword,
+            };
+
+            if (getAccount.OTP != changePasswordDto.OTP)
+            {
+                return -1;
+            }
+
+            if (getAccount.IsUsed == true)
+            {
+                return -2;
+            }
+
+            //if (getAccount.ExpiredTime < DateTime.Now)
+            //{
+            //    return -3; // OTP expired
+            //}
+
+            _accountRepository.Clear();
+
+            var isUpdated = _accountRepository.Update(account);
+            if (!isUpdated)
+            {
+                return -4; //Account not Update
+            }
+
+            return 3;
+        }
+
         public IEnumerable<AccountDto> GetAll()
         {
             var accounts = _accountRepository.GetAll();
