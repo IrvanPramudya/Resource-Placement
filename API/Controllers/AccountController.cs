@@ -18,7 +18,37 @@ namespace API.Controllers
         {
             _accountService = accountService;
         }
-
+        [AllowAnonymous]
+        [HttpPost("Register")]
+        public IActionResult Register(RegisterDto register)
+        {
+            var data = _accountService.register(register);
+            if (data == -1)
+            {
+                return StatusCode(500, new ResponseHandler<RegisterDto>
+                {
+                    Code = StatusCodes.Status500InternalServerError,
+                    Status = HttpStatusCode.InternalServerError.ToString(),
+                    Message = "Register Failed",
+                });
+            }
+            if (data == 0)
+            {
+                return StatusCode(404, new ResponseHandler<RegisterDto>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Email or Phone Number Already Used",
+                });
+            }
+            return Ok(new ResponseHandler<int>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Successfull Register",
+                Data = data
+            });
+        }
         [HttpGet]
         public IActionResult GetAll()
         {
