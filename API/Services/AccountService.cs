@@ -18,14 +18,16 @@ namespace API.Services
         private readonly IEmployeeRepository _employeeRepository;
         private readonly ITokenHandler _tokenHandler;
         private readonly PlacementDbContext _dbContext;
+        private readonly IEmailHandler _emailHandler;
 
-        public AccountService(IAccountRepository accountRepository, IAccountRoleRepository accountRoleRepository, IEmployeeRepository employeeRepository, ITokenHandler tokenHandler, PlacementDbContext dbContext)
+        public AccountService(IAccountRepository accountRepository, IAccountRoleRepository accountRoleRepository, IEmployeeRepository employeeRepository, ITokenHandler tokenHandler, PlacementDbContext dbContext, IEmailHandler emailHandler)
         {
             _accountRepository = accountRepository;
             _accountRoleRepository = accountRoleRepository;
             _employeeRepository = employeeRepository;
             _tokenHandler = tokenHandler;
             _dbContext = dbContext;
+            _emailHandler = emailHandler;
         }
 
         public string Login(LoginDto loginDto)
@@ -67,7 +69,7 @@ namespace API.Services
             return generatedToken;
         }
 
-        public int register(RegisterDto register)
+        public int Register(RegisterDto register)
         {
             if (!_employeeRepository.IsNotExist(register.Email)
                 || !_employeeRepository.IsNotExist(register.PhoneNumber))
@@ -127,6 +129,94 @@ namespace API.Services
             }
 
         }
+
+        public int ForgotPassword(ForgotPassword forgotPasswordDto)
+        {
+            var otp = new Random().Next(111111, 999999);
+            var getAccountDetail = (from e in _employeeRepository.GetAll()
+                                    join a in _accountRepository.GetAll() on e.Guid equals a.Guid
+                                    where e.Email == forgotPasswordDto.Email
+                                    select a).FirstOrDefault();
+
+            if (getAccountDetail is null)
+            {
+                return 0; // no email found
+            }
+
+            _accountRepository.Clear();
+
+            var hashedPassword = HashingHandler.GenerateHash(getAccountDetail.Password);
+            var isUpdated = _accountRepository.Update(new Account
+
+
+            {
+                Guid = getAccountDetail.Guid,
+                Password = hashedPassword,
+                //ExpiredTime = DateTime.Now.AddMinutes(5),
+                OTP = otp,
+                IsUsed = false,
+                CreatedDate = getAccountDetail.CreatedDate,
+                ModifiedDate = getAccountDetail.ModifiedDate
+            });
+
+            if (!isUpdated)
+            {
+                return -1; // error update
+            }
+
+            _emailHandler.SendEmail(forgotPasswordDto.Email, "OTP", $"Your OTP id : {otp}");
+            return 1;
+        }
+
+        public int ChangePassword(ChangePassword changePasswordDto)
+        {
+            var getAccount = (from e in _employeeRepository.GetAll()
+                              join a in _accountRepository.GetAll() on e.Guid equals a.Guid
+                              where e.Email == changePasswordDto.Email
+                              select a).FirstOrDefault();
+
+            if (getAccount is null)
+            {
+                return 0;
+            }
+            var hashedPassword = HashingHandler.GenerateHash(changePasswordDto.Password);
+            var account = new Account
+            {
+                Guid = getAccount.Guid,
+                IsUsed = true,
+                ModifiedDate = DateTime.Now,
+                CreatedDate = getAccount.CreatedDate,
+                OTP = getAccount.OTP,
+                //ExpiredTime = getAccount.ExpiredTime,
+                Password = hashedPassword,
+            };
+
+            if (getAccount.OTP != changePasswordDto.OTP)
+            {
+                return -1;
+            }
+
+            if (getAccount.IsUsed == true)
+            {
+                return -2;
+            }
+
+            //if (getAccount.ExpiredTime < DateTime.Now)
+            //{
+            //    return -3; // OTP expired
+            //}
+
+            _accountRepository.Clear();
+
+            var isUpdated = _accountRepository.Update(account);
+            if (!isUpdated)
+            {
+                return -4; //Account not Update
+            }
+
+            return 3;
+        }
+
         public IEnumerable<AccountDto> GetAll()
         {
             var accounts = _accountRepository.GetAll();

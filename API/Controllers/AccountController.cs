@@ -19,7 +19,7 @@ namespace API.Controllers
             _accountService = accountService;
         }
 
-        [HttpPost("login")]
+        [HttpPost("Login")]
         [AllowAnonymous]
         public IActionResult Login(LoginDto loginDto)
         {
@@ -62,7 +62,7 @@ namespace API.Controllers
         [HttpPost("Register")]
         public IActionResult Register(RegisterDto register)
         {
-            var data = _accountService.register(register);
+            var data = _accountService.Register(register);
             if (data == -1)
             {
                 return StatusCode(500, new ResponseHandler<RegisterDto>
@@ -87,6 +87,101 @@ namespace API.Controllers
                 Status = HttpStatusCode.OK.ToString(),
                 Message = "Successfull Register",
                 Data = data
+            });
+        }
+
+        [HttpPost("forgot-password")]
+        [AllowAnonymous]
+        public IActionResult ForgotPassword(ForgotPassword forgotPasswordDto)
+        {
+            var isUpdated = _accountService.ForgotPassword(forgotPasswordDto);
+            if (isUpdated is 0)
+            {
+                return NotFound(new ResponseHandler<ForgotPassword>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Email Not Found"
+                });
+            }
+
+            if (isUpdated is -1)
+            {
+                return StatusCode(500, new ResponseHandler<ForgotPassword>
+                {
+                    Code = StatusCodes.Status500InternalServerError,
+                    Status = HttpStatusCode.InternalServerError.ToString(),
+                    Message = "Error Retrieve From Database"
+                });
+            }
+            return Ok(new ResponseHandler<ForgotPassword>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Otp has been sent to your email"
+            });
+        }
+
+        [HttpPost("changepassword")]
+        [AllowAnonymous]
+        public IActionResult UpdatePassword(ChangePassword changePasswordDto)
+        {
+            var update = _accountService.ChangePassword(changePasswordDto);
+            if (update is 0)
+            {
+                return NotFound(new ResponseHandler<ChangePassword>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Email Not Found"
+                });
+            }
+
+            if (update is -1)
+            {
+                return NotFound(new ResponseHandler<ChangePassword>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "OTP doesn't match"
+                });
+            }
+
+            if (update is -2)
+            {
+                return NotFound(new ResponseHandler<ChangePassword>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "OTP is used"
+                });
+            }
+
+            if (update is -3)
+            {
+                return NotFound(new ResponseHandler<ChangePassword>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "OTP already expired"
+                });
+            }
+
+            if (update == -4)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ResponseHandler<ChangePassword>
+                {
+                    Code = StatusCodes.Status500InternalServerError,
+                    Status = HttpStatusCode.InternalServerError.ToString(),
+                    Message = "Error retrieving data from the database"
+                });
+            }
+
+            return Ok(new ResponseHandler<ChangePassword>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Password Updated Success"
             });
         }
 
