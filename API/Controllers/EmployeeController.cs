@@ -1,4 +1,5 @@
 ﻿using API.DTOs.Employees;
+using API.Models;
 using API.Services;
 using API.Utilities.Handlers;
 using Microsoft.AspNetCore.Authorization;
@@ -18,7 +19,69 @@ namespace API.Controllers
         {
             _employeeService = employeeService;
         }
-
+        [HttpGet("CountEmployee")]
+        public IActionResult CountEmployee()
+        {
+            var data = _employeeService.CountEmployee();
+            if (data == null)
+            {
+                return StatusCode(404, new ResponseHandler<int>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data is not Found",
+                });
+            }
+            return Ok(new ResponseHandler<int>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Data Success Retrieved",
+                Data = data
+            });
+        }
+        [HttpGet("GetCountedGender")]
+        public IActionResult CountGender()
+        {
+            var data = _employeeService.CountGender();
+            if (data == null)
+            {
+                return StatusCode(404, new ResponseHandler<GetCountedGender>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data is not Found",
+                });
+            }
+            return Ok(new ResponseHandler<GetCountedGender>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Data Success Retrieved",
+                Data = data
+            });
+        }
+        [HttpGet("GetCountedStatus")]
+        public IActionResult CountStatus()
+        {
+            var data = _employeeService.CountStatus();
+            if (data == null)
+            {
+                return StatusCode(404, new ResponseHandler<GetCountedStatus>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data is not Found",
+                });
+            }
+            return Ok(new ResponseHandler<GetCountedStatus>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Data Success Retrieved",
+                Data = data
+            });
+        }
         [HttpGet]
         public IActionResult GetAll()
         {

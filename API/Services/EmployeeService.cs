@@ -13,7 +13,62 @@ namespace API.Services
         {
             _employeeRepository = employeeRepository;
         }
+        public int CountEmployee()
+        {
+            var data = _employeeRepository.GetAll();
+            var counter = 0;
+            foreach (var item in data)
+            {
+                counter++;
+            }
+            return counter;
+        }
+        public GetCountedGender? CountGender()
+        {
+            var data = _employeeRepository.GetAll();
+            var countfemale = 0;
+            var countmale = 0;
 
+            foreach (var item in data)
+            {
+                if (item.Gender == 0)
+                {
+                    countfemale++;
+                }
+                else
+                {
+                    countmale++;
+                }
+            }
+            return new GetCountedGender
+            {
+                CountFemale = countfemale,
+                CountMale = countmale
+            };
+        }
+        public GetCountedStatus? CountStatus()
+        {
+            var data = _employeeRepository.GetAll();
+            var countidle = 0;
+            var countsite = 0;
+
+            foreach (var item in data)
+            {
+                if (item.Status == 0)
+                {
+                    countidle++;
+                }
+                else
+                {
+                    countsite++;
+                }
+            }
+            return new GetCountedStatus
+            {
+                CountIdle = countidle,
+                CountSite = countsite
+            };
+        }
         public IEnumerable<EmployeeDto> GetAll()
         {
             var employees = _employeeRepository.GetAll();

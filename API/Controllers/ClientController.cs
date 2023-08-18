@@ -18,7 +18,27 @@ namespace API.Controllers
         {
             _clientService = clientService;
         }
-
+        [HttpGet("GetAvailableClient")]
+        public IActionResult CountAvailableClient()
+        {
+            var result = _clientService.CountAvailableClient();
+            if(!result.Any())
+            {
+                return NotFound(new ResponseHandler<GetAvailableClient>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data Not Found"
+                });
+            }
+            return Ok(new ResponseHandler<IEnumerable<GetAvailableClient>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success Retrieve Data",
+                Data = result
+            });
+        }
         [HttpGet]
         public IActionResult GetAll()
         {

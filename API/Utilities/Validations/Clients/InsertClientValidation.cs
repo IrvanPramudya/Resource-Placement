@@ -17,8 +17,17 @@ namespace API.Utilities.Validations.Clients
                 .NotEmpty().WithMessage("Email is Required")
                 .EmailAddress().WithMessage("Wrong Email")
                 .Must(IsDuplicateValue).WithMessage("Email is Already Exist");
-            RuleFor(client => client.Capacity)
-                .NotEmpty().WithMessage("Capacity Cannot be Null");
+            RuleFor(client => client.IsAvailable).NotNull().WithMessage("Please input with true/false");
+
+            When(client => client.IsAvailable == true, () =>
+            {
+                RuleFor(client => client.Capacity).NotEmpty().WithMessage("Please Input Capacity if this Client Available");
+            });
+
+            When(client => client.IsAvailable == false, () =>
+            {
+                RuleFor(client => client.Capacity).Equal(0);
+            });
         }
 
         private bool IsDuplicateValue(string arg)

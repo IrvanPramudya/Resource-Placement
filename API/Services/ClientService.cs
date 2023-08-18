@@ -12,7 +12,25 @@ namespace API.Services
         {
             _clientRepository = clientRepository;
         }
-
+        public IEnumerable<GetAvailableClient> CountAvailableClient()
+        {
+            var data = _clientRepository.GetAll();
+            var listclient = new List<GetAvailableClient>();
+            foreach (var client in data) 
+            {
+                var countclient = new GetAvailableClient()
+                {
+                    Name = client.Name,
+                    IsAvailable = client.IsAvailable,
+                    Capacity = client.Capacity,
+                };
+                if(countclient.IsAvailable == true)
+                {
+                    listclient.Add(countclient);
+                }
+            }
+            return listclient;
+        }
         public IEnumerable<ClientDto> GetAll()
         {
             var clients = _clientRepository.GetAll();
