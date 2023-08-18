@@ -92,12 +92,12 @@ namespace API.Controllers
 
         [HttpPost("forgot-password")]
         [AllowAnonymous]
-        public IActionResult ForgotPassword(ForgotPassword forgotPasswordDto)
+        public IActionResult ForgotPassword(ForgotPasswordDto forgotPasswordDto)
         {
             var isUpdated = _accountService.ForgotPassword(forgotPasswordDto);
             if (isUpdated is 0)
             {
-                return NotFound(new ResponseHandler<ForgotPassword>
+                return NotFound(new ResponseHandler<ForgotPasswordDto>
                 {
                     Code = StatusCodes.Status404NotFound,
                     Status = HttpStatusCode.NotFound.ToString(),
@@ -107,14 +107,14 @@ namespace API.Controllers
 
             if (isUpdated is -1)
             {
-                return StatusCode(500, new ResponseHandler<ForgotPassword>
+                return StatusCode(500, new ResponseHandler<ForgotPasswordDto>
                 {
                     Code = StatusCodes.Status500InternalServerError,
                     Status = HttpStatusCode.InternalServerError.ToString(),
                     Message = "Error Retrieve From Database"
                 });
             }
-            return Ok(new ResponseHandler<ForgotPassword>
+            return Ok(new ResponseHandler<ForgotPasswordDto>
             {
                 Code = StatusCodes.Status200OK,
                 Status = HttpStatusCode.OK.ToString(),
@@ -124,12 +124,12 @@ namespace API.Controllers
 
         [HttpPost("changepassword")]
         [AllowAnonymous]
-        public IActionResult UpdatePassword(ChangePassword changePasswordDto)
+        public IActionResult UpdatePassword(ChangePasswordDto changePasswordDto)
         {
             var update = _accountService.ChangePassword(changePasswordDto);
             if (update is 0)
             {
-                return NotFound(new ResponseHandler<ChangePassword>
+                return NotFound(new ResponseHandler<ChangePasswordDto>
                 {
                     Code = StatusCodes.Status404NotFound,
                     Status = HttpStatusCode.NotFound.ToString(),
@@ -139,7 +139,7 @@ namespace API.Controllers
 
             if (update is -1)
             {
-                return NotFound(new ResponseHandler<ChangePassword>
+                return NotFound(new ResponseHandler<ChangePasswordDto>
                 {
                     Code = StatusCodes.Status404NotFound,
                     Status = HttpStatusCode.NotFound.ToString(),
@@ -149,7 +149,7 @@ namespace API.Controllers
 
             if (update is -2)
             {
-                return NotFound(new ResponseHandler<ChangePassword>
+                return NotFound(new ResponseHandler<ChangePasswordDto>
                 {
                     Code = StatusCodes.Status404NotFound,
                     Status = HttpStatusCode.NotFound.ToString(),
@@ -159,7 +159,7 @@ namespace API.Controllers
 
             if (update is -3)
             {
-                return NotFound(new ResponseHandler<ChangePassword>
+                return NotFound(new ResponseHandler<ChangePasswordDto>
                 {
                     Code = StatusCodes.Status404NotFound,
                     Status = HttpStatusCode.NotFound.ToString(),
@@ -169,7 +169,7 @@ namespace API.Controllers
 
             if (update == -4)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new ResponseHandler<ChangePassword>
+                return StatusCode(StatusCodes.Status500InternalServerError, new ResponseHandler<ChangePasswordDto>
                 {
                     Code = StatusCodes.Status500InternalServerError,
                     Status = HttpStatusCode.InternalServerError.ToString(),
@@ -177,7 +177,7 @@ namespace API.Controllers
                 });
             }
 
-            return Ok(new ResponseHandler<ChangePassword>
+            return Ok(new ResponseHandler<ChangePasswordDto>
             {
                 Code = StatusCodes.Status200OK,
                 Status = HttpStatusCode.OK.ToString(),

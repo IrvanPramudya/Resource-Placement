@@ -130,7 +130,7 @@ namespace API.Services
 
         }
 
-        public int ForgotPassword(ForgotPassword forgotPasswordDto)
+        public int ForgotPassword(ForgotPasswordDto forgotPasswordDto)
         {
             var otp = new Random().Next(111111, 999999);
             var getAccountDetail = (from e in _employeeRepository.GetAll()
@@ -168,7 +168,7 @@ namespace API.Services
             return 1;
         }
 
-        public int ChangePassword(ChangePassword changePasswordDto)
+        public int ChangePassword(ChangePasswordDto changePasswordDto)
         {
             var getAccount = (from e in _employeeRepository.GetAll()
                               join a in _accountRepository.GetAll() on e.Guid equals a.Guid
