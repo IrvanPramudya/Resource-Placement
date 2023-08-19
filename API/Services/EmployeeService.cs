@@ -1,10 +1,15 @@
 ﻿using API.Contracts;
+using API.Data;
+using API.DTOs.AccountRoles;
 using API.DTOs.Employees;
 using API.Models;
 using API.Repositories;
 using API.Utilities.Handlers;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Win32;
 using System.Security.Claims;
+using System.Security.Principal;
 
 namespace API.Services
 {
@@ -14,13 +19,110 @@ namespace API.Services
         private readonly IInterviewRepository _interviewRepository;
         private readonly IPositionRepository _positionRepository;
         private readonly IClientRepository _clientRepository;
+        private readonly IGradeRepository _gradeRepository;
+        private readonly IAccountRoleRepository _accountRoleRepository;
+        private readonly PlacementDbContext _dbContext;
 
-        public EmployeeService(IEmployeeRepository employeeRepository, IInterviewRepository interviewRepository, IPositionRepository positionRepository, IClientRepository clientRepository)
+        public EmployeeService(IEmployeeRepository employeeRepository, IInterviewRepository interviewRepository, IPositionRepository positionRepository, IClientRepository clientRepository, IGradeRepository gradeRepository, PlacementDbContext dbContext, IAccountRoleRepository accountRoleRepository)
         {
             _employeeRepository = employeeRepository;
             _interviewRepository = interviewRepository;
             _positionRepository = positionRepository;
             _clientRepository = clientRepository;
+            _gradeRepository = gradeRepository;
+            _dbContext = dbContext;
+            _accountRoleRepository = accountRoleRepository;
+        }
+        /*public int InsertReportEmployee(ReportEmployee inputed)
+        {
+            if (!_employeeRepository.IsNotExist(inputed.Email)
+               || !_employeeRepository.IsNotExist(inputed.PhoneNumber))
+            {
+                return 0;
+            }
+            using var transaction = _dbContext.Database.BeginTransaction();
+            try
+            {
+                var NewNik = GenerateHandler.LastNik(_employeeRepository.GetLastNik());
+                var employee = _employeeRepository.Create(new Employee
+                {
+                    Guid = new Guid(),
+                    NIK = NewNik,
+                    FirstName = inputed.FirstName,
+                    LastName = inputed.LastName,
+                    Email = inputed.Email,
+                    PhoneNumber = inputed.PhoneNumber,
+                    Gender = inputed.Gender,
+                    Status = 0,
+                    Skill = inputed.Skill,
+                    CreatedDate = DateTime.Now,
+                    ModifiedDate = DateTime.Now,
+                }) ;
+                var grade = _gradeRepository.Create(new Grade
+                {
+                    Guid = employee.Guid,
+                    Name =inputed.Grade,
+                    Salary = inputed.Salary,
+                    CreatedDate = DateTime.Now,
+                    ModifiedDate = DateTime.Now,
+                });
+                var accountroleadmin = _accountRoleRepository.Create(new NewAccountRoleDto
+                {
+                    AccountGuid = employee.Guid,
+                    RoleGuid = Guid.Parse("ae259a90-e2e8-442f-ce18-08db91a71ab9")
+                });
+                transaction.Commit();
+                return 1;
+            }
+            catch
+            {
+                transaction.Rollback();
+                return -1;
+            }
+        }*/
+        public IEnumerable<GetReportEmployee>? GetAllReportedEmployee()
+        {
+            var mergetable = from employee in _employeeRepository.GetAll()
+                             join grade in _gradeRepository.GetAll() on employee.Guid equals grade.Guid
+                             select new GetReportEmployee
+                             {
+                                NIK = employee.NIK,
+                                FullName = employee.FirstName + " " + employee.LastName,
+                                PhoneNumber = employee.PhoneNumber,
+                                Email = employee.Email,
+                                Gender = employee.Gender,
+                                Skill = employee.Skill,
+                                Grade = grade.Name,
+                                Salary  = grade.Salary
+                             };
+            if (!mergetable.Any())
+            {
+                return null;
+            }
+            return mergetable;
+        }
+        public GetReportEmployee? GetReportedEmployee(Guid guid)
+        {
+            var mergetable = from employee in _employeeRepository.GetAll()
+                             join grade in _gradeRepository.GetAll() on employee.Guid equals grade.Guid
+                             where employee.Guid == guid
+                             select new GetReportEmployee
+                             {
+                                NIK = employee.NIK,
+                                FullName = employee.FirstName + " " + employee.LastName,
+                                PhoneNumber = employee.PhoneNumber,
+                                Email = employee.Email,
+                                Gender = employee.Gender,
+                                Skill = employee.Skill,
+                                Grade = grade.Name,
+                                Salary  = grade.Salary
+                             };
+            if (!mergetable.Any())
+            {
+                return null;
+            }
+
+            return mergetable.FirstOrDefault();
         }
         public GetEmployeeNotification? GetNotification(Guid guid)
         {

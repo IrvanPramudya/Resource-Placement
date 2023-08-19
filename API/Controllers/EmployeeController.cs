@@ -1,4 +1,5 @@
-﻿using API.DTOs.Employees;
+﻿using API.DTOs.Accounts;
+using API.DTOs.Employees;
 using API.Models;
 using API.Services;
 using API.Utilities.Handlers;
@@ -18,6 +19,79 @@ namespace API.Controllers
         public EmployeeController(EmployeeService employeeService)
         {
             _employeeService = employeeService;
+        }
+        /*[AllowAnonymous]
+        [HttpPost("InsertReportEmployee")]
+        public IActionResult Register(ReportEmployee inputed)
+        {
+            var data = _employeeService.InsertReportEmployee(inputed);
+            if (data == -1)
+            {
+                return StatusCode(500, new ResponseHandler<RegisterDto>
+                {
+                    Code = StatusCodes.Status500InternalServerError,
+                    Status = HttpStatusCode.InternalServerError.ToString(),
+                    Message = "Input Failed",
+                });
+            }
+            if (data == 0)
+            {
+                return StatusCode(404, new ResponseHandler<RegisterDto>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Email or Phone Number Already Used",
+                });
+            }
+            return Ok(new ResponseHandler<int>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Successfull Input Data",
+                Data = data
+            });
+        }*/
+        [HttpGet("GetAllReportEmployee")]
+        public IActionResult GetAllReportEmployee()
+        {
+            var data = _employeeService.GetAllReportedEmployee();
+            if (data == null)
+            {
+                return StatusCode(404, new ResponseHandler<GetReportEmployee>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data is not Found",
+                });
+            }
+            return Ok(new ResponseHandler<IEnumerable<GetReportEmployee>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Data Success Retrieved",
+                Data = data
+            });
+        }
+        [HttpGet("GetReportEmployee/{guid}")]
+        public IActionResult GetReportEmployee(Guid guid)
+        {
+            var data = _employeeService.GetReportedEmployee(guid);
+            if (data == null)
+            {
+                return StatusCode(404, new ResponseHandler<GetReportEmployee>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data is not Found",
+                });
+            }
+            return Ok(new ResponseHandler<GetReportEmployee>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Data Success Retrieved",
+                Data = data
+            });
         }
         [HttpGet("GetEmployeeNotification/{guid}")]
         public IActionResult GetEmployeeNotification(Guid guid)
