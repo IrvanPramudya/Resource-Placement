@@ -182,7 +182,7 @@ function deleteEmployee(guid) {
     }).then(function (result) {
         if (result.isConfirmed) {
             $.ajax({
-                url: "https://localhost:7273/api/employee?guid=" + guid,
+                url: "https://localhost:7273/api/employees?guid=" + guid,
                 type: "DELETE",
             }).done(function (result) {
                 Swal.fire({
@@ -200,11 +200,11 @@ function deleteEmployee(guid) {
 }
 function ShowUpdate(guid) {
     $.ajax({
-        url: "https://localhost:7273/api/employee/" + guid,
+        url: "https://localhost:7273/api/employees/" + guid,
         type: "GET",
         dataType: "json"
     }).done((result) => {
-
+        console.log(result)
         $("#guidUpd").val(result.data.guid);
         $("#nikUpd").val(result.data.nik);
         $("#firstNameUpd").val(result.data.firstName);
@@ -227,8 +227,9 @@ function ShowUpdate(guid) {
         $("#modalemp2").modal("show");
     }).fail((error) => {
         alert("Failed to fetch employee data. Please try again.");
+        console.log(error)
     });
-    console.log(error)
+    
 }
 
 function UpdateEmployee() {
@@ -246,7 +247,7 @@ function UpdateEmployee() {
         skill: $("#skillUpd").val(),
     };
     $.ajax({
-        url: "https://localhost:7273/api/employee",
+        url: "https://localhost:7273/api/employees",
         type: "PUT",
         contentType: "application/json",
         data: JSON.stringify(data)
