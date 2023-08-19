@@ -19,6 +19,28 @@ namespace API.Controllers
             _accountRoleService = accountRoleService;
         }
 
+        [HttpGet("GetCountAllRole")]
+        public IActionResult GetCountAllRole()
+        {
+            var result = _accountRoleService.CountAllRole();
+            if (!result.Any())
+            {
+                return NotFound(new ResponseHandler<IEnumerable<GetCountedAllRole>>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data Not Found"
+                });
+            }
+
+            return Ok(new ResponseHandler<IEnumerable<GetCountedAllRole>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success Retrieve Data",
+                Data = result
+            });
+        }
         [HttpGet]
         public IActionResult GetAll()
         {

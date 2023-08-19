@@ -57,10 +57,21 @@ $.ajax({
     });
 })
 $.ajax({
-    url: "https://localhost:7273/api/employees/CountEmployee",
+    url: "https://localhost:7273/api/accountroles/GetCountAllRole",
     type: "GET"
 }).done((result) => {
-    let employee = `<h3> ${result.data} </h3>`
-
-    $("#count-employee").html(employee)
+    console.log(result.data)
+    let role =""
+    $.each(result.data, (key, val) => {
+        role += `<li>
+                    <i class='bx bx-show-alt'></i>
+                    <span class="info">
+                        <h3>
+                            ${val.countRole}
+                        </h3>
+                        <p>${val.roleName}</p>
+                    </span>
+                </li>`
+    })
+    $("#Adding-Role").html(role)
 })
