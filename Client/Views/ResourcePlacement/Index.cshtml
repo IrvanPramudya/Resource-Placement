@@ -1,4 +1,5 @@
 ﻿@{
+    ViewData["Title"] = "Home Page";
     Layout = "AdminLayout";
 }
 
@@ -20,7 +21,7 @@
 <!-- Insights -->
 <ul class="insights">
     <li>
-        <i class='bx bx-calendar-check'></i>
+        <i class='bx bx-user'></i>
         <span class="info">
             <div id="count-employee"></div>
             <p>Employees</p>
@@ -64,7 +65,7 @@
                 <h3>Gender</h3>
             </div>
             <div class="chart-container" style="position: relative; height:100%; width:100%">
-                <canvas id="StatusChart"></canvas>
+                <canvas id="GenderChart"></canvas>
             </div>
         </div>
         <div class="col-6">
@@ -73,7 +74,7 @@
                 <h3>Status</h3>
             </div>
             <div class="chart-container" style="position: relative; height:100%; width:100%">
-                <canvas id="GenderChart"></canvas>
+                <canvas id="StatusChart"></canvas>
             </div>
         </div>
     </div>

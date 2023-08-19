@@ -1,0 +1,140 @@
+﻿@{
+    Layout = "AdminLayout";
+}
+
+<!-- Modal -->
+<div class="text-center">
+    <h1 class="align-content-center" id="judul">List Employee</h1>
+</div>
+<div class="text-center mt-3">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAddEmployee">Add Employee</button>
+</div>
+
+<div class="add-employee">
+    <div class="modal" id="modalAddEmployee" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Employee</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="firstName" class="form-label"> First Name</label>
+                            <input type="text" class="form control" id="firstName" placeholder="First Name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="lastName" class="form-label"> Last Name</label>
+                            <input type="text" class="form control" id="lastName" placeholder="Last Name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label"> Email</label>
+                            <input type="text" class="form control" id="email" placeholder="email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone" class="form-label"> Phone Number</label>
+                            <input type="tel" class="form control" id="phoneNumber" placeholder="Phone Number">
+                        </div>
+                        <div class="mb-3">
+                            <label for="gender" class="col-form-label">Gender:</label>
+                            <select class="form-control" id="gender" required>
+                                <option value="1">Female</option>
+                                <option value="0">Male</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="status" class="col-form-label">Status:</label>
+                            <select class="form-control" id="status" required>
+                                <option value="1">Active</option>
+                                <option value="0">Idle</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="skill" class="form-label"> Skill</label>
+                            <input type="text" class="form control" id="skill" placeholder="Skill">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="addEmployee()" class="btn btn-primary d-inline-block" data-bs-dismiss="modal">Add Employee</button>
+                    <button type="button" class="btn btn-secondary d-inline-block" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="recent-orders">
+<h2>Recent Orders</h2>
+<table id="employeeTable">
+    <thead>
+        <tr>
+            <th>No</th>
+            <th>NIK</th>
+            <th>Nama</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Gender</th>
+            <th>Status</th>
+            <th>Skill</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody id="tbodyEmployee">
+    </tbody>
+</table>
+</div>
+
+<div class="modal" id="modalUpdateEmployee" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Update</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" class="form-control" id="guidUpd" value="">
+                <input type="hidden" class="form-control" id="nikUpd" value="">
+                <div class="mb-3">
+                    <label for="firstName" class="form-label"> First Name</label>
+                    <input type="text" class="form control" id="firstNameUpd" placeholder="First Name">
+                </div>
+                <div class="mb-3">
+                    <label for="lastName" class="form-label"> Last Name</label>
+                    <input type="text" class="form control" id="lastNameUpd" placeholder="Last Name">
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label"> Email</label>
+                    <input type="text" class="form control" id="emailUpd" placeholder="Email">
+                </div>
+                <div class="mb-3">
+                    <label for="phone" class="form-label"> Phone Number</label>
+                    <input type="tel" class="form control" id="phoneNumberUpd" placeholder="Phone Number">
+                </div>
+                <div class="mb-3">
+                    <label for="gender" class="col-form-label">Gender:</label>
+                    <select class="form-control" id="gender" required>
+                        <option value="1">Male</option>
+                        <option value="0">Female</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="status" class="col-form-label">Status:</label>
+                    <select class="form-control" id="status" required>
+                        <option value="1">Active</option>
+                        <option value="0">Idle</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="skill" class="form-label"> Skill</label>
+                    <input type="text" class="form control" id="skillUpd" placeholder="Skill">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="UpdateEmployee()" class="btn btn-primary d-inline-block" data-bs-dismiss="modal">Update Employee</button>
+                <button type="button" class="btn btn-secondary d-inline-block" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
