@@ -110,20 +110,32 @@ function loadEmployeeData() {
             {
                 data: "gender",
                 render: function (data, type, row) {
+<<<<<<< HEAD
                     return data === 1 ? "Female" : "Male";
+=======
+                    return data === 0 ? "Female" : "Male";
+>>>>>>> mais-branch
                 }
             },
             {
                 data: "status",
                 render: function (data, type, row) {
+<<<<<<< HEAD
                     return data === 1 ? "Idle" : "Active";
+=======
+                    return data === 0 ? "Idle" : "Active";
+>>>>>>> mais-branch
                 }
             },
             { data: "skill" },
             {
                 data: null,
                 render: function (data, type, row) {
+<<<<<<< HEAD
                     return `<button onclick="ShowUpdate('${row.guid}')" data-bs-toggle="modal" data-bs-target="#modalUpdateEmployee" class="btn btn-primary"> Update </button>` +
+=======
+                    return `<button onclick="ShowUpdateEmployee('${row.guid}')" data-bs-toggle="modal" data-bs-target="#modalUpdateEmployee" class="btn btn-primary"> Update </button>` +
+>>>>>>> mais-branch
                         `   <button onclick="deleteEmployee('${row.guid}')" class="btn btn-secondary"> Delete </button>`;
                 }
             }
@@ -198,7 +210,11 @@ function deleteEmployee(guid) {
         }
     });
 }
+<<<<<<< HEAD
 function ShowUpdate(guid) {
+=======
+function ShowUpdateEmployee(guid) {
+>>>>>>> mais-branch
     $.ajax({
         url: "https://localhost:7273/api/employees/" + guid,
         type: "GET",
@@ -211,6 +227,7 @@ function ShowUpdate(guid) {
         $("#lastNameUpd").val(result.data.lastName);
         $("#emailUpd").val(result.data.email);
         $("#phoneNumberUpd").val(result.data.phoneNumber);
+<<<<<<< HEAD
         // Melakukan penyesuaian untuk nilai gender
         if (result.data.gender === 0) {
             $("input[name='gender'][value='Female']").prop("checked", true);
@@ -222,6 +239,21 @@ function ShowUpdate(guid) {
         } else {
             $("input[name='status'][value='Idle']").prop("checked", true);
         }
+=======
+        $("#genderUpd").val(result.data.gender);
+        $("#statusUpd").val(result.data.status);
+        // Melakukan penyesuaian untuk nilai gender
+        /*if (result.data.gender === 0) {
+            $("input[name='genderUpd'][value='Female']").prop("checked", true);
+        } else {
+            $("input[name='genderUpd'][value='Male']").prop("checked", true);
+        }
+        if (result.data.status === 0) {
+            $("input[name='statusUpd'][value='Active']").prop("checked", true);
+        } else {
+            $("input[name='statusUpd'][value='Idle']").prop("checked", true);
+        }*/
+>>>>>>> mais-branch
         $("#skillUpd").val(result.data.skill);
 
         $("#modalemp2").modal("show");
@@ -242,8 +274,13 @@ function UpdateEmployee() {
         lastName: $("#lastNameUpd").val(),
         email: $("#emailUpd").val(),
         phoneNumber: $("#phoneNumberUpd").val(), 
+<<<<<<< HEAD
         gender: $("input[name='gender']:checked").val() === "Female" ? 0 : 1,
         status: $("input[name='status']:checked").val() === "Active" ? 0 : 1,
+=======
+        gender: parseInt($("#genderUpd").val()), 
+        status: parseInt($("#statusUpd").val()), 
+>>>>>>> mais-branch
         skill: $("#skillUpd").val(),
     };
     $.ajax({
@@ -252,10 +289,18 @@ function UpdateEmployee() {
         contentType: "application/json",
         data: JSON.stringify(data)
     }).done((result) => {
+<<<<<<< HEAD
         Swal.fire(
             'Data has been successfully updated!',
             'success'
         ).then(() => {
+=======
+        Swal.fire({
+            title: 'Success',
+            text: 'Data has been successfully updated',
+            icon: 'success'
+        }).then(function () {
+>>>>>>> mais-branch
             location.reload();
         });
     }).fail((error) => {

@@ -18,6 +18,34 @@ namespace API.Controllers
         {
             _placementService = placementService;
         }
+<<<<<<< HEAD
+=======
+
+<<<<<<< Updated upstream
+=======
+        [HttpGet("GetEmployeeClientName")]
+        public IActionResult GetEmployeeClientName()
+        {
+            var data = _placementService.GetEmployeeClientName();
+            if (data == null)
+            {
+                return StatusCode(404, new ResponseHandler<GetEmployeeClientName>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data is not Found",
+                });
+            }
+            return Ok(new ResponseHandler<IEnumerable<GetEmployeeClientName>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Data Success Retrieved",
+                Data = data
+            });
+        }
+
+>>>>>>> mais-branch
         [HttpGet("CountClient")]
         public IActionResult CountEmployee()
         {
@@ -39,6 +67,10 @@ namespace API.Controllers
                 Data = data
             });
         }
+<<<<<<< HEAD
+=======
+>>>>>>> Stashed changes
+>>>>>>> mais-branch
         [HttpGet]
         public IActionResult GetAll()
         {

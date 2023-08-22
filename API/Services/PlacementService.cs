@@ -8,12 +8,48 @@ namespace API.Services
     public class PlacementService
     {
         private readonly IPlacementRepository _placementRepository;
+<<<<<<< HEAD
         private readonly IClientRepository _clientRepository;
+=======
+<<<<<<< Updated upstream
+>>>>>>> mais-branch
 
         public PlacementService(IPlacementRepository placementRepository, IClientRepository clientRepository)
         {
             _placementRepository = placementRepository;
+<<<<<<< HEAD
             _clientRepository = clientRepository;
+=======
+=======
+        private readonly IClientRepository _clientRepository;
+        private readonly IEmployeeRepository _employeeRepository;
+
+        public PlacementService(IPlacementRepository placementRepository, IClientRepository clientRepository, IEmployeeRepository employeeRepository)
+        {
+            _placementRepository = placementRepository;
+            _clientRepository = clientRepository;
+            _employeeRepository = employeeRepository;
+        }
+
+        public IEnumerable<GetEmployeeClientName> GetEmployeeClientName()
+        {
+            var merge = from e in _employeeRepository.GetAll()
+                        join p in _placementRepository.GetAll() on e.Guid equals p.EmployeeGuid
+                        join c in _clientRepository.GetAll() on p.ClientGuid equals c.Guid
+                        select new GetEmployeeClientName
+                        {
+                            Guid = p.Guid,
+                            StartDate = p.StartDate,
+                            EndDate = p.EndDate,
+                            EmployeeName = e.FirstName + " " +e.LastName,
+                            ClientName = c.Name
+                        };
+            if (!merge.Any())
+            {
+                return null;
+            }
+            return merge;
+>>>>>>> mais-branch
         }
         public IEnumerable<GetCountedClient> GetCountedClient()
         {
@@ -37,6 +73,10 @@ namespace API.Services
                 listclient.Add(newclient);
             }
             return listclient;
+<<<<<<< HEAD
+=======
+>>>>>>> Stashed changes
+>>>>>>> mais-branch
         }
         public IEnumerable<PlacementDto> GetAll()
         {

@@ -19,6 +19,29 @@ namespace API.Controllers
             _positionService = positionService;
         }
 
+        [HttpGet("GetClientName")]
+        public IActionResult GetClientName() 
+        {
+            var result = _positionService.GetClientName();
+            if(!result.Any())
+            {
+                return NotFound(new ResponseHandler<GetClientName>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data Not Found"
+                });
+            }
+            return Ok(new ResponseHandler<IEnumerable<GetClientName>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success Retrieve Data",
+                Data = result
+            });
+
+        }
+
         [HttpGet]
         public IActionResult GetAll()
         {

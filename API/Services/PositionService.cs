@@ -8,10 +8,29 @@ namespace API.Services
     public class PositionService
     {
         private readonly IPositionRepository _positionRepository;
+        private readonly IClientRepository _clientRepository;
 
-        public PositionService(IPositionRepository positionRepository)
+        public PositionService(IPositionRepository positionRepository, IClientRepository clientRepository)
         {
             _positionRepository = positionRepository;
+            _clientRepository = clientRepository;
+        }
+
+        public IEnumerable<GetClientName> GetClientName()
+        {
+            var merge = from client in _clientRepository.GetAll()
+                        join position in _positionRepository.GetAll() on client.Guid equals position.ClientGuid
+                        select new GetClientName
+                        {
+                            Guid = position.Guid,
+                            ClientName = client.Name,
+                            PositionName = position.Name
+                        };
+            if(!merge.Any() )
+            {
+                return null;
+            }
+            return merge;
         }
 
         public IEnumerable<PositionDto> GetAll()
