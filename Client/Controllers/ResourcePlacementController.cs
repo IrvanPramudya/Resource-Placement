@@ -13,6 +13,7 @@ namespace Client.Controllers
             return View();
         }
         public IActionResult EmployeeIndex() => View();
+        public IActionResult ClientIndex() => View();
         public IActionResult GradeIndex() => View();
         public IActionResult PositionIndex() => View();
         public IActionResult PlacementIndex() => View();
