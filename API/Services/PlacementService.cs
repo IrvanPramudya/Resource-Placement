@@ -7,22 +7,9 @@ namespace API.Services
 {
     public class PlacementService
     {
-        private readonly IPlacementRepository _placementRepository;
-<<<<<<< HEAD
-        private readonly IClientRepository _clientRepository;
-=======
-<<<<<<< Updated upstream
->>>>>>> mais-branch
-
-        public PlacementService(IPlacementRepository placementRepository, IClientRepository clientRepository)
-        {
-            _placementRepository = placementRepository;
-<<<<<<< HEAD
-            _clientRepository = clientRepository;
-=======
-=======
         private readonly IClientRepository _clientRepository;
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IPlacementRepository _placementRepository;
 
         public PlacementService(IPlacementRepository placementRepository, IClientRepository clientRepository, IEmployeeRepository employeeRepository)
         {
@@ -49,7 +36,6 @@ namespace API.Services
                 return null;
             }
             return merge;
->>>>>>> mais-branch
         }
         public IEnumerable<GetCountedClient> GetCountedClient()
         {
@@ -73,10 +59,6 @@ namespace API.Services
                 listclient.Add(newclient);
             }
             return listclient;
-<<<<<<< HEAD
-=======
->>>>>>> Stashed changes
->>>>>>> mais-branch
         }
         public IEnumerable<PlacementDto> GetAll()
         {

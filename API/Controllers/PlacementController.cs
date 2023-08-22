@@ -18,11 +18,7 @@ namespace API.Controllers
         {
             _placementService = placementService;
         }
-<<<<<<< HEAD
-=======
 
-<<<<<<< Updated upstream
-=======
         [HttpGet("GetEmployeeClientName")]
         public IActionResult GetEmployeeClientName()
         {
@@ -45,7 +41,6 @@ namespace API.Controllers
             });
         }
 
->>>>>>> mais-branch
         [HttpGet("CountClient")]
         public IActionResult CountEmployee()
         {
@@ -67,10 +62,7 @@ namespace API.Controllers
                 Data = data
             });
         }
-<<<<<<< HEAD
-=======
->>>>>>> Stashed changes
->>>>>>> mais-branch
+
         [HttpGet]
         public IActionResult GetAll()
         {
