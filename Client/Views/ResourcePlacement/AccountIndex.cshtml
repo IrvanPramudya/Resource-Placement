@@ -1,0 +1,91 @@
+﻿@{
+    Layout = "AdminLayout";
+}
+
+<!-- Modal -->
+<div class="text-center">
+    <h1 class="align-content-center" id="judul">List Account</h1>
+</div>
+<div class="text-center mt-3">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAddAccount">Add Account</button>
+</div>
+
+<div class="add-account">
+    <div class="modal" id="modalAddAccount" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Account</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="password" class="form-label"> Password</label>
+                            <input type="text" class="form-control" id="password" placeholder="Password">
+                        </div>
+                        <div class="mb-3">
+                            <label for="otp" class="form-label"> OTP</label>
+                            <input type="text" class="form-control" id="otp" placeholder="OTP">
+                        </div>
+                        <div class="mb-3">
+                            <label for="isUsed" class="form-label"> Is Used</label>
+                            <input type="text" class="form-control" id="isUsed" placeholder="Is Used">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="addAccount()" class="btn btn-primary d-inline-block" data-bs-dismiss="modal">Add Account</button>
+                    <button type="button" class="btn btn-secondary d-inline-block" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="recent-orders">
+    <table id="accountTable">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Password</th>
+                <th>OTP</th>
+                <th>Is Used</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="tbodyAccount">
+        </tbody>
+    </table>
+</div>
+
+<div class="modal" id="modalUpdateAccount" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Update</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="password" class="form-label"> Password</label>
+                        <input type="text" class="form-control" id="password" placeholder="Password">
+                    </div>
+                    <div class="mb-3">
+                        <label for="otp" class="form-label"> OTP</label>
+                        <input type="text" class="form-control" id="otp" placeholder="OTP">
+                    </div>
+                    <div class="mb-3">
+                        <label for="isUsed" class="form-label"> Is Used</label>
+                        <input type="text" class="form-control" id="isUsed" placeholder="Is Used">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="UpdateAccount()" class="btn btn-primary d-inline-block" data-bs-dismiss="modal">Update Account</button>
+                <button type="button" class="btn btn-secondary d-inline-block" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

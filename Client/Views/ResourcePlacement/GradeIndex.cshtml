@@ -1,0 +1,97 @@
+﻿@{
+    Layout = "AdminLayout";
+}
+
+<!-- Modal -->
+<div class="text-center">
+    <h1 class="align-content-center" id="judul">List Grade</h1>
+</div>
+<div class="text-center mt-3">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAddGrade">Add Grade</button>
+</div>
+
+<div class="add-grade">
+    <div class="modal" id="modalAddGrade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Grade</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="guid" class="form-label">Employee Name</label>
+                            <select class="form-select employeeSelect" aria-label="Default select example" id="guidEmployee"></select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Grade</label>
+                            <select class="form-select" aria-label="Default select example" id="name">
+                                <option selected>Pilih Grade</option>
+                                <option value="A" data-salary="5500000">Grade A</option>
+                                <option value="B" data-salary="5000000">Grade B</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="salary" class="form-label">Salary</label>
+                            <input type="text" class="form-control" id="salary" placeholder="Salary" readonly>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="addGrade()" class="btn btn-primary d-inline-block" data-bs-dismiss="modal">Add Grade</button>
+                    <button type="button" class="btn btn-secondary d-inline-block" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="recent-orders">
+<table id="gradeTable">
+    <thead>
+        <tr>
+            <th>No</th>
+            <th>Grade</th>
+            <th>Salary</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody id="tbodyGrade">
+    </tbody>
+</table>
+</div>
+
+<div class="modal" id="modalUpdateGrade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Update</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Guid</label>
+                        <input type="text" class="form-control" id="guidUpd" placeholder="Guid" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Grade</label>
+                        <select class="form-select" aria-label="Default select example" id="nameUpd">
+                            <option selected>Open this select menu</option>
+                            <option value="A">Grade A</option>
+                            <option value="B">Grade B</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="salary" class="form-label">Salary</label>
+                        <input type="text" class="form-control" id="salaryUpd" placeholder="Salary">
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="UpdateGrade()" class="btn btn-primary d-inline-block" data-bs-dismiss="modal">Update Grade</button>
+                <button type="button" class="btn btn-secondary d-inline-block" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+

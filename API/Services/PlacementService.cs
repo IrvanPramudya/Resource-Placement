@@ -7,13 +7,59 @@ namespace API.Services
 {
     public class PlacementService
     {
+        private readonly IClientRepository _clientRepository;
+        private readonly IEmployeeRepository _employeeRepository;
         private readonly IPlacementRepository _placementRepository;
 
-        public PlacementService(IPlacementRepository placementRepository)
+        public PlacementService(IPlacementRepository placementRepository, IClientRepository clientRepository, IEmployeeRepository employeeRepository)
         {
             _placementRepository = placementRepository;
+            _clientRepository = clientRepository;
+            _employeeRepository = employeeRepository;
         }
 
+        public IEnumerable<GetEmployeeClientName> GetEmployeeClientName()
+        {
+            var merge = from e in _employeeRepository.GetAll()
+                        join p in _placementRepository.GetAll() on e.Guid equals p.EmployeeGuid
+                        join c in _clientRepository.GetAll() on p.ClientGuid equals c.Guid
+                        select new GetEmployeeClientName
+                        {
+                            Guid = p.Guid,
+                            StartDate = p.StartDate,
+                            EndDate = p.EndDate,
+                            EmployeeName = e.FirstName + " " +e.LastName,
+                            ClientName = c.Name
+                        };
+            if (!merge.Any())
+            {
+                return null;
+            }
+            return merge;
+        }
+        public IEnumerable<GetCountedClient> GetCountedClient()
+        {
+            var placement = _placementRepository.GetAll();
+            var client = _clientRepository.GetAll();
+            var listclient = new List<GetCountedClient>();
+            foreach (var item in client)
+            {
+                var newclient = new GetCountedClient
+                {
+                    ClientName = item.Name,
+                    CountEmployee = 0
+                };
+                foreach(var item2 in placement)
+                {
+                    if(item.Guid == item2.ClientGuid)
+                    {
+                        newclient.CountEmployee++;
+                    }
+                }
+                listclient.Add(newclient);
+            }
+            return listclient;
+        }
         public IEnumerable<PlacementDto> GetAll()
         {
             var placements = _placementRepository.GetAll();

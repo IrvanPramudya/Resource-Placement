@@ -7,12 +7,36 @@ namespace API.Services
     public class AccountRoleService
     {
         private readonly IAccountRoleRepository _accountRoleRepository;
+        private readonly IRoleRepository _roleRepository;
 
-        public AccountRoleService(IAccountRoleRepository accountRoleRepository)
+        public AccountRoleService(IAccountRoleRepository accountRoleRepository, IRoleRepository roleRepository)
         {
-            _accountRoleRepository = accountRoleRepository; 
+            _accountRoleRepository = accountRoleRepository;
+            _roleRepository = roleRepository;
         }
-
+        public IEnumerable<GetCountedAllRole> CountAllRole()
+        {
+            var accountrole = _accountRoleRepository.GetAll();
+            var role = _roleRepository.GetAll();
+            var listrole = new List<GetCountedAllRole>();
+            foreach(var item in role)
+            {
+                var newrole = new GetCountedAllRole
+                {
+                    RoleName = item.Name,
+                    CountRole = 0
+                };
+                foreach(var item2 in accountrole)
+                {
+                    if(item.Guid == item2.RoleGuid)
+                    {
+                        newrole.CountRole++;
+                    }
+                }
+                listrole.Add(newrole);
+            }
+            return listrole;
+        }
         public IEnumerable<AccountRoleDto> GetAll()
         {
             var accountRoles = _accountRoleRepository.GetAll();
