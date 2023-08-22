@@ -19,6 +19,52 @@ namespace API.Controllers
             _placementService = placementService;
         }
 
+<<<<<<< Updated upstream
+=======
+        [HttpGet("GetEmployeeClientName")]
+        public IActionResult GetEmployeeClientName()
+        {
+            var data = _placementService.GetEmployeeClientName();
+            if (data == null)
+            {
+                return StatusCode(404, new ResponseHandler<GetEmployeeClientName>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data is not Found",
+                });
+            }
+            return Ok(new ResponseHandler<IEnumerable<GetEmployeeClientName>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Data Success Retrieved",
+                Data = data
+            });
+        }
+
+        [HttpGet("CountClient")]
+        public IActionResult CountEmployee()
+        {
+            var data = _placementService.GetCountedClient();
+            if (data == null)
+            {
+                return StatusCode(404, new ResponseHandler<GetCountedClient>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data is not Found",
+                });
+            }
+            return Ok(new ResponseHandler<IEnumerable<GetCountedClient>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Data Success Retrieved",
+                Data = data
+            });
+        }
+>>>>>>> Stashed changes
         [HttpGet]
         public IActionResult GetAll()
         {

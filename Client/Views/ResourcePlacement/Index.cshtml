@@ -1,0 +1,106 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    Layout = "AdminLayout";
+}
+
+<div class="header">
+    <div class="left">
+        <h1>Dashboard</h1>
+        <ul class="breadcrumb">
+            <li>
+                <a href="#">
+                    Analytics
+                </a>
+            </li>
+            /
+            <li><a href="#" class="active">Shop</a></li>
+        </ul>
+    </div>
+</div>
+
+<!-- Insights -->
+<ul class="insights" id="Adding-Role">
+
+</ul>
+<!-- End of Insights -->
+
+<div class="bottom-data">
+    <div class="row" style="height:30%; width:40%">
+        <div class="col-6">
+            <div class="header">
+                <i class='bx bx-receipt'></i>
+                <h3>Gender</h3>
+            </div>
+            <div class="chart-container" style="position: relative; height:100%; width:100%">
+                <canvas id="GenderChart"></canvas>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="header">
+                <i class='bx bx-receipt'></i>
+                <h3>Status</h3>
+            </div>
+            <div class="chart-container" style="position: relative; height:100%; width:100%">
+                <canvas id="StatusChart"></canvas>
+            </div>
+        </div>
+    </div>
+    @*<div class="orders">
+        <div class="header">
+            <i class='bx bx-receipt'></i>
+            <h3>Charts</h3>
+            <i class='bx bx-filter'></i>
+            <i class='bx bx-search'></i>
+        </div>
+        <div class="chart-container" style="position: relative; height:50%; width:50%">
+            <canvas id="StatusChart"></canvas>
+        </div>
+    </div>
+    <div class="orders">
+        <div class="header">
+            <i class='bx bx-receipt'></i>
+            <h3>Charts</h3>
+            <i class='bx bx-filter'></i>
+            <i class='bx bx-search'></i>
+        </div>
+        <div class="chart-container" style="position: relative; height:50%; width:50%">
+            <canvas id="GenderChart"></canvas>
+        </div>
+    </div>*@
+
+    <!-- Reminders -->
+    <div class="reminders">
+        <div class="header">
+            <i class='bx bx-note'></i>
+            <h3>Remiders</h3>
+            <i class='bx bx-filter'></i>
+            <i class='bx bx-plus'></i>
+        </div>
+        <ul class="task-list">
+            <li class="completed">
+                <div class="task-title">
+                    <i class='bx bx-check-circle'></i>
+                    <p>Start Our Meeting</p>
+                </div>
+                <i class='bx bx-dots-vertical-rounded'></i>
+            </li>
+            <li class="completed">
+                <div class="task-title">
+                    <i class='bx bx-check-circle'></i>
+                    <p>Analyse Our Site</p>
+                </div>
+                <i class='bx bx-dots-vertical-rounded'></i>
+            </li>
+            <li class="not-completed">
+                <div class="task-title">
+                    <i class='bx bx-x-circle'></i>
+                    <p>Play Footbal</p>
+                </div>
+                <i class='bx bx-dots-vertical-rounded'></i>
+            </li>
+        </ul>
+    </div>
+
+    <!-- End of Reminders-->
+
+</div>

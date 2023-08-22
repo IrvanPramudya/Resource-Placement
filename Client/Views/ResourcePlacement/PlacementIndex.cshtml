@@ -1,0 +1,105 @@
+﻿@{
+    Layout = "AdminLayout";
+}
+
+<!-- Modal -->
+<div class="text-center">
+    <h1 class="align-content-center" id="judul">List Placement</h1>
+</div>
+<div class="text-center mt-3">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAddPlacement">Add Placement</button>
+</div>
+
+<div class="add-placement">
+    <div class="modal" id="modalAddPlacement" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Placement</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="startDate" class="form-label">Start Date</label>
+                            <input type="datetime-local" class="form-control" id="startDate" placeholder="StartDate">
+                        </div>
+                        <div class="mb-3">
+                            <label for="endDate" class="form-label">End Date</label>
+                            <input type="datetime-local" class="form-control" id="endDate" placeholder="EndDate">
+                        </div>
+                        <div class="mb-3">
+                            <label for="employeeGuid" class="form-label">Employee Guid</label>
+                            <input type="text" class="form-control" id="employeeGuid" placeholder="employeeGuid">
+                        </div>
+                        <div class="mb-3">
+                            <label for="clientGuid" class="form-label">Client Guid</label>
+                            <input type="text" class="form-control" id="clientGuid" placeholder="clientGuid">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="addPlacement()" class="btn btn-primary d-inline-block" data-bs-dismiss="modal">Add Placement</button>
+                    <button type="button" class="btn btn-secondary d-inline-block" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="recent-orders">
+    <table id="placementTable">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Employee Name</th>
+                <th>Client Name</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="tbodyPlacement">
+        </tbody>
+    </table>
+</div>
+
+<div class="modal" id="modalUpdatePlacement" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Update</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="guid" class="form-label">Guid</label>
+                        <input type="text" class="form-control" id="guidUpd" placeholder="Guid" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="startDate" class="form-label">Start Date</label>
+                        <input type="datetime" class="form-control" id="startDateUpd" placeholder="StartDate">
+                    </div>
+                    <div class="mb-3">
+                        <label for="endDate" class="form-label">End Date</label>
+                        <input type="datetime" class="form-control" id="endDateUpd" placeholder="EndDate">
+                    </div>
+                    <div class="mb-3">
+                        <label for="employeeGuid" class="form-label">Employee Guid</label>
+                        <input type="text" class="form-control" id="employeeGuidUpd" placeholder="employeeGuid">
+                    </div>
+                    <div class="mb-3">
+                        <label for="clientGuid" class="form-label">Client Guid</label>
+                        <input type="text" class="form-control" id="clientGuidUpd" placeholder="clientGuid">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="UpdatePlacement()" class="btn btn-primary d-inline-block" data-bs-dismiss="modal">Update Placement</button>
+                <button type="button" class="btn btn-secondary d-inline-block" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,89 @@
+﻿@{
+    Layout = "AdminLayout";
+}
+
+<!-- Modal -->
+<div class="text-center">
+    <h1 class="align-content-center" id="judul">List Position</h1>
+</div>
+<div class="text-center mt-3">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAddPosition">Add Position</button>
+</div>
+
+<div class="add-position">
+    <div class="modal" id="modalAddPosition" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Position</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="clientGuid" class="form-label">Client Name</label>
+                            <select class="form-select clientSelect" aria-label="Default select example" id="clientGuid">
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Position</label>
+                            <input type="text" class="form-control" id="name" placeholder="Name">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="addPosition()" class="btn btn-primary d-inline-block" data-bs-dismiss="modal">Add Position</button>
+                    <button type="button" class="btn btn-secondary d-inline-block" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="recent-orders">
+    <table id="positionTable">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Client Name</th>
+                <th>Position Name</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="tbodyPosition">
+        </tbody>
+    </table>
+</div>
+
+<div class="modal" id="modalUpdatePosition" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Update</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="Guid" class="form-label">Guid</label>
+                        <input type="text" class="form-control" id="guidUpd" placeholder="guid" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="clientGuid" class="form-label">Client Name</label>
+                        <select class="form-select clientSelect" aria-label="Default select example" id="clientGuidUpd">
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Position</label>
+                        <input type="text" class="form-control" id="nameUpd" placeholder="nameUpd">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="UpdatePosition()" class="btn btn-primary d-inline-block" data-bs-dismiss="modal">Update Position</button>
+                <button type="button" class="btn btn-secondary d-inline-block" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
