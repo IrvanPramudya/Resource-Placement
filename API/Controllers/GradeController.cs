@@ -19,6 +19,29 @@ namespace API.Controllers
             _gradeService = gradeService;
         }
 
+        [HttpGet("GetEmployeeName")]
+        public IActionResult GetEmployeeName()
+        {
+            var result = _gradeService.GetEmployeeNames();
+            if (!result.Any())
+            {
+                return NotFound(new ResponseHandler<GetEmployeeName>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data Not Found"
+                });
+            }
+
+            return Ok(new ResponseHandler<IEnumerable<GetEmployeeName>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success Retrieve Data",
+                Data = result
+            });
+        }
+
         [HttpGet]
         public IActionResult GetAll()
         {
