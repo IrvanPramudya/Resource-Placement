@@ -6,7 +6,7 @@
     new Chart(ctx, {
         type: 'pie',
         data: {
-            labels: ['Female', 'Male'],
+            labels: ['Male', 'Female'],
             datasets: [{
                 label: 'Gender',
                 data: [result.data.countFemale, result.data.countMale],
@@ -35,7 +35,7 @@ $.ajax({
     new Chart(ctx, {
         type: 'pie',
         data: {
-            labels: ['Idle', 'Site'],
+            labels: ['Site', 'Idle'],
             datasets: [{
                 label: 'Status',
                 data: [result.data.countIdle, result.data.countSite],
@@ -105,7 +105,7 @@ function loadEmployeeData() {
             {
                 data: "status",
                 render: function (data, type, row) {
-                    return data === 1 ? "Idle" : "Active";
+                    return data === 1 ? "Idle" : "Site";
                 }
             },
             { data: "skill" },
@@ -171,7 +171,7 @@ function deleteEmployee(guid) {
     }).then(function (result) {
         if (result.isConfirmed) {
             $.ajax({
-                url: "https://localhost:7273/api/employee?guid=" + guid,
+                url: "https://localhost:7273/api/employees?guid=" + guid,
                 type: "DELETE",
             }).done(function (result) {
                 Swal.fire({
@@ -189,7 +189,7 @@ function deleteEmployee(guid) {
 }
 function ShowUpdate(guid) {
     $.ajax({
-        url: "https://localhost:7273/api/employee/" + guid,
+        url: "https://localhost:7273/api/employees/" + guid,
         type: "GET",
         dataType: "json"
     }).done((result) => {
@@ -207,7 +207,7 @@ function ShowUpdate(guid) {
             $("input[name='gender'][value='Male']").prop("checked", true);
         }
         if (result.data.status === 0) {
-            $("input[name='status'][value='Active']").prop("checked", true);
+            $("input[name='status'][value='Site']").prop("checked", true);
         } else {
             $("input[name='status'][value='Idle']").prop("checked", true);
         }
@@ -231,11 +231,11 @@ function UpdateEmployee() {
         email: $("#emailUpd").val(),
         phoneNumber: $("#phoneNumberUpd").val(), 
         gender: $("input[name='gender']:checked").val() === "Female" ? 0 : 1,
-        status: $("input[name='status']:checked").val() === "Active" ? 0 : 1,
+        status: $("input[name='status']:checked").val() === "Site" ? 0 : 1,
         skill: $("#skillUpd").val(),
     };
     $.ajax({
-        url: "https://localhost:7273/api/employee",
+        url: "https://localhost:7273/api/employees",
         type: "PUT",
         contentType: "application/json",
         data: JSON.stringify(data)
