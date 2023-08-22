@@ -1,0 +1,65 @@
+﻿@{
+    ViewData["Title"] = "Role";
+}
+<div class="text-center">
+    <h1 class="align-content-center" id="judul">List Role</h1>
+</div>
+<div class="text-center mt-3">
+    <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalAddRole">Add Role</button>
+</div>
+
+<div class="add-role">
+    <div class="modal" id="modalAddRole" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Role</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Role</label>
+                            <input type="text" class="form-control" id="name" placeholder="Role">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="addRole()" class="btn btn-primary d-inline-block" data-bs-dismiss="modal">Add Role</button>
+                    <button type="button" class="btn btn-secondary d-inline-block" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="recent-orders">
+    <table id="roleTable">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Name</th>
+                <th>Action</th>
+        </thead>
+    </table>
+</div>
+
+<div class="modal" id="modalUpdateRole" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Update</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" class="form-control" id="guidUpd" value="">
+                <input type="text" class="form-control" id="nameUpd" value="">
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="UpdateRole()" class="btn btn-primary d-inline-block" data-bs-dismiss="modal">Update Role</button>
+                <button type="button" class="btn btn-secondary d-inline-block" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

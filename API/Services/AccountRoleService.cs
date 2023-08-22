@@ -1,18 +1,44 @@
 ﻿using API.Contracts;
 using API.DTOs.AccountRoles;
+using API.DTOs.Roles;
 using API.Models;
+using Microsoft.OpenApi.Any;
 
 namespace API.Services
 {
     public class AccountRoleService
     {
+        private readonly IEmployeeRepository _employeeRepository;
         private readonly IAccountRoleRepository _accountRoleRepository;
+        private readonly IAccountRepository _accountRepository;
         private readonly IRoleRepository _roleRepository;
 
-        public AccountRoleService(IAccountRoleRepository accountRoleRepository, IRoleRepository roleRepository)
+        public AccountRoleService(IAccountRoleRepository accountRoleRepository, IRoleRepository roleRepository, IAccountRepository accountRepository, IEmployeeRepository employeeRepository)
         {
             _accountRoleRepository = accountRoleRepository;
             _roleRepository = roleRepository;
+            _accountRepository = accountRepository;
+            _employeeRepository = employeeRepository;
+        }
+        public IEnumerable<GetAccountRolewithFullname>? GetAccountRolewithFullname() 
+        {
+            var merge = from employee in _employeeRepository.GetAll()
+                        join account in _accountRepository.GetAll() on employee.Guid equals account.Guid
+                        join accountrole in _accountRoleRepository.GetAll() on account.Guid equals accountrole.AccountGuid
+                        join role in _roleRepository.GetAll() on accountrole.RoleGuid equals role.Guid
+                        select new GetAccountRolewithFullname
+                        {
+                            Guid = accountrole.Guid,
+                            AccountGuid = account.Guid,
+                            RoleGuid = role.Guid,
+                            FullName = employee.FirstName+ " " + employee.LastName,
+                            RoleName = role.Name
+                        };
+            if(!merge.Any())
+            {
+                return null;
+            }
+            return merge;
         }
         public IEnumerable<GetCountedAllRole> CountAllRole()
         {

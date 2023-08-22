@@ -33,67 +33,21 @@ namespace API.Services
             _dbContext = dbContext;
             _accountRoleRepository = accountRoleRepository;
         }
-        /*public int InsertReportEmployee(ReportEmployee inputed)
-        {
-            if (!_employeeRepository.IsNotExist(inputed.Email)
-               || !_employeeRepository.IsNotExist(inputed.PhoneNumber))
-            {
-                return 0;
-            }
-            using var transaction = _dbContext.Database.BeginTransaction();
-            try
-            {
-                var NewNik = GenerateHandler.LastNik(_employeeRepository.GetLastNik());
-                var employee = _employeeRepository.Create(new Employee
-                {
-                    Guid = new Guid(),
-                    NIK = NewNik,
-                    FirstName = inputed.FirstName,
-                    LastName = inputed.LastName,
-                    Email = inputed.Email,
-                    PhoneNumber = inputed.PhoneNumber,
-                    Gender = inputed.Gender,
-                    Status = 0,
-                    Skill = inputed.Skill,
-                    CreatedDate = DateTime.Now,
-                    ModifiedDate = DateTime.Now,
-                }) ;
-                var grade = _gradeRepository.Create(new Grade
-                {
-                    Guid = employee.Guid,
-                    Name =inputed.Grade,
-                    Salary = inputed.Salary,
-                    CreatedDate = DateTime.Now,
-                    ModifiedDate = DateTime.Now,
-                });
-                var accountroleadmin = _accountRoleRepository.Create(new NewAccountRoleDto
-                {
-                    AccountGuid = employee.Guid,
-                    RoleGuid = Guid.Parse("ae259a90-e2e8-442f-ce18-08db91a71ab9")
-                });
-                transaction.Commit();
-                return 1;
-            }
-            catch
-            {
-                transaction.Rollback();
-                return -1;
-            }
-        }*/
+        
         public IEnumerable<GetReportEmployee>? GetAllReportedEmployee()
         {
             var mergetable = from employee in _employeeRepository.GetAll()
                              join grade in _gradeRepository.GetAll() on employee.Guid equals grade.Guid
                              select new GetReportEmployee
                              {
-                                NIK = employee.NIK,
-                                FullName = employee.FirstName + " " + employee.LastName,
-                                PhoneNumber = employee.PhoneNumber,
-                                Email = employee.Email,
-                                Gender = employee.Gender,
-                                Skill = employee.Skill,
-                                Grade = grade.Name,
-                                Salary  = grade.Salary
+                                 NIK = employee.NIK,
+                                 FullName = employee.FirstName + " " + employee.LastName,
+                                 PhoneNumber = employee.PhoneNumber,
+                                 Email = employee.Email,
+                                 Gender = employee.Gender,
+                                 Skill = employee.Skill,
+                                 Grade = grade.Name,
+                                 Salary = grade.Salary
                              };
             if (!mergetable.Any())
             {
@@ -108,14 +62,14 @@ namespace API.Services
                              where employee.Guid == guid
                              select new GetReportEmployee
                              {
-                                NIK = employee.NIK,
-                                FullName = employee.FirstName + " " + employee.LastName,
-                                PhoneNumber = employee.PhoneNumber,
-                                Email = employee.Email,
-                                Gender = employee.Gender,
-                                Skill = employee.Skill,
-                                Grade = grade.Name,
-                                Salary  = grade.Salary
+                                 NIK = employee.NIK,
+                                 FullName = employee.FirstName + " " + employee.LastName,
+                                 PhoneNumber = employee.PhoneNumber,
+                                 Email = employee.Email,
+                                 Gender = employee.Gender,
+                                 Skill = employee.Skill,
+                                 Grade = grade.Name,
+                                 Salary = grade.Salary
                              };
             if (!mergetable.Any())
             {
@@ -126,20 +80,20 @@ namespace API.Services
         }
         public GetEmployeeNotification? GetNotification(Guid guid)
         {
-            var merging = from employee     in _employeeRepository.GetAll()
-                          join interview    in _interviewRepository.GetAll() on employee.Guid equals interview.Guid
-                          join client       in _clientRepository.GetAll() on interview.ClientGuid equals client.Guid
-                          join position     in _positionRepository.GetAll() on client.Guid equals position.ClientGuid
+            var merging = from employee in _employeeRepository.GetAll()
+                          join interview in _interviewRepository.GetAll() on employee.Guid equals interview.Guid
+                          join client in _clientRepository.GetAll() on interview.ClientGuid equals client.Guid
+                          join position in _positionRepository.GetAll() on client.Guid equals position.ClientGuid
                           where employee.Guid == guid && client.IsAvailable == true
                           select new GetEmployeeNotification
                           {
                               ClientName = client.Name,
-                              PositionName  = position.Name,
+                              PositionName = position.Name,
                               CapacityClient = client.Capacity,
                               InterviewDate = interview.InterviewDate,
                               Note = interview.Text
                           };
-            if(!merging.Any())
+            if (!merging.Any())
             {
                 return null;
             }
@@ -204,7 +158,7 @@ namespace API.Services
             };
         }
 
-        
+
         public IEnumerable<EmployeeDto> GetAll()
         {
             var employees = _employeeRepository.GetAll();

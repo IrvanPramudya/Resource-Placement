@@ -1,4 +1,5 @@
 ﻿using API.DTOs.AccountRoles;
+using API.DTOs.Roles;
 using API.Services;
 using API.Utilities.Handlers;
 using Microsoft.AspNetCore.Authorization;
@@ -19,6 +20,28 @@ namespace API.Controllers
             _accountRoleService = accountRoleService;
         }
 
+        [HttpGet("GetAccountRolewithFullName")]
+        public IActionResult GetAccountRolewithFullName()
+        {
+            var result = _accountRoleService.GetAccountRolewithFullname();
+            if (!result.Any())
+            {
+                return NotFound(new ResponseHandler<IEnumerable<GetAccountRolewithFullname>>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data Not Found"
+                });
+            }
+
+            return Ok(new ResponseHandler<IEnumerable<GetAccountRolewithFullname>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success Retrieve Data",
+                Data = result
+            });
+        }
         [HttpGet("GetCountAllRole")]
         public IActionResult GetCountAllRole()
         {
