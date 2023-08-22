@@ -5,21 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewData["Title"] - Client</title>
-<<<<<<< Updated upstream
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
-    <title>Responsive Dashboard Design #2 | AsmrProg</title>
-=======
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/EmployeeStyle.css" asp-append-version="true" />
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css" />
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" />
     <title>Resource Placement</title>
->>>>>>> Stashed changes
 </head>
 
 <body>
@@ -32,17 +25,9 @@
         </a>
         <ul class="side-menu">
             <li><a asp-area="" asp-controller="ResourcePlacement" asp-action="Index"><i class='bx bxs-dashboard'></i>Dashboard</a></li>
-            <li><a href="#"><i class='bx bx-store-alt'></i>Shop</a></li>
-            <li class="active"><a href="#"><i class='bx bx-analyse'></i>Analytics</a></li>
-<<<<<<< Updated upstream
-            <li><a href="#"><i class='bx bx-message-square-dots'></i>Tickets</a></li>
-            <li><a href="#"><i class='bx bx-group'></i>Users</a></li>
-=======
             <li><a asp-area="" asp-controller="ResourcePlacement" asp-action="EmployeeIndex"><i class='bx bx-group'></i>Employee</a></li>
             <li><a asp-area="" asp-controller="ResourcePlacement" asp-action="RoleIndex"><i class='bx bx-group'></i>Role</a></li>
             <li><a asp-area="" asp-controller="ResourcePlacement" asp-action="AccountRoleIndex"><i class='bx bx-group'></i>Account Role</a></li>
->>>>>>> Stashed changes
-            <li><a href="#"><i class='bx bx-cog'></i>Settings</a></li>
         </ul>
         <ul class="side-menu">
             <li>
@@ -88,10 +73,8 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/index.js" asp-append-version="true"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/Employee.js" asp-append-version="true"></script>
-<<<<<<< Updated upstream
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-=======
     <script src="~/js/Role.js" asp-append-version="true"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -105,7 +88,6 @@
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
     <script src="https://cdn.datatables.net/fixedcolumns/4.3.0/js/dataTables.fixedColumns.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.colVis.min.js"></script>
->>>>>>> Stashed changes
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 

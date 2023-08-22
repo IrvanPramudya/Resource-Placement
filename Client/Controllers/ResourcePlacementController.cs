@@ -8,8 +8,6 @@ namespace Client.Controllers
         {
             return View();
         }
-<<<<<<< Updated upstream
-=======
         public IActionResult Login()
         {
             return View();
@@ -17,6 +15,5 @@ namespace Client.Controllers
         public IActionResult EmployeeIndex() => View();
         public IActionResult RoleIndex() => View();
         public IActionResult AccountRoleIndex() => View();
->>>>>>> Stashed changes
     }
 }

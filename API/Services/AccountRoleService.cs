@@ -40,6 +40,21 @@ namespace API.Services
             }
             return merge;
         }
+        public IEnumerable<GetEmployeehasAccount>? GetEmployeehasAccount()
+        {
+            var merge = from employee in _employeeRepository.GetAll()
+                        join account in _accountRepository.GetAll() on employee.Guid equals account.Guid
+                        select new GetEmployeehasAccount
+                        {
+                            AccountGuid = account.Guid,
+                            FullName = employee.FirstName + " " + employee.LastName,
+                        };
+            if (!merge.Any())
+            {
+                return null;
+            }
+            return merge;
+        }
         public IEnumerable<GetCountedAllRole> CountAllRole()
         {
             var accountrole = _accountRoleRepository.GetAll();

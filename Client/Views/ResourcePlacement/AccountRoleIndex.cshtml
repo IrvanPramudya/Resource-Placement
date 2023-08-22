@@ -32,12 +32,12 @@
                     <form>
                         <div class="mb-3">
                             <label for="FullName" class="form-label">Account Name</label>
-                            <select class="form-select selectName" aria-label="Default select example" id="accountName">
+                            <select class="form-select selectName" aria-label="Default select example" id="accountGuid">
                             </select>
                         </div>
                         <div class="mb-3">
                             <label for="Role" class="form-label">Role</label>
-                            <select class="form-select selectRole" aria-label="Default select example" id="roleName">
+                            <select class="form-select selectRole" aria-label="Default select example" id="roleGuid">
                             </select>
                         </div>
                     </form>
@@ -82,9 +82,8 @@
         $(document).ready(function () {
             loadAccountRoleData();
             $.ajax({
-                url: "https://localhost:7273/api/accountroles/GetAccountRolewithFullName"
+                url: "https://localhost:7273/api/accountroles/GetEmployeehasAccount"
             }).done(function (result) {
-                // Assuming the API response contains a property named "totalEmployees"
                 console.log(result)
                 let getName = ""
                 $.each(result.data, (key, val) => {
@@ -96,7 +95,6 @@
             $.ajax({
                 url: "https://localhost:7273/api/roles"
             }).done(function (result) {
-                // Assuming the API response contains a property named "totalEmployees"
                 console.log(result)
                 let getRole = ""
                 $.each(result.data, (key, val) => {
@@ -146,8 +144,8 @@
 
         function addAccountRole() {
             var accountroleData = {
-                accountName: $("#accountName").val(),
-                RoleName: $("#roleName").val()
+                accountGuid: $("#accountGuid").val(),
+                roleGuid: $("#roleGuid").val()
             };
 
             $.ajax({
@@ -171,6 +169,7 @@
                     text: 'Failed to insert data. Please try again.',
                     icon: 'error'
                 });
+                console.log(error)
             });
         }
 

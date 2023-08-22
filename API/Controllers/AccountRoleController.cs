@@ -20,6 +20,28 @@ namespace API.Controllers
             _accountRoleService = accountRoleService;
         }
 
+        [HttpGet("GetEmployeehasAccount")]
+        public IActionResult GetEmployeehasAccount()
+        {
+            var result = _accountRoleService.GetEmployeehasAccount();
+            if (!result.Any())
+            {
+                return NotFound(new ResponseHandler<IEnumerable<GetEmployeehasAccount>>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data Not Found"
+                });
+            }
+
+            return Ok(new ResponseHandler<IEnumerable<GetEmployeehasAccount>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success Retrieve Data",
+                Data = result
+            });
+        }
         [HttpGet("GetAccountRolewithFullName")]
         public IActionResult GetAccountRolewithFullName()
         {
