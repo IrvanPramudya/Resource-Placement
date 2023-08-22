@@ -17,5 +17,7 @@ namespace Client.Controllers
         public IActionResult PositionIndex() => View();
         public IActionResult PlacementIndex() => View();
         public IActionResult AccountIndex() => View();
+        public IActionResult RoleIndex() => View();
+        public IActionResult AccountRoleIndex() => View();
     }
 }

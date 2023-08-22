@@ -1,15 +1,12 @@
-﻿$(document).ready(function () {
-    loadAccountData();
 
-    $("#saveAccountBtn").click(function () {
-        addAccount();
-});
+$(document).ready(function () {
+    loadRoleData();
 });
 
-function loadAccountData() {
-    $('#accountTable').DataTable({
+function loadRoleData() {
+    $('#roleTable').DataTable({
         ajax: {
-            url: "https://localhost:7273/api/accounts",
+            url: "https://localhost:7273/api/roles",
             dataType: "JSON",
             dataSrc: "data"
         },
@@ -20,38 +17,40 @@ function loadAccountData() {
                     return meta.row + 1;
                 }
             },
-            { data: "password" },
-            { data: "otp" },
-            { data: "isUsed" },
+            { data: "name" },
             {
                 data: null,
                 render: function (data, type, row) {
-                    return `<button onclick="ShowUpdateAccount('${row.guid}')" data-bs-toggle="modal" data-bs-target="#modalUpdateAccount" class="btn btn-primary"> Update </button>` +
-                        `   <button onclick="deleteAccount('${row.guid}')" class="btn btn-secondary"> Delete </button>`;
+                    return `<button onclick="ShowUpdateRole('${row.guid}')" data-bs-toggle="modal" data-bs-target="#modalUpdateRole" class="btn btn-primary"> Update </button>` +
+                        `   <button onclick="deleteRole('${row.guid}')" class="btn btn-secondary"> Delete </button>`;
                 }
             }
         ],
-        dom: 'Bfrtip',
+        dom: "Blfrtip",
         buttons: [
-            'copy', 'csv', 'excel', 'pdf', 'print'
+            {
+                extend: 'colvis',
+                postfixButtons: ['colvisRestore'],
+                collectionLayout: 'fixed two-column',
+                className: 'btn btn-primary'
+            }
+            , 'copy', 'csv', 'excel', 'pdf', 'print'
         ]
     });
 }
 
-function addAccount() {
-    var accountData = {
-        password: $("#password").val(),
-        otp: $("#otp").val(),
-        isUsed: $("#isUsed").val()
+function addRole() {
+    var roleData = {
+        name: $("#name").val()
     };
 
     $.ajax({
-        url: "https://localhost:7273/api/accounts",
+        url: "https://localhost:7273/api/roles",
         type: "POST",
         headers: {
             'Content-Type': 'application/json'
         },
-        data: JSON.stringify(accountData),
+        data: JSON.stringify(roleData),
     }).done(function (result) {
         Swal.fire({
             title: 'Success',
@@ -69,7 +68,7 @@ function addAccount() {
     });
 }
 
-function deleteAccount(guid) {
+function deleteRole(guid) {
     Swal.fire({
         title: 'Are you sure?',
         text: 'Changes cannot be reverted!',
@@ -81,7 +80,7 @@ function deleteAccount(guid) {
     }).then(function (result) {
         if (result.isConfirmed) {
             $.ajax({
-                url: "https://localhost:7273/api/accounts?guid=" + guid,
+                url: "https://localhost:7273/api/roles?guid=" + guid,
                 type: "DELETE",
             }).done(function (result) {
                 Swal.fire({
@@ -97,59 +96,40 @@ function deleteAccount(guid) {
         }
     });
 }
-function ShowUpdateAccount(guid) {
+function ShowUpdateRole(guid) {
     $.ajax({
-        url: "https://localhost:7273/api/accounts/" + guid,
+        url: "https://localhost:7273/api/roles/" + guid,
         type: "GET",
         dataType: "json"
     }).done((result) => {
         console.log(result)
         $("#guidUpd").val(result.data.guid);
-        $("#passwordUpd").val(result.data.password);
-        $("#otpUpd").val(result.data.otp);
-        $("#isUsedUpd").val(result.data.isUsed);
-        // Melakukan penyesuaian untuk nilai gender
-        if (result.data.gender === 0) {
-            $("input[name='gender'][value='Female']").prop("checked", true);
-        } else {
-            $("input[name='gender'][value='Male']").prop("checked", true);
-        }
-        if (result.data.status === 0) {
-            $("input[name='status'][value='Active']").prop("checked", true);
-        } else {
-            $("input[name='status'][value='Idle']").prop("checked", true);
-        }
-        $("#skillUpd").val(result.data.skill);
-
-        $("#modalemp2").modal("show");
+        $("#nameUpd").val(result.data.name);
     }).fail((error) => {
-        alert("Failed to fetch account data. Please try again.");
+        alert("Failed to fetch role data. Please try again.");
         console.log(error)
     });
 
 }
 
-function UpdateAccount() {
+function UpdateRole() {
 
 
     let data = {
         guid: $("#guidUpd").val(),
-        password: $("#passwordUpd").val(),
-        otp: $("#otpUpd").val(),
-        isUsed: $("#isUsedUpd").val(),
-        email: $("#emailUpd").val()
+        name: $("#nameUpd").val(),
     };
     $.ajax({
-        url: "https://localhost:7273/api/accounts",
+        url: "https://localhost:7273/api/roles",
         type: "PUT",
         contentType: "application/json",
         data: JSON.stringify(data)
     }).done((result) => {
         Swal.fire({
             title: 'Success',
-            text: 'Data has been successfully updated',
+            text: 'Data has been successfully Updated',
             icon: 'success'
-        }).then(function () {
+        }).then(() => {
             location.reload();
         });
     }).fail((error) => {
