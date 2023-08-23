@@ -16,14 +16,26 @@ namespace API.Utilities.Validations.Clients
             RuleFor(client => client.Email)
                 .NotEmpty().WithMessage("Email is Required")
                 .EmailAddress().WithMessage("Wrong Email")
-                .Must(IsDuplicateValue).WithMessage("Email is Already Exist");
+                .Must((e, g) => IsDuplicateValue(e.Email, e.Guid)).WithMessage("Email is Already Exist");
             RuleFor(client => client.Capacity)
                 .NotEmpty().WithMessage("Capacity Cannot be Null");
         }
 
-        private bool IsDuplicateValue(string arg)
+        private bool IsDuplicateValue(string arg, Guid guid)
         {
-            return _clientRepository.IsNotExist(arg);
+            var temp = false;
+            var email = GetEmail(guid);
+            if (arg == email)
+            {
+                temp = true;
+            }
+            var result = _clientRepository.IsNotExist(arg) || temp;
+            return result;
+        }
+        private string GetEmail(Guid guid)
+        {
+            var data = _clientRepository.GetByGuid(guid);
+            return data.Email;
         }
     }
 }

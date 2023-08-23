@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>@ViewData["Title"] - Client</title>
+    @*Offline Style*@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -32,17 +33,22 @@
             </div>
         </a>
         <ul class="side-menu">
-            <li><a asp-area="" asp-controller="ResourcePlacement" asp-action="Index"><i class='bx bxs-dashboard'></i>Dashboard</a></li>
             <li><a href="#"><i class='bx bx-calendar-event'></i>Interview</a></li>
             <li class="active"><a href="#"><i class='bx bx-analyse'></i>Analytics</a></li>
-            <li><a asp-area="" asp-controller="ResourcePlacement" asp-action="ClientIndex"><i class='bx bx-buildings'></i>Client</a></li>
+            <li><a href="#"><i class='bx bx-calendar-event'></i>Interview</a></li>
+            <li class="active"><a href="#"><i class='bx bx-analyse'></i>Analytics</a></li>
+            <li><a href="#"><i class='bx bx-calendar-event'></i>Interview</a></li>
+            <li class="active"><a href="#"><i class='bx bx-analyse'></i>Analytics</a></li>
             <li><a href="#"><i class='bx bx-analyse'></i>Analytics</a></li>
             <li><a asp-area="" asp-controller="ResourcePlacement" asp-action="EmployeeIndex"><i class='bx bx-group'></i>Employee</a></li>
             <li><a asp-area="" asp-controller="ResourcePlacement" asp-action="GradeIndex"><i class='bx bx-award'></i>Grade</a></li>
-            <li><a asp-area="" asp-controller="ResourcePlacement" asp-action="PositionIndex"><i class='bx bx-been-here'></i>Position</a></li>
-            <li><a asp-area="" asp-controller="ResourcePlacement" asp-action="PlacementIndex"><i class='bx bx-building'></i>Placement</a></li>
-            <li><a asp-area="" asp-controller="ResourcePlacement" asp-action="AccountIndex"><i class='bx bx-user'></i>Account</a></li>
-            <li><a href="#"><i class='bx bx-cog'></i>Settings</a></li>
+        <ul class="side-menu">
+            <li>
+                <a asp-area="" asp-controller="ResourcePlacement" asp-action="Login" class="login">
+                    <i class='bx bx-log-in-circle'></i>
+                    Login
+                </a>
+            <li><a asp-area="" asp-controller="ResourcePlacement" asp-action="AccountRoleIndex"><i class='bx bxs-user-detail'></i>Account Role</a></li>
         </ul>
         <ul class="side-menu">
             <li>
@@ -91,10 +97,6 @@
     @*Offline Library*@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/Position.js" asp-append-version="true"></script>
-    <script src="~/js/Placement.js" asp-append-version="true"></script>
-    <script src="~/js/Account.js" asp-append-version="true"></script>
-    <script src="~/js/Role.js" asp-append-version="true"></script>
     @*Online Library*@
     <script src="~/js/Account.js" asp-append-version="true"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
