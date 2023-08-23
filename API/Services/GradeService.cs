@@ -30,7 +30,6 @@ namespace API.Services
                 return null;
             }
             return merge;
-            _employeeRepository = employeeRepository;
         }
 
         public IEnumerable<GetEmployeeName> GetEmployeeNames()
