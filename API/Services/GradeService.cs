@@ -14,6 +14,26 @@ namespace API.Services
             _gradeRepository = gradeRepository;
             _employeeRepository = employeeRepository;
         }
+<<<<<<< Updated upstream
+=======
+        public IEnumerable<GradewithName>? GetwithName()
+        {
+            var merge = from employee in _employeeRepository.GetAll()
+                        join grade in _gradeRepository.GetAll() on employee.Guid equals grade.Guid
+                        select new GradewithName
+                        {
+                            Guid = employee.Guid,
+                            EmployeeName =employee.FirstName+ " " + employee.LastName,
+                            GradeName = grade.Name,
+                            Salary = grade.Salary,
+                        };
+            if(!merge.Any())
+            {
+                return null;
+            }
+            return merge;
+        }
+>>>>>>> Stashed changes
 
         public IEnumerable<GetEmployeeName> GetEmployeeNames()
         {
