@@ -7,11 +7,11 @@
     <h1 class="align-content-center" id="judul">List Client</h1>
 </div>
 <div class="text-center mt-3">
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAddAccount">Add Account</button>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAddClient">Add Client</button>
 </div>
 
 <div class="add-account">
-    <div class="modal" id="modalAddAccount" tabindex="-1">
+    <div class="modal" id="modalAddClient" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -25,8 +25,23 @@
                             <input type="text" class="form-control" id="name" placeholder="Name">
                         </div>
                         <div class="mb-3">
+                            <label for="Email" class="form-label"> Email</label>
+                            <input type="email" class="form-control" id="email" placeholder="email">
+                        </div>
+                        <div class="mb-3">
                             <label for="otp" class="form-label"> Is Available</label>
-                            <input type="text" class="form-control" id="isAvailable" placeholder="Is Available">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="isAvailable" id="isAvailableTrue" value="true">
+                                <label class="form-check-label" for="exampleRadios2">
+                                    True
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="isAvailable" id="isAvailableFalse" value="false">
+                                <label class="form-check-label" for="exampleRadios3">
+                                    False
+                                </label>
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label for="isUsed" class="form-label"> Capacity</label>
@@ -49,13 +64,12 @@
             <tr>
                 <th>No</th>
                 <th>Name</th>
+                <th>Email</th>
                 <th>Is Available</th>
                 <th>Capacity</th>
                 <th>Action</th>
             </tr>
         </thead>
-        <tbody id="tbodyClient">
-        </tbody>
     </table>
 </div>
 
@@ -69,16 +83,34 @@
             <div class="modal-body">
                 <form>
                     <div class="mb-3">
-                        <label for="name" class="form-label"> Name</label>
-                        <input type="text" class="form-control" id="name" placeholder="Name">
+                        <input type="hidden" class="form-control" id="guidUpd" placeholder="Name">
                     </div>
                     <div class="mb-3">
-                        <label for="isAvailable" class="form-label"> Is Available</label>
-                        <input type="text" class="form-control" id="isAvailable" placeholder="Is Available">
+                        <label for="name" class="form-label"> Name</label>
+                        <input type="text" class="form-control" id="nameUpd" placeholder="Name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="Email" class="form-label"> Email</label>
+                        <input type="email" class="form-control" id="emailUpd" placeholder="email">
+                    </div>
+                    <div class="mb-3">
+                        <label for="otp" class="form-label"> Is Available</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="isAvailableUpd" id="isAvailableUpdTrue" value="true">
+                            <label class="form-check-label" for="exampleRadios2">
+                                True
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="isAvailableUpd" id="isAvailableUpdFalse" value="false">
+                            <label class="form-check-label" for="exampleRadios3">
+                                False
+                            </label>
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="capacity" class="form-label"> Capacity</label>
-                        <input type="text" class="form-control" id="capacity" placeholder="Capacity">
+                        <input type="text" class="form-control" id="capacityUpd" placeholder="Capacity">
                     </div>
                 </form>
             </div>
@@ -123,7 +155,7 @@
         function loadClientData() {
             $('#clientTable').DataTable({
                 ajax: {
-                    url: "https://localhost:7273/api/clients/GetAvailableClient",
+                    url: "https://localhost:7273/api/clients/",
                     dataType: "JSON",
                     dataSrc: "data"
                 },
@@ -135,6 +167,7 @@
                         }
                     },
                     { data: "name" },
+                    { data: "email" },
                     { data: "isAvailable" },
                     { data: "capacity" },
                     {
@@ -159,9 +192,11 @@
         }
 
         function addClient() {
+            var isAvailable = $("input[name='isAvailable']:checked").val();
             var clientData = {
-                clientName: $("#clientName").val(),
-                isAvailable: $("#isAvailable").val(),
+                name: $("#name").val(),
+                email: $("#email").val(),
+                isAvailable: isAvailable === "true",
                 capacity: $("#capacity").val()
             };
 
@@ -171,7 +206,7 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                data: JSON.stringify(accountroleData),
+                data: JSON.stringify(clientData),
             }).done(function (result) {
                 Swal.fire({
                     title: 'Success',
@@ -186,6 +221,7 @@
                     text: 'Failed to insert data. Please try again.',
                     icon: 'error'
                 });
+                console.log(error)
             });
         }
 
@@ -225,10 +261,16 @@
             }).done((result) => {
                 console.log(result)
                 $("#guidUpd").val(result.data.guid);
-                $("#accountguidUpd").val(result.data.accountGuid);
-                $("#roleguidUpd").val(result.data.roleGuid);
+                $("#nameUpd").val(result.data.name);
+                $("#emailUpd").val(result.data.email);
+                if (result.data.isAvailable === false) {
+                    $("input[name='isAvailableUpd'][value='false']").prop("checked", true);
+                } else {
+                    $("input[name='isAvailableUpd'][value='true']").prop("checked", true);
+                }
+                $("#capacityUpd").val(result.data.capacity);
             }).fail((error) => {
-                alert("Failed to fetch accountrole data. Please try again.");
+                alert("Failed to fetch Client data. Please try again.");
                 console.log(error)
             });
 
@@ -236,11 +278,13 @@
 
         function UpdateClient() {
 
-
+            var isAvailable = $("input[name='isAvailableUpd']:checked").val();
             let data = {
                 guid: $("#guidUpd").val(),
-                accountGuid: $("#accountguidUpd").val(),
-                roleGuid: $("#roleguidUpd").val(),
+                name: $("#nameUpd").val(),
+                email: $("#emailUpd").val(),
+                isAvailable: $("#isAvailableUpd").val(),
+                capacity: $("#capacityUpd").val(),
             };
             $.ajax({
                 url: "https://localhost:7273/api/clients",
