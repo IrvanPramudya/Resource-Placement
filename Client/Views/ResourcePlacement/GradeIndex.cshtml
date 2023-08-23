@@ -1,4 +1,5 @@
 ﻿@{
+    ViewData["Title"] = "Grade";
     Layout = "AdminLayout";
 }
 
@@ -6,7 +7,7 @@
 <div class="text-center">
     <h1 class="align-content-center" id="judul">List Grade</h1>
 </div>
-<div class="text-center mt-3">
+<div class="text-center my-3">
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAddGrade">Add Grade</button>
 </div>
 
@@ -108,12 +109,12 @@
                 salaryInput.value = selectedSalary;
             });
 
-        $(document).ready(function () {
-            $('#nameUpd').change(function () {
-                const selectedSalaryUpdate = $(this).find(':selected').data('salary-update');
-                $('#salaryUpd').val(selectedSalaryUpdate);
+            $(document).ready(function () {
+                $('#nameUpd').change(function () {
+                    const selectedSalaryUpdate = $(this).find(':selected').data('salary-update');
+                    $('#salaryUpd').val(selectedSalaryUpdate);
+                });
             });
-        });
 
             $(document).ready(function () {
                 loadGradeData();
@@ -154,7 +155,7 @@
                             }
                         }
                     ],
-                    dom: 'Bfrtip',
+                    dom: 'Blfrtip',
                     buttons: [
                         'copy', 'csv', 'excel', 'pdf', 'print'
                     ]
