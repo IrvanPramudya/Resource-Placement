@@ -213,29 +213,30 @@
                 skill: $("#skill").val()
             };
 
-            $.ajax({
-                url: "https://localhost:7273/api/employees",
-                type: "POST",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                data: JSON.stringify(employeeData),
-            }).done(function (result) {
-                Swal.fire({
-                    title: 'Success',
-                    text: 'Data has been successfully inserted',
-                    icon: 'success'
-                }).then(function () {
-                    location.reload();
+                $.ajax({
+                    url: "https://localhost:7273/api/employees",
+                    type: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    data: JSON.stringify(employeeData),
+                }).done(function (result) {
+                    Swal.fire({
+                        title: 'Success',
+                        text: 'Data has been successfully inserted',
+                        icon: 'success'
+                    }).then(function () {
+                        location.reload();
+                    });
+                }).fail(function (error) {
+                    Swal.fire({
+                        title: 'Oops',
+                        text: 'Failed to insert data. Please try again.',
+                        icon: 'error'
+                    });
+                    console.log(error)
                 });
-            }).fail(function (error) {
-                Swal.fire({
-                    title: 'Oops',
-                    text: 'Failed to insert data. Please try again.',
-                    icon: 'error'
-                });
-            });
-        }
+            }
 
         function deleteEmployee(guid) {
             Swal.fire({

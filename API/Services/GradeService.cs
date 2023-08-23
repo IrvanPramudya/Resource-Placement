@@ -30,6 +30,25 @@ namespace API.Services
                 return null;
             }
             return merge;
+            _employeeRepository = employeeRepository;
+        }
+
+        public IEnumerable<GetEmployeeName> GetEmployeeNames()
+        {
+            var merge = from e in _employeeRepository.GetAll()
+                        join g in _gradeRepository.GetAll() on e.Guid equals g.Guid
+                        select new GetEmployeeName
+                        {
+                            Guid = e.Guid,
+                            EmployeeName = e.FirstName+" "+e.LastName,
+                            Grade = g.Name,
+                            Salary = g.Salary
+                        };
+            if (!merge.Any())
+            {
+                return null;
+            }
+            return merge;
         }
         public IEnumerable<GradeDto> GetAll()
         {
