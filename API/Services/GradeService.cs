@@ -15,10 +15,6 @@ namespace API.Services
             _employeeRepository = employeeRepository;
         }
 
-=========
-<<<<<<< Updated upstream
-=======
->>>>>>>>> Temporary merge branch 2
         public IEnumerable<GradewithName>? GetwithName()
         {
             var merge = from employee in _employeeRepository.GetAll()
