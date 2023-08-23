@@ -7,12 +7,30 @@ namespace API.Services
     public class GradeService
     {
         private readonly IGradeRepository _gradeRepository;
+        private readonly IEmployeeRepository _employeeRepository;
 
-        public GradeService(IGradeRepository gradeRepository)
+        public GradeService(IGradeRepository gradeRepository, IEmployeeRepository employeeRepository)
         {
             _gradeRepository = gradeRepository;
+            _employeeRepository = employeeRepository;
         }
-
+        public IEnumerable<GradewithName>? GetwithName()
+        {
+            var merge = from employee in _employeeRepository.GetAll()
+                        join grade in _gradeRepository.GetAll() on employee.Guid equals grade.Guid
+                        select new GradewithName
+                        {
+                            Guid = employee.Guid,
+                            EmployeeName =employee.FirstName+ " " + employee.LastName,
+                            GradeName = grade.Name,
+                            Salary = grade.Salary,
+                        };
+            if(!merge.Any())
+            {
+                return null;
+            }
+            return merge;
+        }
         public IEnumerable<GradeDto> GetAll()
         {
             var grades = _gradeRepository.GetAll();
