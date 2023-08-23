@@ -14,8 +14,7 @@ namespace API.Services
             _gradeRepository = gradeRepository;
             _employeeRepository = employeeRepository;
         }
-<<<<<<< Updated upstream
-=======
+
         public IEnumerable<GradewithName>? GetwithName()
         {
             var merge = from employee in _employeeRepository.GetAll()
@@ -23,17 +22,16 @@ namespace API.Services
                         select new GradewithName
                         {
                             Guid = employee.Guid,
-                            EmployeeName =employee.FirstName+ " " + employee.LastName,
+                            EmployeeName = employee.FirstName + " " + employee.LastName,
                             GradeName = grade.Name,
                             Salary = grade.Salary,
                         };
-            if(!merge.Any())
+            if (!merge.Any())
             {
                 return null;
             }
             return merge;
         }
->>>>>>> Stashed changes
 
         public IEnumerable<GetEmployeeName> GetEmployeeNames()
         {
@@ -42,7 +40,7 @@ namespace API.Services
                         select new GetEmployeeName
                         {
                             Guid = e.Guid,
-                            EmployeeName = e.FirstName+" "+e.LastName,
+                            EmployeeName = e.FirstName + " " + e.LastName,
                             Grade = g.Name,
                             Salary = g.Salary
                         };
@@ -52,7 +50,6 @@ namespace API.Services
             }
             return merge;
         }
-
         public IEnumerable<GradeDto> GetAll()
         {
             var grades = _gradeRepository.GetAll();

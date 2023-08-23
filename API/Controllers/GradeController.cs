@@ -42,6 +42,28 @@ namespace API.Controllers
             });
         }
 
+        [HttpGet("GradewithName")]
+        public IActionResult GradewithName()
+        {
+            var result = _gradeService.GetwithName();
+            if (!result.Any())
+            {
+                return NotFound(new ResponseHandler<GradewithName>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data Not Found"
+                });
+            }
+
+            return Ok(new ResponseHandler<IEnumerable<GradewithName>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success Retrieve Data",
+                Data = result
+            });
+        }
         [HttpGet]
         public IActionResult GetAll()
         {

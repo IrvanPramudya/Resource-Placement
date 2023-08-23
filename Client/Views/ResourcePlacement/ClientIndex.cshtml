@@ -12,7 +12,7 @@
 </div>
 
 <div class="add-account">
-    <div class="modal" id="modalAddAccount" tabindex="-1">
+    <div class="modal" id="modalAddClient" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -22,15 +22,19 @@
                 <div class="modal-body">
                     <form>
                         <div class="mb-3">
-                            <label for="password" class="form-label"> Name</label>
+                            <label for="name" class="form-label"> Name</label>
                             <input type="text" class="form-control" id="name" placeholder="Name">
                         </div>
                         <div class="mb-3">
-                            <label for="otp" class="form-label"> Is Available</label>
+                            <label for="email" class="form-label"> Email</label>
+                            <input type="text" class="form-control" id="email" placeholder="Email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="isAvailable" class="form-label"> Is Available</label>
                             <input type="text" class="form-control" id="isAvailable" placeholder="Is Available">
                         </div>
                         <div class="mb-3">
-                            <label for="isUsed" class="form-label"> Capacity</label>
+                            <label for="capacity" class="form-label"> Capacity</label>
                             <input type="text" class="form-control" id="capacity" placeholder="Capacity">
                         </div>
                     </form>
@@ -50,6 +54,7 @@
             <tr>
                 <th>No</th>
                 <th>Name</th>
+                <th>Email</th>
                 <th>Is Available</th>
                 <th>Capacity</th>
                 <th>Action</th>
@@ -72,6 +77,10 @@
                     <div class="mb-3">
                         <label for="name" class="form-label"> Name</label>
                         <input type="text" class="form-control" id="name" placeholder="Name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label"> Email</label>
+                        <input type="text" class="form-control" id="email" placeholder="Email">
                     </div>
                     <div class="mb-3">
                         <label for="isAvailable" class="form-label"> Is Available</label>
@@ -124,7 +133,7 @@
         function loadClientData() {
             $('#clientTable').DataTable({
                 ajax: {
-                    url: "https://localhost:7273/api/clients/GetAvailableClient",
+                    url: "https://localhost:7273/api/clients",
                     dataType: "JSON",
                     dataSrc: "data"
                 },
@@ -136,6 +145,7 @@
                         }
                     },
                     { data: "name" },
+                    { data: "email" },
                     { data: "isAvailable" },
                     { data: "capacity" },
                     {
@@ -161,7 +171,8 @@
 
         function addClient() {
             var clientData = {
-                clientName: $("#clientName").val(),
+                Name: $("#name").val(),
+                email: $("#email").val(),
                 isAvailable: $("#isAvailable").val(),
                 capacity: $("#capacity").val()
             };
@@ -226,8 +237,10 @@
             }).done((result) => {
                 console.log(result)
                 $("#guidUpd").val(result.data.guid);
-                $("#accountguidUpd").val(result.data.accountGuid);
-                $("#roleguidUpd").val(result.data.roleGuid);
+                $("#nameUpd").val(result.data.name);
+                $("#emailUpd").val(result.data.email);
+                $("#isAvailableUpd").val(result.data.isAvailable);
+                $("#capacityUpd").val(result.data.capacity);
             }).fail((error) => {
                 alert("Failed to fetch client data. Please try again.");
                 console.log(error)
@@ -240,8 +253,10 @@
 
             let data = {
                 guid: $("#guidUpd").val(),
-                accountGuid: $("#accountguidUpd").val(),
-                roleGuid: $("#roleguidUpd").val(),
+                name: $("#nameUpd").val(),
+                email: $("#emailUpd").val(),
+                isAvailable: $("#isAvailableUpd").val(),
+                capacity: $("#capacityUpd").val(),
             };
             $.ajax({
                 url: "https://localhost:7273/api/clients",

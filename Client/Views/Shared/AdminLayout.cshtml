@@ -3,24 +3,17 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<<<<<<< Updated upstream
     <title>@ViewData["Title"] - Client</title>
-=======
-    <title>@ViewData["Title"]</title>
-    @*Offline Style*@
->>>>>>> Stashed changes
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.css" />
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.css" />
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/EmployeeStyle.css" asp-append-version="true" />
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    
+    @*Online Style*@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css" />
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" />
+    @await RenderSectionAsync("CSS", required: false)
     <title>Resource Placement</title>
 </head>
 
@@ -30,28 +23,26 @@
     <div class="sidebar">
         <a href="#" class="logo mt-3 fs-4">
             <i class='bx bx-code-alt'></i>
-            <div class="logo-name"><span>Asmr</span>Prog</div>
+            <div class="logo-name">
+                <span>
+                    Metrodata
+                </span>
+                <br />
+                Academy
+            </div>
         </a>
         <ul class="side-menu">
             <li><a asp-area="" asp-controller="ResourcePlacement" asp-action="Index"><i class='bx bxs-dashboard'></i>Dashboard</a></li>
             <li><a href="#"><i class='bx bx-calendar-event'></i>Interview</a></li>
-<<<<<<< Updated upstream
             <li class="active"><a href="#"><i class='bx bx-analyse'></i>Analytics</a></li>
-=======
             <li><a asp-area="" asp-controller="ResourcePlacement" asp-action="ClientIndex"><i class='bx bx-buildings'></i>Client</a></li>
             <li><a href="#"><i class='bx bx-analyse'></i>Analytics</a></li>
->>>>>>> Stashed changes
             <li><a asp-area="" asp-controller="ResourcePlacement" asp-action="EmployeeIndex"><i class='bx bx-group'></i>Employee</a></li>
             <li><a asp-area="" asp-controller="ResourcePlacement" asp-action="GradeIndex"><i class='bx bx-award'></i>Grade</a></li>
             <li><a asp-area="" asp-controller="ResourcePlacement" asp-action="PositionIndex"><i class='bx bx-been-here'></i>Position</a></li>
             <li><a asp-area="" asp-controller="ResourcePlacement" asp-action="PlacementIndex"><i class='bx bx-building'></i>Placement</a></li>
             <li><a asp-area="" asp-controller="ResourcePlacement" asp-action="AccountIndex"><i class='bx bx-user'></i>Account</a></li>
-<<<<<<< Updated upstream
             <li><a href="#"><i class='bx bx-cog'></i>Settings</a></li>
-=======
-            <li><a asp-area="" asp-controller="ResourcePlacement" asp-action="RoleIndex"><i class='bx bxs-user-badge'></i>Role</a></li>
-            <li><a asp-area="" asp-controller="ResourcePlacement" asp-action="AccountRoleIndex"><i class='bx bxs-user-detail'></i>Account Role</a></li>
->>>>>>> Stashed changes
         </ul>
         <ul class="side-menu">
             <li>
@@ -97,19 +88,18 @@
         </main>
 
     </div>
-
+    @*Offline Library*@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/index.js" asp-append-version="true"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    
-    
-    
-    
+    <script src="~/js/Position.js" asp-append-version="true"></script>
+    <script src="~/js/Placement.js" asp-append-version="true"></script>
+    <script src="~/js/Account.js" asp-append-version="true"></script>
+    <script src="~/js/Role.js" asp-append-version="true"></script>
+    @*Online Library*@
+    <script src="~/js/Account.js" asp-append-version="true"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.js"></script>
-    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
@@ -118,7 +108,7 @@
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
     <script src="https://cdn.datatables.net/fixedcolumns/4.3.0/js/dataTables.fixedColumns.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.colVis.min.js"></script>
-    <script src="~/js/index.js" asp-append-version="true"></script>
+    @*Page Script*@
     <script src="~/js/Employee.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
