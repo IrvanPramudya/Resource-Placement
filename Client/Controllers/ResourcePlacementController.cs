@@ -14,6 +14,7 @@ namespace Client.Controllers
         }
         public IActionResult EmployeeIndex() => View();
         public IActionResult ClientIndex() => View();
+        public IActionResult InterviewIndex() => View();
         public IActionResult GradeIndex() => View();
         public IActionResult PositionIndex() => View();
         public IActionResult PlacementIndex() => View();
