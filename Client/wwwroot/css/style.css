@@ -71,7 +71,7 @@ body {
     }
 
     .sidebar .logo {
-        font-size: 24px;
+        font-size: 21px;
         font-weight: 700;
         height: 56px;
         display: flex;
@@ -81,6 +81,38 @@ body {
         padding-bottom: 20px;
         box-sizing: content-box;
     }
+
+/* Gaya untuk dropdown */
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    display: none;
+    z-index: 1;
+    width: 100%;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+
+/* Gaya untuk item menu dalam dropdown */
+.dropdown-menu li {
+    margin-bottom: 10px; /* Jarak bawah pada setiap item menu dalam submenu */
+}
+
+/* Gaya untuk item menu yang didorong oleh submenu */
+.menu-item-push {
+    transition: margin-top 0.3s ease; /* Efek transisi saat submenu muncul */
+}
+
+.dropdown:hover + .menu-item-push {
+    margin-top: 10px; /* Jarak atas ketika dropdown dihover dan submenu muncul */
+}
 
         .sidebar .logo .logo-name span {
             color: var(--dark);
@@ -619,3 +651,7 @@ body {
         min-width: 340px;
     }
 }
+
+.btn btn-primary {
+    --bs-tooltip-bg: var(--bd-violet-bg);
+    --bs-tooltip-color: var(--bs-white);

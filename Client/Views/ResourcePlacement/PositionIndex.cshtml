@@ -8,7 +8,9 @@
     <h1 class="align-content-center" id="judul">List Position</h1>
 </div>
 <div class="text-center my-3">
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAddPosition">Add Position</button>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAddPosition" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Add Position">
+        <i class='bx bx-user-plus'></i>
+    </button>
 </div>
 
 <div class="add-position">
@@ -90,6 +92,9 @@
 @section Scripts{
     <script src="~/js/Position.js" asp-append-version="true"></script>
         <script>
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="modal"]')
+            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+
             $(document).ready(function () {
                 loadPositionData();
                 $.ajax({
@@ -125,15 +130,20 @@
                         {
                             data: null,
                             render: function (data, type, row) {
-                                return `<button onclick="ShowUpdatePosition('${row.guid}')" data-bs-toggle="modal" data-bs-target="#modalUpdatePosition" class="btn btn-primary"> Update </button>` +
-                                    `   <button onclick="deletePosition('${row.guid}')" class="btn btn-secondary"> Delete </button>`;
+                            return `<button onclick="ShowUpdatePosition('${row.guid}')" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modalUpdatePosition" data-bs-placement="top" title="Update Data"><i class='bx bx-edit'></i></button>` +
+                                `   <button onclick="deletePosition('${row.guid}')" class="btn btn-danger" data-bs-toggle="modal" data-bs-placement="top" title="Delete Data"><i class='bx bxs-trash-alt'></i></button>`;
                             }
                         }
                     ],
-                    dom: 'Blfrtip',
-                    buttons: [
-                        'copy', 'csv', 'excel', 'pdf', 'print'
-                    ]
+                "dom":
+                    "<'row'<'col-md-5'B><'col-md-7'f>>" + // Bagian atas: Tombol - Elemen Panjang - Elemen Pencarian
+                    "<'row'<'col-sm-12'tr>>" + // Tabel
+                    "<'row'<'col-md-5'i><'col-md-3 mt-2 mx-auto'l><'col-md-4'p>>", // Bagian bawah: Elemen Info - Elemen Halaman
+                "buttons": [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ],
+                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                "pageLength": 25
                 });
             }
 
