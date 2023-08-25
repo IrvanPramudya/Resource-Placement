@@ -10,9 +10,9 @@
         <i class='bx bx-user-plus'></i>
     </button>
 </div>
-<div class="recent-orders">
-    <table id="accountroleTable">
-        <thead>
+<div class="recent-orders table-responsive">
+    <table class="table table-striped table-hover" id="accountroleTable">
+        <thead class="table-dark">
             <tr>
                 <th>No</th>
                 <th>Full Name</th>
@@ -135,9 +135,9 @@
                     }
                 ],
                 "dom":
-                    "<'row'<'col-md-5'B><'col-md-7'f>>" + // Bagian atas: Tombol - Elemen Panjang - Elemen Pencarian
+                    "<'row'<'col-md-8'B><'col-md-4'f>>" + 
                     "<'row'<'col-sm-12'tr>>" + // Tabel
-                    "<'row'<'col-md-5'i><'col-md-3 mt-2 mx-auto'l><'col-md-4'p>>", // Bagian bawah: Elemen Info - Elemen Halaman
+                    "<'row'<'col-md-5'i><'col-md-3 mt-2 mx-auto'l><'col-md-4'p>>", 
                 "buttons": [
                     'copy', 'csv', 'excel', 'pdf', 'print', 'colvis'
                 ],
