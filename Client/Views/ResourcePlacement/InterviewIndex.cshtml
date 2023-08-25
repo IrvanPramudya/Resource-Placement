@@ -101,13 +101,13 @@
             loadInterviewData();
 
             $.ajax({
-                url: "https://localhost:7273/api/accountroles/GetEmployeehasAccount"
+                url: "https://localhost:7273/api/interviews/GetRemainingEmployee"
             }).done(function (result) {
                 console.log(result)
                 let getName = ""
                 $.each(result.data, (key, val) => {
                     console.log(result)
-                    getName += ` <option value="${val.accountGuid}">${val.fullName}</option>`
+                    getName += ` <option value="${val.guid}">${val.fullName}</option>`
                 })
                 $('.selectNameinInterview').html(getName)
             })

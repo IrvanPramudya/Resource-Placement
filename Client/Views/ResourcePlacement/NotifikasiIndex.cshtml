@@ -2,43 +2,46 @@
 @{
     ViewData["Title"] = "Notification";
 }
-<div class="card" style="width: 18rem;">
-    <img src="~/images/user.jpg" class="card-img-top" id="cardNotification">
+<div class="card" style="width: 40%;">
+    <img src="~/images/user.jpg" class="card-img-top" >
+    <div class="container">
+        <div class="row" id="cardNotification">
+        </div>
+    </div>
     
 </div>
 @section Scripts
 {
     <script>
-        const guid = document.getElementById('guidSection')
         const Token = '@Context.Session.GetString("JWToken")'
         $.ajax({
-            url: "https://localhost:7273/api/employees/GetEmployeeNotification/"+guid,
-            type:"GET",
-            dataType:"json",
+            url: "https://localhost:7273/api/employees/GetEmployeeNotification/@User.FindFirst("Guid").Value",
             headers: {
                 'Authorization': 'Bearer ' + Token
             }
-        }).Done((result)=>{
+        }).done((result)=>{
+            console.log(result)
             $("#clientName").val(result.data.clientName);
-            $("#interviewDate").val(result.data.interviewDate);
+            interviewDate = moment($("#interviewDate").val(result.data.interviewDate)).format("dddd, D MMMM YYYY, HH:mm");
             $("#positionName").val(result.data.positionName);
             $("#capacityClient").val(result.data.capacityClient);
             $("#note").val(result.data.note);
-            let dataNotifikasi = `<div class="card-body text-bg-warning">
-                                        <h5 class="card-title mx-auto">You've got an Interview Notification</h5>
-                                        <p class="card-text uppercase">${result.data.clientName}</p>
-                                        <br>
-                                        <p class="card-text uppercase">${result.data.positionName}</p>
-                                        <br>
-                                        <p class="card-text uppercase">${result.data.interviewDate}</p>
-                                        <br>
-                                        <p class="card-text uppercase">${result.data.note}</p>
-                                    </div>
-                                    <div class="card-body">
-                                            <a onclick="interviewAccepted('${guid}')" class="btn btn-success"><i class='bx bxs-badge-check'></i></a>
-                                                    <a onclick="interviewRejected('${guid}')" class="btn btn-Danger"><i class='bx bx-x'></i></a>
-                                    </div>`
+            let dataNotifikasi = `<div class="col">
+                                              <div class="card-body text-bg-warning">
+                                                    <h5 class="card-title mx-auto">You've got an Interview Notification</h5>
+                                                                    <p class="card-text uppercase">Client  &nbsp;: ${result.data.clientName}</p>
+                                                                    <p class="card-text uppercase">Position  &nbsp;: ${result.data.positionName}</p>
+                                                                    <p class="card-text uppercase">Interview Date  &nbsp;: ${interviewDate}</p>
+                                                            <p class="card-text uppercase">Note &nbsp;: ${result.data.note}</p>
+                                                </div>
+                                                <div class="card-body mx-auto">
+                                                            <a onclick="interviewAccepted('@User.FindFirst("Guid").Value')"><box-icon name='check' color="green" size="md"></box-icon></a>
+                                                                            <a onclick="interviewRejected('@User.FindFirst("Guid").Value')"><box-icon name='x' color="red" size="md"></box-icon></a>
+                                                </div>
+                                            </div>`
             $('#cardNotification').html(dataNotifikasi)
         })
+            
+        
     </script>
 }
