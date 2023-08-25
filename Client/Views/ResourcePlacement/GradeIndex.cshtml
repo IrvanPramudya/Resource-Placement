@@ -25,7 +25,7 @@
                     <form>
                         <div class="mb-3">
                             <label for="guid" class="form-label">Employee Name</label>
-                            <select class="form-select employeeSelect" aria-label="Default select example" id="guidEmployee"></select>
+                            <select class="form-select selectNameinGrade" aria-label="Default select example" id="guidEmployee"></select>
                         </div>
                         <div class="mb-3">
                             <label for="name" class="form-label">Grade</label>
@@ -123,18 +123,18 @@
 
             $(document).ready(function () {
                 loadGradeData();
-            });
-
             $.ajax({
-                url: "https://localhost:7273/api/employees"
-            }).done((result) => {
-                let selectEmployee = ""
+                url: "https://localhost:7273/api/employees/GetEmployeeOuterJoin"
+            }).done(function (result) {
+                console.log(result)
+                let getName = ""
                 $.each(result.data, (key, val) => {
-                    console.log(val)
-                    selectEmployee += ` <option value="${val.guid}">${val.firstName} ${val.lastName}</option>`
+                    console.log(result)
+                    getName += ` <option value="${val.guid}">${val.fullName}</option>`
                 })
-                $('.employeeSelect').html(selectEmployee)
+                $('.selectNameinGrade').html(getName)
             })
+            });
             function loadGradeData() {
                 $('#gradeTable').DataTable({
                     ajax: {

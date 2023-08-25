@@ -11,8 +11,6 @@ namespace API.Models
         public string Email { get; set; }
         [Column("is_available")]
         public bool IsAvailable { get; set; }
-        [Column("capacity")]
-        public int Capacity { get; set; }
         //Cardinality
         /*public Employee? Employee { get; set;}*/
         public Interview? Interview { get; set;}

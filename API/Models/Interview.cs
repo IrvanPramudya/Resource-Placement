@@ -11,6 +11,8 @@ namespace API.Models
         public string? Text { get; set; }
         [Column("client_guid")]
         public Guid ClientGuid { get; set; }
+        [Column("is_accepted")]
+        public bool IsAccepted { get; set; }
         /*[Column("position_guid")]
         public Guid PositionGuid { get; set; }*/
 

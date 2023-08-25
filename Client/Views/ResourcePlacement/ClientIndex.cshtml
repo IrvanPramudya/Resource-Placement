@@ -31,25 +31,6 @@
                             <label for="Email" class="form-label"> Email</label>
                             <input type="email" class="form-control" id="email" placeholder="email">
                         </div>
-                        <div class="mb-3">
-                            <label for="otp" class="form-label"> Is Available</label>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="isAvailable" id="isAvailableTrue" value="true">
-                                <label class="form-check-label" for="exampleRadios2">
-                                    True
-                                </label>
-                        </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="isAvailable" id="isAvailableFalse" value="false">
-                                <label class="form-check-label" for="exampleRadios3">
-                                    False
-                                </label>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="capacity" class="form-label"> Capacity</label>
-                            <input type="text" class="form-control" id="capacity" placeholder="Capacity">
-                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -69,7 +50,6 @@
                 <th>Name</th>
                 <th>Email</th>
                 <th>Is Available</th>
-                <th>Capacity</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -97,25 +77,6 @@
                     <div class="mb-3">
                         <label for="Email" class="form-label"> Email</label>
                         <input type="email" class="form-control" id="emailUpd" placeholder="email">
-                    </div>
-                    <div class="mb-3">
-                        <label for="otp" class="form-label"> Is Available</label>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="isAvailableUpd" id="isAvailableUpdTrue" value="true">
-                            <label class="form-check-label" for="exampleRadios2">
-                                True
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="isAvailableUpd" id="isAvailableUpdFalse" value="false">
-                            <label class="form-check-label" for="exampleRadios3">
-                                False
-                            </label>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="capacity" class="form-label"> Capacity</label>
-                        <input type="text" class="form-control" id="capacityUpd" placeholder="Capacity">
                     </div>
                 </form>
             </div>
@@ -177,7 +138,6 @@
                     { data: "name" },
                     { data: "email" },
                     { data: "isAvailable" },
-                    { data: "capacity" },
                     {
                         data: null,
                         render: function (data, type, row) {
@@ -199,12 +159,9 @@
         }
 
         function addClient() {
-            var isAvailable = $("input[name='isAvailable']:checked").val();
             var clientData = {
                 name: $("#name").val(),
                 email: $("#email").val(),
-                isAvailable: isAvailable === "true",
-                capacity: $("#capacity").val()
             };
 
             $.ajax({
@@ -270,12 +227,6 @@
                 $("#guidUpd").val(result.data.guid);
                 $("#nameUpd").val(result.data.name);
                 $("#emailUpd").val(result.data.email);
-                if (result.data.isAvailable === false) {
-                    $("input[name='isAvailableUpd'][value='false']").prop("checked", true);
-                } else {
-                    $("input[name='isAvailableUpd'][value='true']").prop("checked", true);
-                }
-                $("#capacityUpd").val(result.data.capacity);
             }).fail((error) => {
                 alert("Failed to fetch client data. Please try again.");
                 $("#accountguidUpd").val(result.data.accountGuid);
@@ -289,13 +240,10 @@
 
         function UpdateClient() {
 
-            var isAvailable = $("input[name='isAvailableUpd']:checked").val();
             let data = {
                 guid: $("#guidUpd").val(),
                 name: $("#nameUpd").val(),
                 email: $("#emailUpd").val(),
-                isAvailable: $("#isAvailableUpd").val(),
-                capacity: $("#capacityUpd").val(),
             };
             $.ajax({
                 url: "https://localhost:7273/api/clients",

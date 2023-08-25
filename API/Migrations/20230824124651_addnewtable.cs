@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace API.Migrations
 {
-    public partial class CreateTable : Migration
+    public partial class addnewtable : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -17,7 +17,6 @@ namespace API.Migrations
                     name = table.Column<string>(type: "nvarchar(100)", nullable: false),
                     email = table.Column<string>(type: "nvarchar(100)", nullable: false),
                     is_available = table.Column<bool>(type: "bit", nullable: false),
-                    capacity = table.Column<int>(type: "int", nullable: false),
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     modified_date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -67,7 +66,7 @@ namespace API.Migrations
                 {
                     guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    client_guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    capacity = table.Column<int>(type: "int", nullable: false),
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     modified_date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -75,8 +74,8 @@ namespace API.Migrations
                 {
                     table.PrimaryKey("PK_tb_m_positions", x => x.guid);
                     table.ForeignKey(
-                        name: "FK_tb_m_positions_tb_m_clients_client_guid",
-                        column: x => x.client_guid,
+                        name: "FK_tb_m_positions_tb_m_clients_guid",
+                        column: x => x.guid,
                         principalTable: "tb_m_clients",
                         principalColumn: "guid",
                         onDelete: ReferentialAction.Cascade);
@@ -88,8 +87,9 @@ namespace API.Migrations
                 {
                     guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    otp = table.Column<int>(type: "int", nullable: false),
+                    otp = table.Column<int>(type: "int", nullable: true),
                     is_used = table.Column<bool>(type: "bit", nullable: false),
+                    expired_time = table.Column<DateTime>(type: "datetime2", nullable: true),
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     modified_date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -133,6 +133,7 @@ namespace API.Migrations
                     interview_date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     text = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     client_guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    is_accepted = table.Column<bool>(type: "bit", nullable: false),
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     modified_date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -214,10 +215,10 @@ namespace API.Migrations
                 columns: new[] { "guid", "created_date", "modified_date", "name" },
                 values: new object[,]
                 {
-                    { new Guid("4ec90656-e89c-4871-d9e5-08db8a7d0f37"), new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4550), new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4551), "Trainer" },
-                    { new Guid("5fb9adc0-7d08-45d4-cd66-08db9c7a678f"), new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4558), new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4559), "Admin" },
-                    { new Guid("ae259a90-e2e8-442f-ce18-08db91a71ab9"), new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4537), new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4547), "Employee" },
-                    { new Guid("c0689b0a-5c87-46f1-ce19-08db91a71ab9"), new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4555), new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4555), "Operasional" }
+                    { new Guid("4ec90656-e89c-4871-d9e5-08db8a7d0f37"), new DateTime(2023, 8, 24, 19, 46, 51, 616, DateTimeKind.Local).AddTicks(9172), new DateTime(2023, 8, 24, 19, 46, 51, 616, DateTimeKind.Local).AddTicks(9173), "Trainer" },
+                    { new Guid("5fb9adc0-7d08-45d4-cd66-08db9c7a678f"), new DateTime(2023, 8, 24, 19, 46, 51, 616, DateTimeKind.Local).AddTicks(9179), new DateTime(2023, 8, 24, 19, 46, 51, 616, DateTimeKind.Local).AddTicks(9180), "Admin" },
+                    { new Guid("ae259a90-e2e8-442f-ce18-08db91a71ab9"), new DateTime(2023, 8, 24, 19, 46, 51, 616, DateTimeKind.Local).AddTicks(9155), new DateTime(2023, 8, 24, 19, 46, 51, 616, DateTimeKind.Local).AddTicks(9168), "Employee" },
+                    { new Guid("c0689b0a-5c87-46f1-ce19-08db91a71ab9"), new DateTime(2023, 8, 24, 19, 46, 51, 616, DateTimeKind.Local).AddTicks(9175), new DateTime(2023, 8, 24, 19, 46, 51, 616, DateTimeKind.Local).AddTicks(9176), "Operasional" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -231,11 +232,6 @@ namespace API.Migrations
                 table: "tb_m_employees",
                 columns: new[] { "nik", "email", "phone_number" },
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_tb_m_positions_client_guid",
-                table: "tb_m_positions",
-                column: "client_guid");
 
             migrationBuilder.CreateIndex(
                 name: "IX_tb_tr_account_roles_account_guid",

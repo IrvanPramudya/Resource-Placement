@@ -1,4 +1,5 @@
-﻿using API.DTOs.Placements;
+﻿using API.DTOs.Accounts;
+using API.DTOs.Placements;
 using API.Services;
 using API.Utilities.Handlers;
 using Microsoft.AspNetCore.Authorization;
@@ -13,10 +14,12 @@ namespace API.Controllers
     public class PlacementController : ControllerBase
     {
         private readonly PlacementService _placementService;
+        private readonly InterviewService _interviewService;
 
-        public PlacementController(PlacementService placementService)
+        public PlacementController(PlacementService placementService, InterviewService interviewService)
         {
             _placementService = placementService;
+            _interviewService = interviewService;
         }
 
         [HttpGet("GetEmployeeClientName")]
@@ -113,13 +116,15 @@ namespace API.Controllers
         public IActionResult Insert(NewPlacementDto newPlacementDto)
         {
             var result = _placementService.Create(newPlacementDto);
+            var deleteInterview = _interviewService.Delete(newPlacementDto.EmployeeGuid);
             if (result is null)
             {
                 return StatusCode(500, new ResponseHandler<PlacementDto>
                 {
                     Code = StatusCodes.Status500InternalServerError,
                     Status = HttpStatusCode.InternalServerError.ToString(),
-                    Message = "Error Retrieve From Database"
+                    Message = "Error Retrieve From Database",
+                    AdditionalMessage = "Employee Have Not Being Interview Yet"
                 });
             }
 

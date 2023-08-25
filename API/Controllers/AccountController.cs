@@ -19,6 +19,73 @@ namespace API.Controllers
             _accountService = accountService;
         }
 
+
+        [HttpGet("GetAccountwithNameOuterJoin")]
+        public IActionResult GetAccountwithNameOuterJoin()
+        {
+            var result = _accountService.GetAccountwithNamesOuterJoin();
+            if (!result.Any())
+            {
+                return NotFound(new ResponseHandler<GetAccountwithName>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data Not Found"
+                });
+            }
+
+            return Ok(new ResponseHandler<IEnumerable<GetAccountwithName>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success Retrieve Data",
+                Data = result
+            });
+        }
+        [HttpGet("GetAccountwithNameandRole")]
+        public IActionResult GetAccountwithNameandRole()
+        {
+            var result = _accountService.GetAccountwithNamesAndRolesOuterJoin();
+            if (!result.Any())
+            {
+                return NotFound(new ResponseHandler<GetAccountwithNameAndRoles>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data Not Found"
+                });
+            }
+
+            return Ok(new ResponseHandler<IEnumerable<GetAccountwithNameAndRoles>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success Retrieve Data",
+                Data = result
+            });
+        }
+        [HttpGet("GetAccountwithName")]
+        public IActionResult GetAccountwithName()
+        {
+            var result = _accountService.GetAccountwithNames();
+            if (!result.Any())
+            {
+                return NotFound(new ResponseHandler<GetAccountwithName>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data Not Found"
+                });
+            }
+
+            return Ok(new ResponseHandler<IEnumerable<GetAccountwithName>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success Retrieve Data",
+                Data = result
+            });
+        }
         [HttpPost("Login")]
         [AllowAnonymous]
         public IActionResult Login(LoginDto loginDto)
@@ -255,7 +322,7 @@ namespace API.Controllers
         }
 
         [HttpPut]
-        public IActionResult Update(AccountDto accountDto)
+        public IActionResult Update(NewAccountDto accountDto)
         {
             var result = _accountService.Update(accountDto);
 

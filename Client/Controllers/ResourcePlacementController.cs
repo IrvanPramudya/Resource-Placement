@@ -21,5 +21,6 @@ namespace Client.Controllers
         public IActionResult AccountIndex() => View();
         public IActionResult RoleIndex() => View();
         public IActionResult AccountRoleIndex() => View();
+        public IActionResult NotifikasiIndex() => View();
     }
 }

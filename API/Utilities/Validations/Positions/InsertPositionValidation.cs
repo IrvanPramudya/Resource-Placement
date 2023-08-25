@@ -7,8 +7,10 @@ namespace API.Utilities.Validations.Positions
     {
         public InsertPositionValidation()
         {
-            RuleFor(Position=>Position.ClientGuid).NotEmpty().WithMessage("Client Guid Required");
+            RuleFor(Position=>Position.Guid).NotEmpty().WithMessage("Guid Required");
             RuleFor(Position=>Position.Name).NotEmpty().WithMessage("Name of Position Required");
+            RuleFor(client => client.Capacity)
+                .NotEmpty().WithMessage("Capacity Cannot be Null");
         }
     }
 }

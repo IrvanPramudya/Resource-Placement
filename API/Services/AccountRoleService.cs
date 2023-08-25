@@ -44,16 +44,20 @@ namespace API.Services
         {
             var merge = from employee in _employeeRepository.GetAll()
                         join account in _accountRepository.GetAll() on employee.Guid equals account.Guid
+                        join accountrole in _accountRoleRepository.GetAll() on account.Guid equals accountrole?.AccountGuid into accountrolegroup
+                        from accountrole in accountrolegroup.DefaultIfEmpty()
                         select new GetEmployeehasAccount
                         {
-                            AccountGuid = account.Guid,
+                            EmployeeGuid = employee.Guid,
+                            AccountGuid = accountrole != null ? accountrole.Guid : null,
                             FullName = employee.FirstName + " " + employee.LastName,
+                            RoleGuid = accountrole != null ? accountrole.RoleGuid : null 
                         };
             if (!merge.Any())
             {
                 return null;
             }
-            return merge;
+            return merge.Where(ar=>ar.RoleGuid == null);
         }
         public IEnumerable<GetCountedAllRole> CountAllRole()
         {

@@ -76,29 +76,10 @@
             <i class='bx bx-filter'></i>
             <i class='bx bx-plus'></i>
         </div>
-        <ul class="task-list">
-            <li class="completed">
-                <div class="task-title">
-                    <i class='bx bx-check-circle'></i>
-                    <p>Start Our Meeting</p>
-                </div>
-                <i class='bx bx-dots-vertical-rounded'></i>
-            </li>
-            <li class="completed">
-                <div class="task-title">
-                    <i class='bx bx-check-circle'></i>
-                    <p>Analyse Our Site</p>
-                </div>
-                <i class='bx bx-dots-vertical-rounded'></i>
-            </li>
-            <li class="not-completed">
-                <div class="task-title">
-                    <i class='bx bx-x-circle'></i>
-                    <p>Play Footbal</p>
-                </div>
-                <i class='bx bx-dots-vertical-rounded'></i>
-            </li>
-        </ul>
+                    <div class="chart">
+                        <canvas id="chart-line" class="chart-canvas" height="300"></canvas>
+                    </div>
+                
     </div>
 
     <!-- End of Reminders-->
@@ -169,6 +150,101 @@
                         </li>`
             })
             $("#Adding-Role").html(role)
+        })
+        $.ajax({
+            url: "https://localhost:7273/api/placements/CountClient",
+            type:"GET"
+        }).done((result)=>{
+            const clientName = result.data.map(entry => entry.clientName)
+            const countEmployee = result.data.map(entry => entry.countEmployee)
+            var ctx2 = document.getElementById("chart-line").getContext("2d");
+
+            var gradientStroke1 = ctx2.createLinearGradient(0, 230, 0, 50);
+
+            gradientStroke1.addColorStop(1, 'rgba(203,12,159,0.2)');
+            gradientStroke1.addColorStop(0.2, 'rgba(72,72,176,0.0)');
+            gradientStroke1.addColorStop(0, 'rgba(203,12,159,0)'); //purple colors
+
+            var gradientStroke2 = ctx2.createLinearGradient(0, 230, 0, 50);
+
+            gradientStroke2.addColorStop(1, 'rgba(20,23,39,0.2)');
+            gradientStroke2.addColorStop(0.2, 'rgba(72,72,176,0.0)');
+            gradientStroke2.addColorStop(0, 'rgba(20,23,39,0)'); //purple colors
+
+            new Chart(ctx2, {
+                type: "line",
+                data: {
+                    labels: clientName,
+                    datasets: [{
+                        label: "Employee",
+                        tension: 0.4,
+                        borderWidth: 0,
+                        pointRadius: 0,
+                        borderColor: "#cb0c9f",
+                        borderWidth: 3,
+                        backgroundColor: gradientStroke1,
+                        fill: true,
+                        data: countEmployee,
+                        maxBarThickness: 6
+
+                    }],
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false,
+                        }
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'index',
+                    },
+                    scales: {
+                        y: {
+                            grid: {
+                                drawBorder: false,
+                                display: true,
+                                drawOnChartArea: true,
+                                drawTicks: false,
+                                borderDash: [5, 5]
+                            },
+                            ticks: {
+                                display: true,
+                                padding: 10,
+                                color: '#b2b9bf',
+                                font: {
+                                    size: 11,
+                                    family: "Open Sans",
+                                    style: 'normal',
+                                    lineHeight: 2
+                                },
+                            }
+                        },
+                        x: {
+                            grid: {
+                                drawBorder: false,
+                                display: false,
+                                drawOnChartArea: false,
+                                drawTicks: false,
+                                borderDash: [5, 5]
+                            },
+                            ticks: {
+                                display: true,
+                                color: '#b2b9bf',
+                                padding: 20,
+                                font: {
+                                    size: 11,
+                                    family: "Open Sans",
+                                    style: 'normal',
+                                    lineHeight: 2
+                                },
+                            }
+                        },
+                    },
+                },
+            });
         })
     </script>
 }

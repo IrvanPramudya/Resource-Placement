@@ -3,6 +3,8 @@
     public class GetEmployeeClientName
     {
         public Guid Guid { get; set; }
+        public Guid EmployeeGuid { get; set; }
+        public Guid ClientGuid { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string? EmployeeName { get; set; }

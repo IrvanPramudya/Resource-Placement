@@ -7,10 +7,12 @@ namespace API.Services
     public class ClientService
     {
         private readonly IClientRepository _clientRepository;
+        private readonly IPositionRepository _positionRepository;
 
-        public ClientService(IClientRepository clientRepository)
+        public ClientService(IClientRepository clientRepository, IPositionRepository positionRepository)
         {
             _clientRepository = clientRepository;
+            _positionRepository = positionRepository;
         }
         public IEnumerable<GetAvailableClient> CountAvailableClient()
         {
@@ -22,7 +24,6 @@ namespace API.Services
                 {
                     Name = client.Name,
                     IsAvailable = client.IsAvailable,
-                    Capacity = client.Capacity,
                 };
                 if(countclient.IsAvailable == true)
                 {
@@ -61,24 +62,39 @@ namespace API.Services
 
         public ClientDto? Create(NewClientDto newClientDto)
         {
-            var client = _clientRepository.Create(newClientDto);
+            var client = new ClientDto
+            {
+                Email = newClientDto.Email,
+                Name = newClientDto.Name,
+                IsAvailable = false
+                
+            };
             if (client is null)
             {
                 return null; // Client is null or not found;
             }
+            Client clientCreate = client;
+            clientCreate.CreatedDate = DateTime.Now;
+            var CreatedClient = _clientRepository.Create(clientCreate);
+            if (CreatedClient is null)
+            {
+                return null; // Client is null or not found;
+            }
 
-            return (ClientDto)client; // Client is found;
+            return (ClientDto)CreatedClient; // Client is found;
         }
 
-        public int Update(ClientDto clientDto)
+        public int Update(UpdateClientDto clientDto)
         {
             var client = _clientRepository.GetByGuid(clientDto.Guid);
             if (client is null)
             {
                 return -1; // Client is null or not found;
             }
-
+            var position = _positionRepository.GetByGuid(clientDto.Guid);
+           
             Client toUpdate = clientDto;
+            toUpdate.IsAvailable = position is null ? false : true;
             toUpdate.CreatedDate = client.CreatedDate;
             var result = _clientRepository.Update(toUpdate);
 

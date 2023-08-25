@@ -91,10 +91,10 @@ namespace API.Data
                         .HasOne(Client => Client.Interview)
                         .WithOne(Interview => Interview.Client)
                         .HasForeignKey<Interview>(Interview => Interview.ClientGuid);
-            modelBuilder.Entity<Client>()
-                        .HasMany(Client => Client.Positions)
-                        .WithOne(Position => Position.Client)
-                        .HasForeignKey(Position => Position.ClientGuid);
+            modelBuilder.Entity<Position>()
+                        .HasOne(Position=>Position.Client)
+                        .WithMany(Client=>Client.Positions)
+                        .HasForeignKey(Position => Position.Guid);
             //Position
             /*modelBuilder.Entity<Position>()
                         .HasOne(Position => Position.Interview)

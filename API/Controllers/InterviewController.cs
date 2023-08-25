@@ -19,6 +19,50 @@ namespace API.Controllers
             _interviewService = interviewService;
         }
 
+        [HttpGet("GetRemainingEmployee")]
+        public IActionResult GetRemainingEmployee()
+        {
+            var result = _interviewService.GetEmployeeOuterJoinInterview();
+            if (!result.Any())
+            {
+                return NotFound(new ResponseHandler<GetRemainingEmployee>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data Not Found"
+                });
+            }
+
+            return Ok(new ResponseHandler<IEnumerable<GetRemainingEmployee>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success Retrieve Data",
+                Data = result
+            });
+        }
+        [HttpGet("InterviewInformatif")]
+        public IActionResult GetInterviewInformatif()
+        {
+            var result = _interviewService.GetInterviews();
+            if (!result.Any())
+            {
+                return NotFound(new ResponseHandler<InformatifInterview>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data Not Found"
+                });
+            }
+
+            return Ok(new ResponseHandler<IEnumerable<InformatifInterview>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success Retrieve Data",
+                Data = result
+            });
+        }
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -75,7 +119,8 @@ namespace API.Controllers
                 {
                     Code = StatusCodes.Status500InternalServerError,
                     Status = HttpStatusCode.InternalServerError.ToString(),
-                    Message = "Error Retrieve From Database"
+                    Message = "Error Retrieve From Database",
+                    AdditionalMessage = "Employee Already in Site or Employee Have Not Register its Grade yet"
                 });
             }
 
@@ -89,7 +134,7 @@ namespace API.Controllers
         }
 
         [HttpPut]
-        public IActionResult Update(InterviewDto interviewDto)
+        public IActionResult Update(NewInterviewDto interviewDto)
         {
             var result = _interviewService.Update(interviewDto);
 

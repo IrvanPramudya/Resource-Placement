@@ -17,8 +17,6 @@ namespace API.Utilities.Validations.Clients
                 .NotEmpty().WithMessage("Email is Required")
                 .EmailAddress().WithMessage("Wrong Email")
                 .Must((e, g) => IsDuplicateValue(e.Email, e.Guid)).WithMessage("Email is Already Exist");
-            RuleFor(client => client.Capacity)
-                .NotEmpty().WithMessage("Capacity Cannot be Null");
         }
 
         private bool IsDuplicateValue(string arg, Guid guid)

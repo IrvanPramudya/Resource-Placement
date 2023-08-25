@@ -10,7 +10,6 @@ namespace API.DTOs.Employees
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public GenderLevel Gender { get; set; }
-        public StatusLevel Status { get; set; }
         public string? Skill { get; set; }
 
         public static implicit operator Employee(NewEmployeeDto dto)
@@ -20,7 +19,6 @@ namespace API.DTOs.Employees
                 Guid = new Guid(),
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
-                Status = dto.Status,
                 Gender = dto.Gender,
                 Skill = dto.Skill,
                 Email = dto.Email,
@@ -35,7 +33,6 @@ namespace API.DTOs.Employees
             {
                 FirstName = employee.FirstName,
                 LastName = employee.LastName,
-                Status = employee.Status,
                 Gender = employee.Gender,
                 Skill = employee.Skill,
                 Email = employee.Email,
