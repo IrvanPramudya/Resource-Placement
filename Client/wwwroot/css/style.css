@@ -68,10 +68,11 @@ body {
 
     .sidebar.close {
         width: 60px;
+
     }
 
     .sidebar .logo {
-        font-size: 21px;
+        font-size: 20px;
         font-weight: 700;
         height: 56px;
         display: flex;
@@ -81,38 +82,6 @@ body {
         padding-bottom: 20px;
         box-sizing: content-box;
     }
-
-/* Gaya untuk dropdown */
-.dropdown-menu {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    display: none;
-    z-index: 1;
-    width: 100%;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    padding: 10px;
-}
-
-.dropdown:hover .dropdown-menu {
-    display: block;
-}
-
-
-/* Gaya untuk item menu dalam dropdown */
-.dropdown-menu li {
-    margin-bottom: 10px; /* Jarak bawah pada setiap item menu dalam submenu */
-}
-
-/* Gaya untuk item menu yang didorong oleh submenu */
-.menu-item-push {
-    transition: margin-top 0.3s ease; /* Efek transisi saat submenu muncul */
-}
-
-.dropdown:hover + .menu-item-push {
-    margin-top: 10px; /* Jarak atas ketika dropdown dihover dan submenu muncul */
-}
 
         .sidebar .logo .logo-name span {
             color: var(--dark);
@@ -128,6 +97,7 @@ body {
     .sidebar .side-menu {
         width: 100%;
         margin-top: 48px;
+        padding-left:unset;
     }
 
         .sidebar .side-menu li {
@@ -188,6 +158,7 @@ body {
     .sidebar.close .side-menu li a {
         width: calc(48px - (4px * 2));
         transition: all 0.3s ease;
+        padding-left: unset;
     }
 
     .sidebar .side-menu li a .bx {
@@ -211,6 +182,7 @@ body {
 .sidebar.close ~ .content {
     width: calc(100% - 60px);
     left: 60px;
+    
 }
 
 .content nav {
