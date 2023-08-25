@@ -1,0 +1,44 @@
+﻿@using System.Net.Http
+@{
+    ViewData["Title"] = "Notification";
+}
+<div class="card" style="width: 18rem;">
+    <img src="~/images/user.jpg" class="card-img-top" id="cardNotification">
+    
+</div>
+@section Scripts
+{
+    <script>
+        const guid = document.getElementById('guidSection')
+        const Token = '@Context.Session.GetString("JWToken")'
+        $.ajax({
+            url: "https://localhost:7273/api/employees/GetEmployeeNotification/"+guid,
+            type:"GET",
+            dataType:"json",
+            headers: {
+                'Authorization': 'Bearer ' + Token
+            }
+        }).Done((result)=>{
+            $("#clientName").val(result.data.clientName);
+            $("#interviewDate").val(result.data.interviewDate);
+            $("#positionName").val(result.data.positionName);
+            $("#capacityClient").val(result.data.capacityClient);
+            $("#note").val(result.data.note);
+            let dataNotifikasi = `<div class="card-body text-bg-warning">
+                                        <h5 class="card-title mx-auto">You've got an Interview Notification</h5>
+                                        <p class="card-text uppercase">${result.data.clientName}</p>
+                                        <br>
+                                        <p class="card-text uppercase">${result.data.positionName}</p>
+                                        <br>
+                                        <p class="card-text uppercase">${result.data.interviewDate}</p>
+                                        <br>
+                                        <p class="card-text uppercase">${result.data.note}</p>
+                                    </div>
+                                    <div class="card-body">
+                                            <a onclick="interviewAccepted('${guid}')" class="btn btn-success"><i class='bx bxs-badge-check'></i></a>
+                                                    <a onclick="interviewRejected('${guid}')" class="btn btn-Danger"><i class='bx bx-x'></i></a>
+                                    </div>`
+            $('#cardNotification').html(dataNotifikasi)
+        })
+    </script>
+}

@@ -19,9 +19,6 @@ namespace API.Utilities.Validations.Accounts
             RuleFor(l => l.Gender)
                 .NotNull()
                 .IsInEnum();
-            RuleFor(l => l.Status)
-                .NotNull()
-                .IsInEnum();
             RuleFor(l => l.Email)
                 .NotEmpty().WithMessage("Email is required")
                 .EmailAddress().WithMessage("Email is not valid")

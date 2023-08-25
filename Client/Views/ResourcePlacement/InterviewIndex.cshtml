@@ -7,7 +7,7 @@
     <h1 class="align-content-center" id="judul">Interview</h1>
 </div>
 <div class="text-center mt-3">
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAddInterview">Add Inetrview</button>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAddInterview">Add Interview</button>
 </div>
 
 <div class="add-account">
@@ -21,19 +21,19 @@
                 <div class="modal-body">
                     <form>
                         <div class="mb-3">
-                            <label for="guid" class="form-label"> Guid</label>
-                            <input type="text" class="form-control" id="guid" placeholder="Guid">
+                            <label for="guid" class="form-label"> Name</label>
+                            <select class="form-select selectNameinInterview" aria-label="Default select example" id="guidEmployee"></select>
                         </div>
                         <div class="mb-3">
                             <label for="interviewDate" class="form-label"> Interview Date</label>
-                            <input type="date" class="form-control" id="interviewDate" placeholder="Interview Date">
+                            <input type="datetime-local" class="form-control" id="interviewDate" placeholder="Interview Date">
                         </div>
                         <div class="mb-3">
                             <label for="clientGuid" class="form-label"> Client Guid</label>
-                            <input type="text" class="form-control" id="clientGuid" placeholder="Client Guid">
+                            <select class="form-select selectClientinInterview" aria-label="Default select example" id="guidClient"></select>
                         </div>
                         <div class="mb-3">
-                            <label for="text" class="form-label"> Text</label>
+                            <label for="text" class="form-label">Notes</label>
                             <input type="text" class="form-control" id="text" placeholder="Text">
                         </div>
                     </form>
@@ -52,15 +52,13 @@
         <thead>
             <tr>
                 <th>No</th>
-                <th>Guid</th>
+                <th>Name</th>
+                <th>Client</th>
                 <th>Interview Date</th>
-                <th>Client Guid</th>
                 <th>Text</th>
                 <th>Action</th>
             </tr>
         </thead>
-        <tbody id="tbodyInterview">
-        </tbody>
     </table>
 </div>
 
@@ -74,20 +72,19 @@
             <div class="modal-body">
                 <form>
                     <div class="mb-3">
-                        <label for="guid" class="form-label"> Guid</label>
-                        <input type="text" class="form-control" id="guid" placeholder="Guid">
+                        <input type="hidden" class="form-control" id="guidEmployeeUpd" />
                     </div>
                     <div class="mb-3">
                         <label for="interviewDate" class="form-label"> Interview Date</label>
-                        <input type="date" class="form-control" id="interviewDate" placeholder="Interview Date">
+                        <input type="datetime-local" class="form-control" id="interviewDateUpd" placeholder="Interview Date">
                     </div>
                     <div class="mb-3">
                         <label for="clientGuid" class="form-label"> Client Guid</label>
-                        <input type="text" class="form-control" id="clientGuid" placeholder="Client Guid">
+                        <select class="form-select selectClientinInterview" aria-label="Default select example" id="clientGuidUpd"></select>
                     </div>
                     <div class="mb-3">
-                        <label for="text" class="form-label"> Text</label>
-                        <input type="text" class="form-control" id="text" placeholder="Text">
+                        <label for="text" class="form-label">Notes</label>
+                        <input type="text" class="form-control" id="textUpd" placeholder="Text">
                     </div>
                 </form>
             </div>
@@ -99,20 +96,39 @@
     </div>
 </div>
 @section Scripts{
-    <script src="~/js/Interview.js" asp-append-version="true"></script>
     <script>
         $(document).ready(function () {
             loadInterviewData();
 
-            $("#saveInterviewBtn").click(function () {
-                addInterview();
-            });
+            $.ajax({
+                url: "https://localhost:7273/api/accountroles/GetEmployeehasAccount"
+            }).done(function (result) {
+                console.log(result)
+                let getName = ""
+                $.each(result.data, (key, val) => {
+                    console.log(result)
+                    getName += ` <option value="${val.accountGuid}">${val.fullName}</option>`
+                })
+                $('.selectNameinInterview').html(getName)
+            })
+            $.ajax({
+                url: "https://localhost:7273/api/clients"
+            }).done(function (result) {
+                // Assuming the API response contains a property named "totalEmployees"
+                console.log(result)
+                let getClientinInterview = ""
+                $.each(result.data, (key, val) => {
+                    console.log(result)
+                    getClientinInterview += ` <option value="${val.guid}">${val.name}</option>`
+                })
+                $('.selectClientinInterview').html(getClientinInterview)
+            })
         });
 
         function loadInterviewData() {
             $('#interviewTable').DataTable({
                 ajax: {
-                    url: "https://localhost:7273/api/interviews",
+                    url: "https://localhost:7273/api/interviews/InterviewInformatif",
                     dataType: "JSON",
                     dataSrc: "data"
                 },
@@ -123,9 +139,14 @@
                             return meta.row + 1;
                         }
                     },
-                    { data: "guid" },
-                    { data: "interviewDate"},
-                    { data: "clientGuid" },
+                    { data: "fullName" },
+                    { data: "clientName"},
+                    {
+                        data: 'interviewDate',
+                        render: function (data, type, row) {
+                            return moment(data).format("DD/MM/YYYY");;
+                        }
+                    },
                     { data: "text" },
                     {
                         data: null,
@@ -135,18 +156,24 @@
                         }
                     }
                 ],
-                dom: 'Bfrtip',
+                dom: "Blfrtip",
                 buttons: [
-                    'copy', 'csv', 'excel', 'pdf', 'print'
+                    {
+                        extend: 'colvis',
+                        postfixButtons: ['colvisRestore'],
+                        collectionLayout: 'fixed two-column',
+                        className: 'btn btn-primary'
+                    }
+                    , 'copy', 'csv', 'excel', 'pdf', 'print'
                 ]
             });
         }
 
         function addInterview() {
             var interviewData = {
-                guid: $("#guid").val(),
-                interviewGuid: $("#interviewGuid").val(),
-                clientGuid: $("#clientGuid").val(),
+                guid: $("#guidEmployee").val(),
+                interviewDate: $("#interviewDate").val(),
+                clientGuid: $("#guidClient").val(),
                 text: $("#text").val()
             };
 
@@ -156,7 +183,7 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                data: JSON.stringify(accountData),
+                data: JSON.stringify(interviewData),
             }).done(function (result) {
                 Swal.fire({
                     title: 'Success',
@@ -209,12 +236,10 @@
                 dataType: "json"
             }).done((result) => {
                 console.log(result)
-                $("#guidUpd").val(result.data.guid);
+                $("#guidEmployeeUpd").val(result.data.guid);
                 $("#interviewDateUpd").val(result.data.interviewDate);
                 $("#clientGuidUpd").val(result.data.clientGuid);
                 $("#textUpd").val(result.data.text);
-
-                $("#modalemp2").modal("show");
             }).fail((error) => {
                 alert("Failed to fetch account data. Please try again.");
                 console.log(error)
@@ -226,8 +251,8 @@
 
 
             let data = {
-                guid: $("#guidUpd").val(),
-                interviewDate: $("#interviewUpd").val(),
+                guid: $("#guidEmployeeUpd").val(),
+                interviewDate: $("#interviewDateUpd").val(),
                 clientGuid: $("#clientGuidUpd").val(),
                 text: $("#textUpd").val()
             };

@@ -22,16 +22,13 @@
                 <div class="modal-body">
                     <form>
                         <div class="mb-3">
+                            <label for="guid" class="form-label">Guid</label>
+                            <select class="form-select selectNameinAccount" aria-label="Default select example" id="guid">
+                            </select>
+                        </div>
+                        <div class="mb-3">
                             <label for="password" class="form-label"> Password</label>
                             <input type="text" class="form-control" id="password" placeholder="Password">
-                        </div>
-                        <div class="mb-3">
-                            <label for="otp" class="form-label"> OTP</label>
-                            <input type="text" class="form-control" id="otp" placeholder="OTP">
-                        </div>
-                        <div class="mb-3">
-                            <label for="isUsed" class="form-label"> Is Used</label>
-                            <input type="text" class="form-control" id="isUsed" placeholder="Is Used">
                         </div>
                     </form>
                 </div>
@@ -49,6 +46,7 @@
         <thead>
             <tr>
                 <th>No</th>
+                <th>Name</th>
                 <th>Password</th>
                 <th>OTP</th>
                 <th>Is Used</th>
@@ -59,52 +57,27 @@
         </tbody>
     </table>
 </div>
-
-<div class="modal" id="modalUpdateAccount" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Update</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="mb-3">
-                        <label for="password" class="form-label"> Password</label>
-                        <input type="text" class="form-control" id="password" placeholder="Password">
-                    </div>
-                    <div class="mb-3">
-                        <label for="otp" class="form-label"> OTP</label>
-                        <input type="text" class="form-control" id="otp" placeholder="OTP">
-                    </div>
-                    <div class="mb-3">
-                        <label for="isUsed" class="form-label"> Is Used</label>
-                        <input type="text" class="form-control" id="isUsed" placeholder="Is Used">
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" onclick="UpdateAccount()" class="btn btn-primary d-inline-block" data-bs-dismiss="modal">Update Account</button>
-                <button type="button" class="btn btn-secondary d-inline-block" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
 @section Scripts{
-    <script src="~/js/Account.js" asp-append-version="true"></script>
         <script>
             $(document).ready(function () {
                 loadAccountData();
-
-                $("#saveAccountBtn").click(function () {
-                    addAccount();
-                });
+            $.ajax({
+                url: "https://localhost:7273/api/accounts/GetAccountwithNameOuterJoin"
+            }).done(function (result) {
+                console.log(result)
+                let getName = ""
+                $.each(result.data, (key, val) => {
+                    console.log(result)
+                    getName += ` <option value="${val.guid}">${val.fullName}</option>`
+                })
+                $('.selectNameinAccount').html(getName)
+            })
             });
 
             function loadAccountData() {
                 $('#accountTable').DataTable({
                     ajax: {
-                        url: "https://localhost:7273/api/accounts",
+                    url: "https://localhost:7273/api/accounts/GetAccountwithName",
                         dataType: "JSON",
                         dataSrc: "data"
                     },
@@ -115,29 +88,34 @@
                                 return meta.row + 1;
                             }
                         },
+                        { data: "fullName" },
                         { data: "password" },
                         { data: "otp" },
                         { data: "isUsed" },
                         {
                             data: null,
                             render: function (data, type, row) {
-                                return `<button onclick="ShowUpdateAccount('${row.guid}')" data-bs-toggle="modal" data-bs-target="#modalUpdateAccount" class="btn btn-primary"> Update </button>` +
-                                    `   <button onclick="deleteAccount('${row.guid}')" class="btn btn-secondary"> Delete </button>`;
+                                return `<button onclick="deleteAccount('${row.guid}')" class="btn btn-secondary"> Delete </button>`;
                             }
                         }
                     ],
-                    dom: 'Blfrtip',
-                    buttons: [
-                        'copy', 'csv', 'excel', 'pdf', 'print'
-                    ]
+                dom: "Blfrtip",
+                buttons: [
+                    {
+                        extend: 'colvis',
+                        postfixButtons: ['colvisRestore'],
+                        collectionLayout: 'fixed two-column',
+                        className: 'btn btn-primary'
+                    }
+                    , 'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
                 });
             }
 
             function addAccount() {
                 var accountData = {
-                    password: $("#password").val(),
-                    otp: $("#otp").val(),
-                    isUsed: $("#isUsed").val()
+                    guid: $("#guid").val(),
+                    password: $("#password").val()
                 };
 
                 $.ajax({
@@ -161,6 +139,7 @@
                         text: 'Failed to insert data. Please try again.',
                         icon: 'error'
                     });
+                    console.log(error)
                 });
             }
 
@@ -191,58 +170,6 @@
                         });
                     }
                 });
-            }
-            function ShowUpdateAccount(guid) {
-                $.ajax({
-                    url: "https://localhost:7273/api/accounts/" + guid,
-                    type: "GET",
-                    dataType: "json"
-                }).done((result) => {
-                    console.log(result)
-                    $("#guidUpd").val(result.data.guid);
-                    $("#passwordUpd").val(result.data.password);
-                    $("#otpUpd").val(result.data.otp);
-                    $("#isUsedUpd").val(result.data.isUsed);
-
-                    $("#modalemp2").modal("show");
-                }).fail((error) => {
-                    alert("Failed to fetch account data. Please try again.");
-                    console.log(error)
-                });
-
-            }
-
-            function UpdateAccount() {
-
-
-                let data = {
-                    guid: $("#guidUpd").val(),
-                    password: $("#passwordUpd").val(),
-                    otp: $("#otpUpd").val(),
-                    isUsed: $("#isUsedUpd").val(),
-                    email: $("#emailUpd").val()
-                };
-                $.ajax({
-                    url: "https://localhost:7273/api/accounts",
-                    type: "PUT",
-                    contentType: "application/json",
-                    data: JSON.stringify(data)
-                }).done((result) => {
-                    Swal.fire({
-                        title: 'Success',
-                        text: 'Data has been successfully updated',
-                        icon: 'success'
-                    }).then(function () {
-                        location.reload();
-                    });
-                }).fail((error) => {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Failed to insert data! Please try again.'
-                    })
-                    console.log(error)
-                })
             }
         </script>
 }

@@ -21,9 +21,10 @@ namespace API.Services
         private readonly IClientRepository _clientRepository;
         private readonly IGradeRepository _gradeRepository;
         private readonly IAccountRoleRepository _accountRoleRepository;
+        private readonly IAccountRepository _accountRepository;
         private readonly PlacementDbContext _dbContext;
 
-        public EmployeeService(IEmployeeRepository employeeRepository, IInterviewRepository interviewRepository, IPositionRepository positionRepository, IClientRepository clientRepository, IGradeRepository gradeRepository, PlacementDbContext dbContext, IAccountRoleRepository accountRoleRepository)
+        public EmployeeService(IEmployeeRepository employeeRepository, IInterviewRepository interviewRepository, IPositionRepository positionRepository, IClientRepository clientRepository, IGradeRepository gradeRepository, PlacementDbContext dbContext, IAccountRoleRepository accountRoleRepository, IAccountRepository accountRepository)
         {
             _employeeRepository = employeeRepository;
             _interviewRepository = interviewRepository;
@@ -32,8 +33,27 @@ namespace API.Services
             _gradeRepository = gradeRepository;
             _dbContext = dbContext;
             _accountRoleRepository = accountRoleRepository;
+            _accountRepository = accountRepository;
         }
-        
+
+        public IEnumerable<GetEmployeeinGrade>? GetEmployeeinGrade()
+        {
+            var merge = 
+                        from employee in _employeeRepository.GetAll() 
+                        join grade in _gradeRepository.GetAll() on employee.Guid equals grade.Guid into tbl
+                        from grade in tbl.DefaultIfEmpty()
+                        select new GetEmployeeinGrade
+                             {
+                                 Guid = employee.Guid,
+                                 FullName =employee.FirstName+ " " +employee.LastName,
+                                 Grade =grade!=null?grade.Name:null
+                             };
+            if (!merge.Any())
+            {
+                return null;
+            }
+            return merge.Where(a=>a.Grade is null);
+        } 
         public IEnumerable<GetReportEmployee>? GetAllReportedEmployee()
         {
             var mergetable = from employee in _employeeRepository.GetAll()
@@ -83,13 +103,12 @@ namespace API.Services
             var merging = from employee in _employeeRepository.GetAll()
                           join interview in _interviewRepository.GetAll() on employee.Guid equals interview.Guid
                           join client in _clientRepository.GetAll() on interview.ClientGuid equals client.Guid
-                          join position in _positionRepository.GetAll() on client.Guid equals position.ClientGuid
+                          join position in _positionRepository.GetAll() on client.Guid equals position.Guid
                           where employee.Guid == guid && client.IsAvailable == true
                           select new GetEmployeeNotification
                           {
                               ClientName = client.Name,
                               PositionName = position.Name,
-                              CapacityClient = client.Capacity,
                               InterviewDate = interview.InterviewDate,
                               Note = interview.Text
                           };
@@ -191,7 +210,7 @@ namespace API.Services
         {
             Employee toCreate = newEmployeeDto;
             toCreate.NIK = GenerateHandler.LastNik(_employeeRepository.GetLastNik());
-
+            toCreate.Status = 0;
             var employee = _employeeRepository.Create(toCreate);
             if (employee is null)
             {

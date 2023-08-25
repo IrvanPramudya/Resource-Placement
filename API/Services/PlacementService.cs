@@ -1,7 +1,10 @@
 ﻿using API.Contracts;
+using API.Data;
+using API.DTOs.Employees;
 using API.DTOs.Placements;
 using API.Models;
 using API.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Services
 {
@@ -10,12 +13,16 @@ namespace API.Services
         private readonly IClientRepository _clientRepository;
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IPlacementRepository _placementRepository;
+        private readonly IInterviewRepository _interviewRepository;
+        private readonly PlacementDbContext _dbContext;
 
-        public PlacementService(IPlacementRepository placementRepository, IClientRepository clientRepository, IEmployeeRepository employeeRepository)
+        public PlacementService(IPlacementRepository placementRepository, IClientRepository clientRepository, IEmployeeRepository employeeRepository, IInterviewRepository interviewRepository, PlacementDbContext dbContext)
         {
             _placementRepository = placementRepository;
             _clientRepository = clientRepository;
             _employeeRepository = employeeRepository;
+            _interviewRepository = interviewRepository;
+            _dbContext = dbContext;
         }
 
         public IEnumerable<GetEmployeeClientName> GetEmployeeClientName()
@@ -26,10 +33,13 @@ namespace API.Services
                         select new GetEmployeeClientName
                         {
                             Guid = p.Guid,
+                            EmployeeGuid = e.Guid,
+                            ClientGuid = c.Guid,
                             StartDate = p.StartDate,
                             EndDate = p.EndDate,
                             EmployeeName = e.FirstName + " " +e.LastName,
                             ClientName = c.Name
+                            
                         };
             if (!merge.Any())
             {
@@ -90,13 +100,47 @@ namespace API.Services
 
         public PlacementDto? Create(NewPlacementDto newPlacementDto)
         {
-            var placement = _placementRepository.Create(newPlacementDto);
-            if (placement is null)
+            var interview = _interviewRepository.GetByGuid(newPlacementDto.EmployeeGuid);
+            if(interview is null)
             {
-                return null; // Placement is null or not found;
+                return null;
             }
-
-            return (PlacementDto)placement; // Placement is found;
+            using var transaction = _dbContext.Database.BeginTransaction();
+            try
+            {
+                var placement = _placementRepository.Create(newPlacementDto);
+                if (placement is null)
+                {
+                    return null; // Placement is null or not found;
+                }
+                var employee = _employeeRepository.GetByGuid(newPlacementDto.EmployeeGuid);
+                if (employee is null)
+                {
+                    return null; // employee is null or not found;
+                }
+                var employeeUpdate = new UpdateEmployeeDto
+                {
+                    Guid = newPlacementDto.EmployeeGuid,
+                    Email = employee.Email,
+                    FirstName = employee.FirstName,
+                    LastName = employee.LastName,
+                    Gender = employee.Gender,
+                    PhoneNumber = employee.PhoneNumber,
+                    Skill = employee.Skill,
+                    Status = Utilities.Enums.StatusLevel.Site
+                };
+                Employee employeeToUpdate = employeeUpdate;
+                employeeToUpdate.NIK = employee.NIK;
+                var UpdatedEmployee = _employeeRepository.Update(employeeToUpdate);
+                transaction.Commit();
+                return (PlacementDto)placement; // Placement is found;
+            }
+            catch
+            {
+                transaction.Rollback();
+                return null;
+            }
+            
         }
 
         public int Update(PlacementDto placementDto)

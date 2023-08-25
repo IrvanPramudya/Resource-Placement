@@ -21,21 +21,21 @@
                 </div>
                 <div class="modal-body">
                     <form>
-                        <div class="mb-3">
+                        <div class="mb-3 date-container">
                             <label for="startDate" class="form-label">Start Date</label>
                             <input type="datetime-local" class="form-control" onclick="" id="startDate" placeholder="StartDate">
                         </div>
                         <div class="mb-3">
                             <label for="endDate" class="form-label">End Date</label>
-                            <input type="datetime-local" class="form-control" id="endDate" placeholder="EndDate" readonly>
+                            <input type="datetime-local" class="form-control" id="endDate" placeholder="EndDate">
                         </div>
                         <div class="mb-3">
                             <label for="employeeGuid" class="form-label">Employee Guid</label>
-                            <input type="text" class="form-control" id="employeeGuid" placeholder="Employee Guid">
+                            <select class="form-select selectNameinPlacement" aria-label="Default select example" id="employeeGuid"></select>
                         </div>
                         <div class="mb-3">
                             <label for="clientGuid" class="form-label">Client Guid</label>
-                            <input type="text" class="form-control" id="clientGuid" placeholder="Client Guid">
+                            <select class="form-select selectClientinPlacement" aria-label="Default select example" id="clientGuid"></select>
                         </div>
                     </form>
                 </div>
@@ -88,11 +88,11 @@
                     </div>
                     <div class="mb-3">
                         <label for="employeeGuid" class="form-label">Employee Guid</label>
-                        <input type="text" class="form-control" id="employeeGuidUpd" placeholder="Employee Guid">
+                        <select class="form-select selectNameinPlacement" aria-label="Default select example" id="employeeGuidUpd"></select>
                     </div>
                     <div class="mb-3">
                         <label for="clientGuid" class="form-label">Client Guid</label>
-                        <input type="text" class="form-control" id="clientGuidUpd" placeholder="Client Guid">
+                        <select class="form-select selectClientinPlacement" aria-label="Default select example" id="clientGuidUpd"></select>
                     </div>
                 </form>
             </div>
@@ -104,7 +104,6 @@
     </div>
 </div>
 @section Scripts{
-    <script src="~/js/Placement.js" asp-append-version="true"></script>
         <script>
             const startDateInput = document.getElementById('startDate');
             const endDateInput = document.getElementById('endDate');
@@ -125,6 +124,29 @@
 
             $(document).ready(function () {
                 loadPlacementData();
+                $.ajax({
+                    url: "https://localhost:7273/api/accountroles/GetEmployeehasAccount"
+                }).done(function (result) {
+                    console.log(result)
+                    let getName = ""
+                    $.each(result.data, (key, val) => {
+                        console.log(result)
+                        getName += ` <option value="${val.accountGuid}">${val.fullName}</option>`
+                    })
+                    $('.selectNameinPlacement').html(getName)
+                })
+                $.ajax({
+                    url: "https://localhost:7273/api/clients"
+                }).done(function (result) {
+                    // Assuming the API response contains a property named "totalEmployees"
+                    console.log(result)
+                    let getClientinInterview = ""
+                    $.each(result.data, (key, val) => {
+                        console.log(result)
+                        getClientinInterview += ` <option value="${val.guid}">${val.name}</option>`
+                    })
+                    $('.selectClientinPlacement').html(getClientinInterview)
+                })
             });
 
             function loadPlacementData() {
@@ -141,8 +163,18 @@
                                 return meta.row + 1;
                             }
                         },
-                        { data: "startDate" },
-                        { data: "endDate" },
+                        {
+                            data: 'startDate',
+                            render: function (data, type, row) {
+                                return moment(data).format("DD/MM/YYYY");;
+                            }
+                        },
+                        {
+                            data: 'endDate',
+                            render: function (data, type, row) {
+                                return moment(data).format("DD/MM/YYYY");;
+                            }
+                        },
                         { data: "employeeName" },
                         { data: "clientName" },
                         {
@@ -153,10 +185,16 @@
                             }
                         }
                     ],
-                    dom: 'Blfrtip',
-                    buttons: [
-                        'copy', 'csv', 'excel', 'pdf', 'print'
-                    ]
+                dom: "Blfrtip",
+                buttons: [
+                    {
+                        extend: 'colvis',
+                        postfixButtons: ['colvisRestore'],
+                        collectionLayout: 'fixed two-column',
+                        className: 'btn btn-primary'
+                    }
+                    , 'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
                 });
             }
 

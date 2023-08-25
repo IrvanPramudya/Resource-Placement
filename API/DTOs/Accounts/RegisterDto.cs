@@ -10,7 +10,6 @@ namespace API.DTOs.Accounts
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public GenderLevel Gender { get; set; }
-        public StatusLevel Status { get; set; }
         public string? Skill { get; set; }
     }
 }

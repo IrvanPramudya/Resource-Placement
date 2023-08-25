@@ -4,16 +4,17 @@ namespace API.DTOs.Positions
 {
     public class NewPositionDto
     {
-        public Guid ClientGuid { get; set; }
+        public Guid Guid { get; set; }
         public string Name { get; set; }
+        public int Capacity { get; set; }
 
         public static implicit operator Position(NewPositionDto position)
         {
             return new Position
             {
-                Guid = new Guid(),
+                Guid = position.Guid,
                 Name = position.Name,
-                ClientGuid = position.ClientGuid,
+                Capacity = position.Capacity,
                 CreatedDate = DateTime.Now,
                 ModifiedDate = DateTime.Now,
             };
@@ -23,7 +24,7 @@ namespace API.DTOs.Positions
             return new NewPositionDto
             {
                 Name = position.Name,
-                ClientGuid = position.ClientGuid,
+                Capacity = position.Capacity,
             };
         }
 

@@ -15,8 +15,6 @@ namespace API.Utilities.Validations.Employee
                 .NotEmpty().WithMessage("First Name is Required");
             RuleFor(employee => employee.Gender)
                 .IsInEnum().WithMessage("Gender is not Identify");
-            RuleFor(employee => employee.Status)
-                .IsInEnum().WithMessage("Status is not Identify");
             RuleFor(employee => employee.Email)
                 .NotEmpty().WithMessage("Email is Required")
                 .EmailAddress().WithMessage("Wrong Email")

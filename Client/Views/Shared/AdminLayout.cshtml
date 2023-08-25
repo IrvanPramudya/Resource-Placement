@@ -1,16 +1,17 @@
-﻿<!DOCTYPE html>
+﻿@using System.Net.Http
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<<<<<<< Updated upstream
     <title>@ViewData["Title"] - Client</title>
     @*Offline Style*@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/tempus-dominus/dist/css/tempus-dominus.min.css" asp-append-version="true" />
     
     @*Online Style*@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
@@ -34,25 +35,60 @@
                 Academy
             </div>
         </a>
-        <ul class="side-menu">
-            <li><a asp-area="" asp-controller="ResourcePlacement" asp-action="Index"><i class='bx bxs-dashboard'></i>Dashboard</a></li>
-            <li><a asp-area="" asp-controller="ResourcePlacement" asp-action="ClientIndex"><i class='bx bx-group'></i>Client</a></li>
-            <li><a asp-area="" asp-controller="ResourcePlacement" asp-action="InterviewIndex"><i class='bx bx-calendar-event'></i>Interview</a></li>
-=======
-            <li><a asp-area="" asp-controller="ResourcePlacement" asp-action="ClientIndex"><i class='bx bx-buildings'></i>Client</a></li>
-            <li><a href="#"><i class='bx bx-analyse'></i>Analytics</a></li>
->>>>>>> Stashed changes
-            <li><a asp-area="" asp-controller="ResourcePlacement" asp-action="EmployeeIndex"><i class='bx bx-group'></i>Employee</a></li>
-            <li><a asp-area="" asp-controller="ResourcePlacement" asp-action="GradeIndex"><i class='bx bx-award'></i>Grade</a></li>
-            <li><a asp-area="" asp-controller="ResourcePlacement" asp-action="PositionIndex"><i class='bx bx-been-here'></i>Position</a></li>
-            <li><a asp-area="" asp-controller="ResourcePlacement" asp-action="PlacementIndex"><i class='bx bx-building'></i>Placement</a></li>
-            <li><a asp-area="" asp-controller="ResourcePlacement" asp-action="AccountIndex"><i class='bx bx-user'></i>Account</a></li>
-            <li><a asp-area="" asp-controller="ResourcePlacement" asp-action="RoleIndex"><i class='bx bx-group'></i>Role</a></li>
-            <li><a asp-area="" asp-controller="ResourcePlacement" asp-action="AccountRoleIndex"><i class='bx bx-group'></i>Account Role</a></li>
-=======
-            <li><a asp-area="" asp-controller="ResourcePlacement" asp-action="RoleIndex"><i class='bx bxs-user-badge'></i>Role</a></li>
-            <li><a asp-area="" asp-controller="ResourcePlacement" asp-action="AccountRoleIndex"><i class='bx bxs-user-detail'></i>Account Role</a></li>
->>>>>>> Stashed changes
+        @*<div class="side-menu">
+            <h2 class="accordion-header" id="flush-headingOne">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                    Account
+                </button>
+            </h2>
+            <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                <div class="accordion-body">
+                    <a asp-controller="ResourcePlacement" asp-action="AccountIndex"><i class='bx bx-user'></i>Account</a>
+                </div>
+            </div>
+            <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                <div class="accordion-body">
+                    <a asp-controller="ResourcePlacement" asp-action="AccountIndex"><i class='bx bx-user'></i>Account</a>
+                </div>
+            </div>
+        </div>*@
+        @*<div class="btn-group dropend side-menu">
+            <button type="button" class="btn btn-secondary">
+                Split dropend
+            </button>
+            <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="visually-hidden">Toggle Dropend</span>
+            </button>
+            <ul class="dropdown-menu" style="position:absolute;">
+                <li><a asp-controller="ResourcePlacement" asp-action="Index"><i class='bx bx-user'></i>Dashboard</a></li>
+                <li><a asp-controller="ResourcePlacement" asp-action="AccountIndex"><i class='bx bx-user'></i>Account</a></li>
+                <li><a asp-controller="ResourcePlacement" asp-action="AccountRoleIndex"><i class='bx bxs-user-detail'></i>Account Role</a></li>
+            </ul>
+        </div>*@
+        @*<div class="dropdown-center">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Centered dropdown
+            </button>
+            <ul class="side-menu dropdown-menu">
+                <li><a asp-controller="ResourcePlacement" asp-action="Index"><i class='bx bx-user'></i>Dashboard</a></li>
+                <li><a asp-controller="ResourcePlacement" asp-action="AccountIndex"><i class='bx bx-user'></i>Account</a></li>
+                <li><a asp-controller="ResourcePlacement" asp-action="AccountRoleIndex"><i class='bx bxs-user-detail'></i>Account Role</a></li>
+                <li><a asp-controller="ResourcePlacement" asp-action="RoleIndex"><i class='bx bx-group'></i>Role</a></li>
+            </ul>
+        </div>*@
+        <ul class="side-menu ">
+            <li><a asp-controller="ResourcePlacement" asp-action="Index"><i class='bx bx-user'></i>Dashboard</a></li>
+            <li><a asp-controller="ResourcePlacement" asp-action="AccountIndex"><i class='bx bx-user'></i>Account</a></li>
+            <li><a asp-controller="ResourcePlacement" asp-action="AccountRoleIndex"><i class='bx bxs-user-detail'></i>Account Role</a></li>
+            <li><a asp-controller="ResourcePlacement" asp-action="RoleIndex"><i class='bx bx-group'></i>Role</a></li>
+            <li><a asp-controller="ResourcePlacement" asp-action="EmployeeIndex"><i class='bx bx-group'></i>Employee</a></li>
+            <li><a asp-controller="ResourcePlacement" asp-action="InterviewIndex"><i class='bx bx-calendar-event'></i>Interview</a></li>
+            <li><a asp-controller="ResourcePlacement" asp-action="NotifikasiIndex"><i class='bx bx-calendar-event'></i>Notifikasi</a></li>
+            <li><a asp-controller="ResourcePlacement" asp-action="ClientIndex"><i class='bx bx-buildings'></i>Client</a></li>
+            <li><a asp-controller="ResourcePlacement" asp-action="GradeIndex"><i class='bx bx-award'></i>Grade</a></li>
+            <li><a asp-controller="ResourcePlacement" asp-action="PositionIndex"><i class='bx bx-been-here'></i>Position</a></li>
+            <li><a asp-controller="ResourcePlacement" asp-action="PlacementIndex"><i class='bx bx-building'></i>Placement</a></li>
+            <li><a asp-controller="ResourcePlacement" asp-action="RoleIndex"><i class='bx bxs-user-badge'></i>Role</a></li>
         </ul>
         <ul class="side-menu">
             <li>
@@ -93,16 +129,19 @@
         <!-- End of Navbar -->
 
         <main>
+            <input type="hidden" id="guidSection" value="@User.FindFirst("guid")" />
             @RenderBody()
 
         </main>
 
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     @*Offline Library*@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/tempus-dominus/dist/js/tempus-dominus.min.js"></script>
     @*Online Library*@
-    <script src="~/js/Account.js" asp-append-version="true"></script>
+    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
@@ -114,8 +153,9 @@
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
     <script src="https://cdn.datatables.net/fixedcolumns/4.3.0/js/dataTables.fixedColumns.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.colVis.min.js"></script>
+    <script src="https://momentjs.com/downloads/moment.min.js"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.10.13/sorting/datetime-moment.js"></script>
     @*Page Script*@
-    <script src="~/js/Employee.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 

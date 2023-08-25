@@ -29,7 +29,54 @@ namespace API.Services
             _dbContext = dbContext;
             _emailHandler = emailHandler;
         }
+        public IEnumerable<GetAccountwithNameAndRoles>? GetAccountwithNamesAndRolesOuterJoin()
+        {
+            var merge = from employee in _employeeRepository.GetAll()
+                        join account in _accountRepository.GetAll() on employee.Guid equals account.Guid into accountGroup
+                        from account in accountGroup.DefaultIfEmpty()
+                        join accountRole in _accountRoleRepository.GetAll() on account.Guid equals accountRole.AccountGuid into accountRoleGroup
+                        from accountRole in accountRoleGroup.DefaultIfEmpty()
+                        select new GetAccountwithNameAndRoles
+                        {
+                            Guid = employee.Guid,
+                            FullName = employee.FirstName + " " + employee.LastName,
+                            IsUsed = account != null ? account.IsUsed : false,
+                            OTP = account != null ? account.OTP : null,
+                            Password = account != null ? account.Password : null,
+                            RoleGuid = accountRole != null ? accountRole.RoleGuid : null
+                        };
+            return merge;
+        }
 
+        public IEnumerable<GetAccountwithName>? GetAccountwithNames()
+        {
+            var merge = from employee in _employeeRepository.GetAll()
+                        join account in _accountRepository.GetAll() on employee.Guid equals account.Guid
+                        select new GetAccountwithName
+                        {
+                            Guid = employee.Guid,
+                            FullName = employee.FirstName + " " + employee.LastName,
+                            IsUsed = account.IsUsed,
+                            OTP = account.OTP,
+                            Password = account.Password
+                        };
+            return merge;
+        }
+        public IEnumerable<GetAccountwithName>? GetAccountwithNamesOuterJoin()
+        {
+            var merge = from employee in _employeeRepository.GetAll()
+                        join account in _accountRepository.GetAll() on employee.Guid equals account.Guid into accountGroup
+                        from account in accountGroup.DefaultIfEmpty()
+                        select new GetAccountwithName
+                        {
+                            Guid = employee.Guid,
+                            FullName = employee.FirstName + " " + employee.LastName,
+                            IsUsed = account != null ? account.IsUsed : false,
+                            OTP = account != null ? account.OTP : null,
+                            Password = account != null ? account.Password : null
+                        };
+            return merge.Where(a=>a.Password == null);
+        }
         public string Login(LoginDto loginDto)
         {
             var getEmployee = _employeeRepository.GetByEmail(loginDto.Email);
@@ -89,7 +136,7 @@ namespace API.Services
                     Email = register.Email,
                     PhoneNumber = register.PhoneNumber,
                     Gender = register.Gender,
-                    Status = register.Status,
+                    Status = 0,
                     Skill = register.Skill,
                     CreatedDate = DateTime.Now,
                     ModifiedDate = DateTime.Now
@@ -98,8 +145,9 @@ namespace API.Services
                 {
                     Guid = employee.Guid,
                     Password = HashingHandler.GenerateHash(register.Password),
-                    OTP = new Random().Next(111111, 999999),
+                    OTP = null,
                     IsUsed = true,
+                    ExpiredTime = null,
                     CreatedDate = DateTime.Now,
                     ModifiedDate = DateTime.Now
                 });
@@ -187,7 +235,7 @@ namespace API.Services
                 ModifiedDate = DateTime.Now,
                 CreatedDate = getAccount.CreatedDate,
                 OTP = getAccount.OTP,
-                //ExpiredTime = getAccount.ExpiredTime,
+                ExpiredTime = getAccount.ExpiredTime,
                 Password = hashedPassword,
             };
 
@@ -201,10 +249,10 @@ namespace API.Services
                 return -2;
             }
 
-            //if (getAccount.ExpiredTime < DateTime.Now)
-            //{
-            //    return -3; // OTP expired
-            //}
+            if (getAccount.ExpiredTime < DateTime.Now)
+            {
+                return -3;  //OTP expired
+            }
 
             _accountRepository.Clear();
 
@@ -247,7 +295,14 @@ namespace API.Services
 
         public AccountDto? Create(NewAccountDto newAccountDto)
         {
-            var account = _accountRepository.Create(newAccountDto);
+            var account = _accountRepository.Create(new AccountDto
+            {
+                Password = HashingHandler.GenerateHash(newAccountDto.Password),
+                Guid = newAccountDto.Guid,
+                ExpiredTime = null,
+                OTP = null,
+                IsUsed = true
+            });
             if (account is null)
             {
                 return null; // Account is null or not found;
@@ -256,7 +311,7 @@ namespace API.Services
             return (AccountDto)account; // Account is found;
         }
 
-        public int Update(AccountDto accountDto)
+        public int Update(NewAccountDto accountDto)
         {
             var account = _accountRepository.GetByGuid(accountDto.Guid);
             if (account is null)
@@ -265,6 +320,9 @@ namespace API.Services
             }
 
             Account toUpdate = accountDto;
+            toUpdate.OTP = account.OTP;
+            toUpdate.ExpiredTime = account.ExpiredTime;
+            toUpdate.IsUsed = account.IsUsed;
             toUpdate.CreatedDate = account.CreatedDate;
             var result = _accountRepository.Update(toUpdate);
 

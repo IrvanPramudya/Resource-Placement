@@ -23,12 +23,16 @@
                     <form>
                         <div class="mb-3">
                             <label for="clientGuid" class="form-label">Client Name</label>
-                            <select class="form-select clientSelect" aria-label="Default select example" id="clientGuid">
+                            <select class="form-select clientSelect" aria-label="Default select example" id="guid">
                             </select>
                         </div>
                         <div class="mb-3">
                             <label for="name" class="form-label">Position</label>
                             <input type="text" class="form-control" id="name" placeholder="Position Name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Capacity</label>
+                            <input type="number" class="form-control" id="capacity" placeholder="Position Capacity">
                         </div>
                     </form>
                 </div>
@@ -48,11 +52,10 @@
                 <th>No</th>
                 <th>Client Name</th>
                 <th>Position Name</th>
+                <th>Capacity</th>
                 <th>Action</th>
             </tr>
         </thead>
-        <tbody id="tbodyPosition">
-        </tbody>
     </table>
 </div>
 
@@ -66,17 +69,15 @@
             <div class="modal-body">
                 <form>
                     <div class="mb-3">
-                        <label for="Guid" class="form-label">Guid</label>
-                        <input type="text" class="form-control" id="guidUpd" placeholder="guid" readonly>
-                    </div>
-                    <div class="mb-3">
-                        <label for="clientGuid" class="form-label">Client Name</label>
-                        <select class="form-select clientSelect" aria-label="Default select example" id="clientGuidUpd">
-                        </select>
+                        <input type="hidden" class="form-control" id="guidUpd" placeholder="guid" readonly>
                     </div>
                     <div class="mb-3">
                         <label for="name" class="form-label">Position</label>
-                        <input type="text" class="form-control" id="nameUpd" placeholder="nameUpd">
+                        <input type="text" class="form-control" id="nameUpd" placeholder="Position Name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Capacity</label>
+                        <input type="text" class="form-control" id="capacityUpd" placeholder="Position Capacity">
                     </div>
                 </form>
             </div>
@@ -122,6 +123,7 @@
                         },
                         { data: "clientName" },
                         { data: "positionName" },
+                        { data: "capacity" },
                         {
                             data: null,
                             render: function (data, type, row) {
@@ -130,17 +132,24 @@
                             }
                         }
                     ],
-                    dom: 'Blfrtip',
-                    buttons: [
-                        'copy', 'csv', 'excel', 'pdf', 'print'
-                    ]
+                dom: "Blfrtip",
+                buttons: [
+                    {
+                        extend: 'colvis',
+                        postfixButtons: ['colvisRestore'],
+                        collectionLayout: 'fixed two-column',
+                        className: 'btn btn-primary'
+                    }
+                    , 'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
                 });
             }
 
             function addPosition() {
                 var positionData = {
-                    clientGuid: $("#clientGuid").val(),
+                    clientGuid: $("#guid").val(),
                     name: $("#name").val(),
+                    capacity: $("#capacity").val(),
                 };
 
                 $.ajax({
@@ -203,7 +212,7 @@
                 }).done((result) => {
                     console.log(result)
                     $("#guidUpd").val(result.data.guid);
-                    $("#clientGuidUpd").val(result.data.clientGuid);
+                    $("#capacityUpd").val(result.data.capacity);
                     $("#nameUpd").val(result.data.name);
 
                     $("#modalemp2").modal("show");
@@ -218,7 +227,7 @@
 
                 let data = {
                     guid: $("#guidUpd").val(),
-                    clientGuid: $("#clientGuidUpd").val(),
+                    capacity: $("#capacityUpd").val(),
                     name: $("#nameUpd").val(),
                 };
                 $.ajax({

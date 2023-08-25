@@ -1,8 +1,6 @@
 @using System.Net.Http
 @{
     ViewData["Title"] = "Employee";
->>>>>>> Stashed changes
-    Layout = "AdminLayout";
 }
 
 <!-- Modal -->
@@ -44,13 +42,6 @@
                             <select class="form-control" id="gender" required>
                                 <option value="0">Female</option>
                                 <option value="1">Male</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="status" class="col-form-label">Status:</label>
-                            <select class="form-control" id="status" required>
-                                <option value="1">Site</option>
-                                <option value="0">Idle</option>
                             </select>
                         </div>
                         <div class="mb-3">
@@ -122,13 +113,6 @@
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label for="status" class="col-form-label">Status:</label>
-                    <select class="form-control" id="statusUpd" required>
-                        <option value="1">Active</option>
-                        <option value="0">Idle</option>
-                    </select>
-                </div>
-                <div class="mb-3">
                     <label for="skill" class="form-label"> Skill</label>
                     <input type="text" class="form-control" id="skillUpd" placeholder="Skill">
                 </div>
@@ -140,8 +124,7 @@
         </div>
     </div>
 </div>
-@section Scripts{    
-    <script src="~/js/Employee.js" asp-append-version="true"></script>
+@section Scripts{
     <script>
         $(document).ready(function () {
             loadEmployeeData();
@@ -211,7 +194,6 @@
                 email: $("#email").val(),
                 phoneNumber: $("#phoneNumber").val(),
                 gender: parseInt($("#gender").val()),
-                status: parseInt($("#status").val()),
                 skill: $("#skill").val()
             };
 
@@ -281,22 +263,8 @@
                 $("#lastNameUpd").val(result.data.lastName);
                 $("#emailUpd").val(result.data.email);
                 $("#phoneNumberUpd").val(result.data.phoneNumber);
-                    $("#genderUpd").val(result.data.gender);
-                    $("#statusUpd").val(result.data.status);
-                // Melakukan penyesuaian untuk nilai gender
-                    /*if (result.data.gender === 0) {
-                        $("input[name='genderUpd'][value='Female']").prop("checked", true);
-                } else {
-                        $("input[name='genderUpd'][value='Male']").prop("checked", true);
-                }
-                if (result.data.status === 0) {
-                        $("input[name='statusUpd'][value='Active']").prop("checked", true);
-                } else {
-                        $("input[name='statusUpd'][value='Idle']").prop("checked", true);
-                    }*/
+                $("#genderUpd").val(result.data.gender);
                 $("#skillUpd").val(result.data.skill);
-
-                $("#modalemp2").modal("show");
             }).fail((error) => {
                 alert("Failed to fetch employee data. Please try again.");
                 console.log(error)
@@ -314,8 +282,7 @@
                 lastName: $("#lastNameUpd").val(),
                 email: $("#emailUpd").val(),
                 phoneNumber: $("#phoneNumberUpd").val(),
-                    gender: parseInt($("#genderUpd").val()),
-                    status: parseInt($("#statusUpd").val()),
+                gender: parseInt($("#genderUpd").val()),
                 skill: $("#skillUpd").val(),
             };
             $.ajax({

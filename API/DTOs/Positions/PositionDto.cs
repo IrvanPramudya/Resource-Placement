@@ -5,8 +5,8 @@ namespace API.DTOs.Positions
     public class PositionDto
     {
         public Guid Guid { get; set; }
-        public Guid ClientGuid { get; set; }
         public string Name { get; set; }
+        public int Capacity { get; set; }
 
         public static implicit operator Position(PositionDto position)
         {
@@ -14,7 +14,7 @@ namespace API.DTOs.Positions
             {
                 Guid = position.Guid,
                 Name = position.Name,
-                ClientGuid = position.ClientGuid,
+                Capacity = position.Capacity,
                 ModifiedDate = DateTime.Now,
             };
         }
@@ -24,7 +24,7 @@ namespace API.DTOs.Positions
             {
                 Guid = position.Guid,
                 Name = position.Name,
-                ClientGuid = position.ClientGuid,
+                Capacity = position.Capacity,
             };
         }
     }

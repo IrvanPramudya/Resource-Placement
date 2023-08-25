@@ -5,5 +5,6 @@
         public Guid Guid { get; set; }
         public string? ClientName { get; set; }
         public string? PositionName { get; set; }
+        public int Capacity { get; set; }
     }
 }

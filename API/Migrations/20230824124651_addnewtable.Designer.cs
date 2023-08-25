@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(PlacementDbContext))]
-    [Migration("20230817091138_CreateTable")]
-    partial class CreateTable
+    [Migration("20230824124651_addnewtable")]
+    partial class addnewtable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -34,6 +34,10 @@ namespace API.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("created_date");
 
+                    b.Property<DateTime?>("ExpiredTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("expired_time");
+
                     b.Property<bool>("IsUsed")
                         .HasColumnType("bit")
                         .HasColumnName("is_used");
@@ -42,7 +46,7 @@ namespace API.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("modified_date");
 
-                    b.Property<int>("OTP")
+                    b.Property<int?>("OTP")
                         .HasColumnType("int")
                         .HasColumnName("otp");
 
@@ -94,10 +98,6 @@ namespace API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("guid");
-
-                    b.Property<int>("Capacity")
-                        .HasColumnType("int")
-                        .HasColumnName("capacity");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2")
@@ -234,6 +234,10 @@ namespace API.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("interview_date");
 
+                    b.Property<bool>("IsAccepted")
+                        .HasColumnType("bit")
+                        .HasColumnName("is_accepted");
+
                     b.Property<DateTime>("ModifiedDate")
                         .HasColumnType("datetime2")
                         .HasColumnName("modified_date");
@@ -294,13 +298,12 @@ namespace API.Migrations
             modelBuilder.Entity("API.Models.Position", b =>
                 {
                     b.Property<Guid>("Guid")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("guid");
 
-                    b.Property<Guid>("ClientGuid")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("client_guid");
+                    b.Property<int>("Capacity")
+                        .HasColumnType("int")
+                        .HasColumnName("capacity");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2")
@@ -316,8 +319,6 @@ namespace API.Migrations
                         .HasColumnName("name");
 
                     b.HasKey("Guid");
-
-                    b.HasIndex("ClientGuid");
 
                     b.ToTable("tb_m_positions");
                 });
@@ -350,29 +351,29 @@ namespace API.Migrations
                         new
                         {
                             Guid = new Guid("ae259a90-e2e8-442f-ce18-08db91a71ab9"),
-                            CreatedDate = new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4537),
-                            ModifiedDate = new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4547),
+                            CreatedDate = new DateTime(2023, 8, 24, 19, 46, 51, 616, DateTimeKind.Local).AddTicks(9155),
+                            ModifiedDate = new DateTime(2023, 8, 24, 19, 46, 51, 616, DateTimeKind.Local).AddTicks(9168),
                             Name = "Employee"
                         },
                         new
                         {
                             Guid = new Guid("4ec90656-e89c-4871-d9e5-08db8a7d0f37"),
-                            CreatedDate = new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4550),
-                            ModifiedDate = new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4551),
+                            CreatedDate = new DateTime(2023, 8, 24, 19, 46, 51, 616, DateTimeKind.Local).AddTicks(9172),
+                            ModifiedDate = new DateTime(2023, 8, 24, 19, 46, 51, 616, DateTimeKind.Local).AddTicks(9173),
                             Name = "Trainer"
                         },
                         new
                         {
                             Guid = new Guid("c0689b0a-5c87-46f1-ce19-08db91a71ab9"),
-                            CreatedDate = new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4555),
-                            ModifiedDate = new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4555),
+                            CreatedDate = new DateTime(2023, 8, 24, 19, 46, 51, 616, DateTimeKind.Local).AddTicks(9175),
+                            ModifiedDate = new DateTime(2023, 8, 24, 19, 46, 51, 616, DateTimeKind.Local).AddTicks(9176),
                             Name = "Operasional"
                         },
                         new
                         {
                             Guid = new Guid("5fb9adc0-7d08-45d4-cd66-08db9c7a678f"),
-                            CreatedDate = new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4558),
-                            ModifiedDate = new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4559),
+                            CreatedDate = new DateTime(2023, 8, 24, 19, 46, 51, 616, DateTimeKind.Local).AddTicks(9179),
+                            ModifiedDate = new DateTime(2023, 8, 24, 19, 46, 51, 616, DateTimeKind.Local).AddTicks(9180),
                             Name = "Admin"
                         });
                 });
@@ -460,7 +461,7 @@ namespace API.Migrations
                 {
                     b.HasOne("API.Models.Client", "Client")
                         .WithMany("Positions")
-                        .HasForeignKey("ClientGuid")
+                        .HasForeignKey("Guid")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

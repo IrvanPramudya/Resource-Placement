@@ -109,13 +109,13 @@ namespace API.Controllers
         }
 
         [HttpPut]
-        public IActionResult Update(ClientDto clientDto)
+        public IActionResult Update(UpdateClientDto clientDto)
         {
             var result = _clientService.Update(clientDto);
 
             if (result is -1)
             {
-                return NotFound(new ResponseHandler<ClientDto>
+                return NotFound(new ResponseHandler<UpdateClientDto>
                 {
                     Code = StatusCodes.Status404NotFound,
                     Status = HttpStatusCode.NotFound.ToString(),
@@ -125,7 +125,7 @@ namespace API.Controllers
 
             if (result is 0)
             {
-                return StatusCode(500, new ResponseHandler<ClientDto>
+                return StatusCode(500, new ResponseHandler<UpdateClientDto>
                 {
                     Code = StatusCodes.Status500InternalServerError,
                     Status = HttpStatusCode.InternalServerError.ToString(),
@@ -133,7 +133,7 @@ namespace API.Controllers
                 });
             }
 
-            return Ok(new ResponseHandler<ClientDto>
+            return Ok(new ResponseHandler<UpdateClientDto>
             {
                 Code = StatusCodes.Status200OK,
                 Status = HttpStatusCode.OK.ToString(),
