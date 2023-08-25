@@ -118,3 +118,8 @@ body{
         width: 400px;
     }
 }
+
+.btn btn-primary {
+    --bs-tooltip-bg: var(--bd-violet-bg);
+    --bs-tooltip-color: var(--bs-white);
+}

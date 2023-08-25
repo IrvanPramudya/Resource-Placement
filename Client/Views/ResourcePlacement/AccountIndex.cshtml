@@ -8,7 +8,9 @@
     <h1 class="align-content-center" id="judul">List Account</h1>
 </div>
 <div class="text-center my-3">
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAddAccount">Add Account</button>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAddAccount" data-bs-placement="top" data-bs-title="Add Account">
+        <i class='bx bx-user-plus'></i>
+    </button>
 </div>
 
 <div class="add-account">
@@ -59,6 +61,9 @@
 </div>
 @section Scripts{
         <script>
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="modal"]')
+            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+
             $(document).ready(function () {
                 loadAccountData();
             $.ajax({
@@ -99,16 +104,15 @@
                             }
                         }
                     ],
-                dom: "Blfrtip",
-                buttons: [
-                    {
-                        extend: 'colvis',
-                        postfixButtons: ['colvisRestore'],
-                        collectionLayout: 'fixed two-column',
-                        className: 'btn btn-primary'
-                    }
-                    , 'copy', 'csv', 'excel', 'pdf', 'print'
-                ]
+                "dom":
+                    "<'row'<'col-md-5'B><'col-md-7'f>>" + // Bagian atas: Tombol - Elemen Panjang - Elemen Pencarian
+                    "<'row'<'col-sm-12'tr>>" + // Tabel
+                    "<'row'<'col-md-5'i><'col-md-3 mt-2 mx-auto'l><'col-md-4'p>>", // Bagian bawah: Elemen Info - Elemen Halaman
+                "buttons": [
+                    'copy', 'csv', 'excel', 'pdf', 'print', 'colvis'
+                ],
+                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                "pageLength": 25
                 });
             }
 

@@ -14,6 +14,7 @@ namespace API.Services
             _gradeRepository = gradeRepository;
             _employeeRepository = employeeRepository;
         }
+
         public IEnumerable<GradewithName>? GetwithName()
         {
             var merge = from employee in _employeeRepository.GetAll()
@@ -21,11 +22,11 @@ namespace API.Services
                         select new GradewithName
                         {
                             Guid = employee.Guid,
-                            EmployeeName =employee.FirstName+ " " + employee.LastName,
+                            EmployeeName = employee.FirstName + " " + employee.LastName,
                             GradeName = grade.Name,
                             Salary = grade.Salary,
                         };
-            if(!merge.Any())
+            if (!merge.Any())
             {
                 return null;
             }
@@ -39,7 +40,7 @@ namespace API.Services
                         select new GetEmployeeName
                         {
                             Guid = e.Guid,
-                            EmployeeName = e.FirstName+" "+e.LastName,
+                            EmployeeName = e.FirstName + " " + e.LastName,
                             Grade = g.Name,
                             Salary = g.Salary
                         };

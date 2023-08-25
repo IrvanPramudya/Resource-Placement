@@ -2,7 +2,7 @@
     background-color: var(--color-white);
     width: 100%;
     padding: var(--card-padding);
-    text-align: center;
+    text-align: left;
     box-shadow: var(--box-shadow);
     border-radius: var(--card-border-radius);
     transition: all 0.3s ease;
@@ -23,8 +23,13 @@ table tbody tr:last-child td {
 }
 
 .recent-orders a {
-    text-align: center;
+    text-align: left;
     display: block;
     margin: 1rem auto;
     color: var(--color-primary);
+}
+
+.btn btn-primary {
+    --bs-tooltip-bg: var(--bd-violet-bg);
+    --bs-tooltip-color: var(--bs-white);
 }
