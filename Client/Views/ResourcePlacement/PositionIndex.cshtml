@@ -177,6 +177,7 @@
                         text: 'Failed to insert data. Please try again.',
                         icon: 'error'
                     });
+                    console.log(error)
                 });
             }
 
@@ -218,8 +219,6 @@
                     $("#guidUpd").val(result.data.guid);
                     $("#capacityUpd").val(result.data.capacity);
                     $("#nameUpd").val(result.data.name);
-
-                    $("#modalemp2").modal("show");
                 }).fail((error) => {
                     alert("Failed to fetch position data. Please try again.");
                     console.log(error)

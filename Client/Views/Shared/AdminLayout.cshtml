@@ -35,47 +35,6 @@
                 Academy
             </div>
         </a>
-        @*<div class="side-menu">
-            <h2 class="accordion-header" id="flush-headingOne">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                    Account
-                </button>
-            </h2>
-            <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-                <div class="accordion-body">
-                    <a asp-controller="ResourcePlacement" asp-action="AccountIndex"><i class='bx bx-user'></i>Account</a>
-                </div>
-            </div>
-            <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-                <div class="accordion-body">
-                    <a asp-controller="ResourcePlacement" asp-action="AccountIndex"><i class='bx bx-user'></i>Account</a>
-                </div>
-            </div>
-        </div>*@
-        @*<div class="btn-group dropend side-menu">
-            <button type="button" class="btn btn-secondary">
-                Split dropend
-            </button>
-            <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
-                <span class="visually-hidden">Toggle Dropend</span>
-            </button>
-            <ul class="dropdown-menu" style="position:absolute;">
-                <li><a asp-controller="ResourcePlacement" asp-action="Index"><i class='bx bx-user'></i>Dashboard</a></li>
-                <li><a asp-controller="ResourcePlacement" asp-action="AccountIndex"><i class='bx bx-user'></i>Account</a></li>
-                <li><a asp-controller="ResourcePlacement" asp-action="AccountRoleIndex"><i class='bx bxs-user-detail'></i>Account Role</a></li>
-            </ul>
-        </div>*@
-        @*<div class="dropdown-center">
-            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Centered dropdown
-            </button>
-            <ul class="side-menu dropdown-menu">
-                <li><a asp-controller="ResourcePlacement" asp-action="Index"><i class='bx bx-user'></i>Dashboard</a></li>
-                <li><a asp-controller="ResourcePlacement" asp-action="AccountIndex"><i class='bx bx-user'></i>Account</a></li>
-                <li><a asp-controller="ResourcePlacement" asp-action="AccountRoleIndex"><i class='bx bxs-user-detail'></i>Account Role</a></li>
-                <li><a asp-controller="ResourcePlacement" asp-action="RoleIndex"><i class='bx bx-group'></i>Role</a></li>
-            </ul>
-        </div>*@
         <ul class="side-menu ">
             <li><a asp-controller="ResourcePlacement" asp-action="Index"><i class='bx bxs-dashboard'></i></i>Dashboard</a></li>
             <li><a asp-controller="ResourcePlacement" asp-action="AccountIndex"><i class='bx bx-user'></i>Account</a></li>
@@ -122,13 +81,12 @@
             </a>
             <a href="#" class="profile">
                 <img src="~/images/logo.png">
-            </a>
+            </a>    
         </nav>
 
         <!-- End of Navbar -->
 
         <main>
-            <input type="hidden" id="guidSection" value="@User.FindFirst("guid")" />
             @RenderBody()
 
         </main>

@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="dotenv.net" Version="3.1.2" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="popper.js" Version="1.16.1" />
   </ItemGroup>

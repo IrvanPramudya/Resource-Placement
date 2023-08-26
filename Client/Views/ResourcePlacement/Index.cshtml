@@ -23,7 +23,6 @@
 
 </ul>
 <!-- End of Insights -->
-
 <div class="bottom-data">
     <div class="row" style="height:30%; width:40%">
         <div class="col-6">
@@ -87,6 +86,10 @@
 </div>
 @section Scripts
 {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script type="text/javascript">
+        toastr.success('@TempData["Success"]');
+    </script>
     <script>
         $.ajax({
             url: "https://localhost:7273/api/employees/GetCountedGender",
@@ -247,4 +250,7 @@
             });
         })
     </script>
+}
+@section CSS{
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
 }

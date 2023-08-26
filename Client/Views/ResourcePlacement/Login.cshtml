@@ -1,4 +1,5 @@
-﻿@{
+﻿@model API.DTOs.Accounts.LoginDto
+@{
     Layout = "LoginLayout";
 }
 
@@ -6,10 +7,23 @@
     <h2>Login</h2>
     <h3>Enter your credentials</h3>
 
-    <form class="login-form">
-        <input type="text" placeholder="Username">
-        <input type="password" placeholder="Password">
-        <a href="#">Forget your password?</a>
-        <button type="submit">LOGIN</button>
+    <form action="/resourceplacement/login/" method="post" class="login-form">
+        <input type="email" asp-for="Email" placeholder="Email">
+        <span asp-validation-for="Email" class="text-danger"></span>
+        <input type="password" asp-for="Password" placeholder=" Password">
+        <div class="row">
+            <div class="col-4">
+                <button type="submit" class="btn btn-outline-primary">LOGIN</button>
+            </div>
+            <div class="col-4">
+                <a class="btn btn-outline-warning" href="/Register">REGISTER</a>
+            </div>
+            <div class="col-4">
+                <a class="btn btn-outline-danger" href="/Forgot">FORGOT</a>
+            </div>
+        </div>
     </form>
 </div>
+@section Scripts{
+
+}
