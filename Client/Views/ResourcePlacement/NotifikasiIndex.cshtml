@@ -8,7 +8,6 @@
         <div class="row" id="cardNotification">
         </div>
     </div>
-    
 </div>
 @section Scripts
 {
@@ -29,19 +28,100 @@
             let dataNotifikasi = `<div class="col">
                                               <div class="card-body text-bg-warning">
                                                     <h5 class="card-title mx-auto">You've got an Interview Notification</h5>
-                                                                    <p class="card-text uppercase">Client  &nbsp;: ${result.data.clientName}</p>
-                                                                    <p class="card-text uppercase">Position  &nbsp;: ${result.data.positionName}</p>
-                                                                    <p class="card-text uppercase">Interview Date  &nbsp;: ${interviewDate}</p>
-                                                            <p class="card-text uppercase">Note &nbsp;: ${result.data.note}</p>
+                                                                    <input type="hidden" value="${result.data.clientGuid}" id="client"/>
+                                                                    <input type="hidden" value="${result.data.interviewDate}" id="interviewDate"/>
+                                                                    <input type="hidden" value="${result.data.note}" id="note"/>
+                                                                            <div class="row">
+                                                                                <div class="col-5"><strong>Client</strong></div>
+                                                                                <div class="col-1">:</div>
+                                                                                <div class="col-6"><strong>${result.data.clientName}</strong></div>
+                                                                            </div>
+                                                                             <div class="row">
+                                                                                <div class="col-5"><strong>Position</strong></div>
+                                                                                <div class="col-1">:</div>
+                                                                                <div class="col-6"><strong>${result.data.positionName}</strong></div>
+                                                                             </div>
+
+                                                                            <div class="row">
+                                                                                <div class="col-5"><strong>Interview Date</strong></div>
+                                                                                <div class="col-1">:</div>
+                                                                                <div class="col-6"><strong>${interviewDate}</strong></div>
+                                                                            </div>
+                                                                            <div class="row">
+                                                                                <div class="col-5"><strong>Note</strong></div>
+                                                                                <div class="col-1">:</div>
+                                                                                <div class="col-6"><strong>${result.data.note}</strong></div>
+                                                                            </div>
                                                 </div>
-                                                <div class="card-body mx-auto">
-                                                            <a onclick="interviewAccepted('@User.FindFirst("Guid").Value')"><box-icon name='check' color="green" size="md"></box-icon></a>
-                                                                            <a onclick="interviewRejected('@User.FindFirst("Guid").Value')"><box-icon name='x' color="red" size="md"></box-icon></a>
+                                                <div class="card-body text-center">
+                                                            <a onclick="interviewAccepted('@User.FindFirst("Guid").Value')"><box-icon name='check' color="green" size="lg"></box-icon></a>
+                                                            <a onclick="interviewRejected('@User.FindFirst("Guid").Value')"><box-icon name='x' color="red" size="lg"></box-icon></a>
                                                 </div>
                                             </div>`
             $('#cardNotification').html(dataNotifikasi)
         })
-            
+        function interviewAccepted(guidEmployee){
+            let data = {
+                guid : guidEmployee,
+                interviewDate : $("#interviewDate").val(),
+                clientGuid : $("#client").val(),
+                text : $("#note").val(),
+                isAccepted : false,
+                status : 1,
+            }
+            $.ajax({
+                url : "https://localhost:7273/api/interviews/UpdateFullInterview",
+                type: "PUT",
+                contentType: "application/json",
+                data: JSON.stringify(data)
+            }).done((result) => {
+                Swal.fire({
+                    title: 'Success',
+                    text: 'Data Interview has been successfully updated',
+                    icon: 'success'
+                }).then(function () {
+                    location.reload();
+                });
+            }).fail((error) => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Failed to Updated data Interview! Please try again.'
+                })
+                console.log(error)
+            })
+        }
+        function interviewRejected(guidEmployee){
+            let data = {
+                guid : guidEmployee,
+                interviewDate : $("#interviewDate").val(),
+                clientGuid : $("#client").val(),
+                text : $("#note").val(),
+                isAccepted : false,
+                status : 2,
+            }
+            $.ajax({
+                url : "https://localhost:7273/api/interviews/UpdateFullInterview",
+                type: "PUT",
+                contentType: "application/json",
+                data: JSON.stringify(data)
+            }).done((result) => {
+                Swal.fire({
+                    title: 'Success',
+                    text: 'Data Interview has been successfully updated',
+                    icon: 'success'
+                }).then(function () {
+                    location.reload();
+                });
+            }).fail((error) => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Failed to Updated data Interview! Please try again.'
+                })
+                console.log(error)
+            })
+        }    
         
     </script>
 }

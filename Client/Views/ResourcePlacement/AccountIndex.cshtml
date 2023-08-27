@@ -7,11 +7,11 @@
 <div class="text-center">
     <h1 class="align-content-center" id="judul">List Account</h1>
 </div>
-<div class="text-center my-3">
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAddAccount" data-bs-placement="top" data-bs-title="Add Account">
-        <i class='bx bx-user-plus'></i>
-    </button>
-</div>
+    <div class="text-center my-3">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAddAccount" data-bs-placement="top" data-bs-title="Add Account">
+            <i class='bx bx-user-plus'></i>
+        </button>
+    </div>
 
 <div class="add-account">
     <div class="modal" id="modalAddAccount" tabindex="-1">
@@ -63,7 +63,8 @@
         <script>
             const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="modal"]')
             const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-
+        </script>
+        <script>
             $(document).ready(function () {
                 loadAccountData();
             $.ajax({
@@ -100,7 +101,7 @@
                         {
                             data: null,
                             render: function (data, type, row) {
-                            return `<button onclick="deleteAccount('${row.guid}')" class="btn btn-danger" data-bs-toggle="modal" data-bs-placement="top" title="Delete Data"><i class='bx bxs-trash-alt'></i></button>`;
+                            return `<button onclick="deleteAccount('${row.guid}')" class="btn btn-danger" data-bs-toggle="modal" data-bs-placement="top" data-bs-title="Delete Account" ><i class='bx bxs-trash-alt'></i></button>`;
                             }
                         }
                     ],

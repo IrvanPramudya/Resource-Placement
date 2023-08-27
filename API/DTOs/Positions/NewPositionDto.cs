@@ -4,7 +4,8 @@ namespace API.DTOs.Positions
 {
     public class NewPositionDto
     {
-        public Guid Guid { get; set; }
+        /*public Guid Guid { get; set; }*/
+        public Guid ClientGuid { get; set; }
         public string Name { get; set; }
         public int Capacity { get; set; }
 
@@ -12,7 +13,8 @@ namespace API.DTOs.Positions
         {
             return new Position
             {
-                Guid = position.Guid,
+                Guid = new Guid(),
+                ClientGuid = position.ClientGuid,
                 Name = position.Name,
                 Capacity = position.Capacity,
                 CreatedDate = DateTime.Now,

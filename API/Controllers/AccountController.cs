@@ -20,6 +20,28 @@ namespace API.Controllers
         }
 
 
+        [HttpGet("GetDetailAccount/{guid}")]
+        public IActionResult GetDetailAccount(Guid guid)
+        {
+            var result = _accountService.DetailAccount(guid);
+            if (result == null)
+            {
+                return NotFound(new ResponseHandler<GetAccountDetail>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data Not Found"
+                });
+            }
+
+            return Ok(new ResponseHandler<GetAccountDetail>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success Retrieve Data",
+                Data = result
+            });
+        }
         [HttpGet("GetAccountwithNameOuterJoin")]
         public IActionResult GetAccountwithNameOuterJoin()
         {

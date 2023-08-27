@@ -49,6 +49,7 @@ namespace API.Repositories
                 _context.Entry(entity)
                         .State = EntityState.Modified;
                 _context.SaveChanges();
+                
                 return true;
             }
             catch
@@ -64,6 +65,7 @@ namespace API.Repositories
                 _context.Set<TEntity>()
                         .Remove(entity);
                 _context.SaveChanges();
+                
                 return true;
             }
             catch

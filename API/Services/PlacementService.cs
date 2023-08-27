@@ -24,11 +24,10 @@ namespace API.Services
             _interviewRepository = interviewRepository;
             _dbContext = dbContext;
         }
-
         public IEnumerable<GetEmployeeClientName> GetEmployeeClientName()
         {
             var merge = from e in _employeeRepository.GetAll()
-                        join p in _placementRepository.GetAll() on e.Guid equals p.EmployeeGuid
+                        join p in _placementRepository.GetAll() on e.Guid equals p.Guid
                         join c in _clientRepository.GetAll() on p.ClientGuid equals c.Guid
                         select new GetEmployeeClientName
                         {
@@ -100,8 +99,8 @@ namespace API.Services
 
         public PlacementDto? Create(NewPlacementDto newPlacementDto)
         {
-            var interview = _interviewRepository.GetByGuid(newPlacementDto.EmployeeGuid);
-            if(interview is null)
+            var interview = _interviewRepository.GetByGuid(newPlacementDto.Guid);
+            if(interview is null || interview.Status != Utilities.Enums.InterviewLevel.AcceptedbyClient)
             {
                 return null;
             }
@@ -113,14 +112,14 @@ namespace API.Services
                 {
                     return null; // Placement is null or not found;
                 }
-                var employee = _employeeRepository.GetByGuid(newPlacementDto.EmployeeGuid);
+                var employee = _employeeRepository.GetByGuid(newPlacementDto.Guid);
                 if (employee is null)
                 {
                     return null; // employee is null or not found;
                 }
                 var employeeUpdate = new UpdateEmployeeDto
                 {
-                    Guid = newPlacementDto.EmployeeGuid,
+                    Guid = newPlacementDto.Guid,
                     Email = employee.Email,
                     FirstName = employee.FirstName,
                     LastName = employee.LastName,
@@ -131,6 +130,7 @@ namespace API.Services
                 };
                 Employee employeeToUpdate = employeeUpdate;
                 employeeToUpdate.NIK = employee.NIK;
+                employeeToUpdate.CreatedDate = employee.CreatedDate;
                 var UpdatedEmployee = _employeeRepository.Update(employeeToUpdate);
                 transaction.Commit();
                 return (PlacementDto)placement; // Placement is found;
@@ -161,12 +161,15 @@ namespace API.Services
 
         public int Delete(Guid guid)
         {
+            
             var placement = _placementRepository.GetByGuid(guid);
             if (placement is null)
             {
                 return -1; // Placement is null or not found;
             }
-
+            var employee = _employeeRepository.GetByGuid(placement.Guid);
+            employee.Status = 0;
+            var employeeUpdate = _employeeRepository.Update(employee);
             var result = _placementRepository.Delete(placement);
 
             return result ? 1 // Placement is deleted;

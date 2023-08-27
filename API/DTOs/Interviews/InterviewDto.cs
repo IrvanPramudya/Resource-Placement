@@ -1,4 +1,5 @@
 ﻿using API.Models;
+using API.Utilities.Enums;
 
 namespace API.DTOs.Interviews
 {
@@ -8,7 +9,8 @@ namespace API.DTOs.Interviews
         public DateTime InterviewDate { get; set; }
         public Guid ClientGuid { get; set; }
         public string? Text { get; set; }
-        public bool IsAccepted { get; set; }
+        public bool? IsAccepted { get; set; }
+        public InterviewLevel Status { get; set; }
 
         public static implicit operator Interview(InterviewDto interview)
         {
@@ -19,6 +21,7 @@ namespace API.DTOs.Interviews
                 ClientGuid = interview.ClientGuid,
                 Text = interview.Text,
                 IsAccepted = interview.IsAccepted,
+                Status = interview.Status,
                 ModifiedDate = DateTime.Now,
             };
         }
@@ -29,6 +32,8 @@ namespace API.DTOs.Interviews
                 Guid = interview.Guid,
                 InterviewDate = interview.InterviewDate,
                 ClientGuid = interview.ClientGuid,
+                IsAccepted = interview.IsAccepted,
+                Status = interview.Status,
                 Text = interview.Text,
             };
         }

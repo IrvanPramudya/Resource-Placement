@@ -33,7 +33,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="employeeGuid" class="form-label">Employee Guid</label>
-                            <select class="form-select selectNameinPlacement" aria-label="Default select example" id="employeeGuid"></select>
+                            <select class="form-select selectNameinPlacement" aria-label="Default select example" id="guid"></select>
                         </div>
                         <div class="mb-3">
                             <label for="clientGuid" class="form-label">Client Guid</label>
@@ -89,10 +89,6 @@
                         <input type="datetime-local" class="form-control" id="endDateUpd" placeholder="End Date" readonly>
                     </div>
                     <div class="mb-3">
-                        <label for="employeeGuid" class="form-label">Employee Guid</label>
-                        <select class="form-select selectNameinPlacement" aria-label="Default select example" id="employeeGuidUpd"></select>
-                    </div>
-                    <div class="mb-3">
                         <label for="clientGuid" class="form-label">Client Guid</label>
                         <select class="form-select selectClientinPlacement" aria-label="Default select example" id="clientGuidUpd"></select>
                     </div>
@@ -130,13 +126,13 @@
             $(document).ready(function () {
                 loadPlacementData();
                 $.ajax({
-                    url: "https://localhost:7273/api/accountroles/GetEmployeehasAccount"
+                url: "https://localhost:7273/api/interviews/GetRemainingEmployeeinPlacement"
                 }).done(function (result) {
                     console.log(result)
                     let getName = ""
                     $.each(result.data, (key, val) => {
                         console.log(result)
-                        getName += ` <option value="${val.accountGuid}">${val.fullName}</option>`
+                        getName += ` <option value="${val.guid}">${val.fullName}</option>`
                     })
                     $('.selectNameinPlacement').html(getName)
                 })
@@ -206,7 +202,7 @@
                 var placementData = {
                     startDate: $("#startDate").val(),
                     endDate: $("#endDate").val(),
-                    employeeGuid: $("#employeeGuid").val(),
+                    guid: $("#guid").val(),
                     clientGuid: $("#clientGuid").val(),
                 };
 
@@ -273,10 +269,7 @@
                     $("#guidUpd").val(result.data.guid);
                     $("#startDateUpd").val(result.data.startDate);
                     $("#endDateUpd").val(result.data.endDate);
-                    $("#employeeGuidUpd").val(result.data.employeeGuid);
                     $("#clientGuidUpd").val(result.data.clientGuid);
-
-                    $("#modalemp2").modal("show");
                 }).fail((error) => {
                     alert("Failed to fetch placement data. Please try again.");
                     console.log(error)
@@ -289,7 +282,7 @@
                 let data = {
                     startDate: $("#startDateUpd").val(),
                     endDate: $("#endDateUpd").val(),
-                    employeeGuid: $("#employeeGuidUpd").val(),
+                    guid: $("#guidUpd").val(),
                     clientGuid: $("#clientGuidUpd").val(),
                 };
                 $.ajax({

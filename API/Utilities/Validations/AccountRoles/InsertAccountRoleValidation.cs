@@ -14,13 +14,13 @@ namespace API.Utilities.Validations.AccountRoles
             RuleFor(accounrole => accounrole.AccountGuid)
                 .NotEmpty().WithMessage("Account Guid can not be Null");
             RuleFor(accounrole => accounrole.RoleGuid)
-                .NotEmpty().WithMessage("Role Guid can not be Null")
-                .Must(IsDuplicateValue).WithMessage("Cannot Get Same Role");
+                .NotEmpty().WithMessage("Role Guid can not be Null");
+                /*.Must(IsDuplicateValue).WithMessage("Cannot Get Same Role");*/
         }
 
-        private bool IsDuplicateValue(Guid guid)
+        /*private bool IsDuplicateValue(Guid guid)
         {
             return _accountroleRepository.IsNotExist(guid);
-        }
+        }*/
     }
 }

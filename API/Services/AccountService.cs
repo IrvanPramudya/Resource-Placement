@@ -16,11 +16,17 @@ namespace API.Services
         private readonly IAccountRepository _accountRepository;
         private readonly IAccountRoleRepository _accountRoleRepository;
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IGradeRepository _gradeRepository;
+        private readonly IInterviewRepository _interviewRepository;
+        private readonly IPlacementRepository _placementRepository;
+        private readonly IClientRepository _clientRepository;
+        private readonly IPositionRepository _positionRepository;
+        private readonly IRoleRepository _roleRepository;
         private readonly ITokenHandler _tokenHandler;
         private readonly PlacementDbContext _dbContext;
         private readonly IEmailHandler _emailHandler;
 
-        public AccountService(IAccountRepository accountRepository, IAccountRoleRepository accountRoleRepository, IEmployeeRepository employeeRepository, ITokenHandler tokenHandler, PlacementDbContext dbContext, IEmailHandler emailHandler)
+        public AccountService(IAccountRepository accountRepository, IAccountRoleRepository accountRoleRepository, IEmployeeRepository employeeRepository, ITokenHandler tokenHandler, PlacementDbContext dbContext, IEmailHandler emailHandler, IGradeRepository gradeRepository, IInterviewRepository interviewRepository, IPlacementRepository placementRepository, IClientRepository clientRepository, IPositionRepository positionRepository, IRoleRepository roleRepository)
         {
             _accountRepository = accountRepository;
             _accountRoleRepository = accountRoleRepository;
@@ -28,6 +34,55 @@ namespace API.Services
             _tokenHandler = tokenHandler;
             _dbContext = dbContext;
             _emailHandler = emailHandler;
+            _gradeRepository = gradeRepository;
+            _interviewRepository = interviewRepository;
+            _placementRepository = placementRepository;
+            _clientRepository = clientRepository;
+            _positionRepository = positionRepository;
+            _roleRepository = roleRepository;
+        }
+        public GetAccountDetail? DetailAccount(Guid id)
+        {
+            var merge = from employee in _employeeRepository.GetAll()
+                        join grade in _gradeRepository.GetAll() on employee.Guid equals grade.Guid into GrdGrp
+                        from grade in GrdGrp.DefaultIfEmpty()
+                        join account in _accountRepository.GetAll() on employee.Guid equals account.Guid
+                        join accountrole in _accountRoleRepository.GetAll() on account.Guid equals accountrole.AccountGuid
+                        join placement in _placementRepository.GetAll() on employee.Guid equals placement.Guid into PlcGrp
+                        from placement in PlcGrp.DefaultIfEmpty()
+                        join interview in _interviewRepository.GetAll() on employee.Guid equals interview.Guid into InterGrp
+                        from interview in InterGrp.DefaultIfEmpty()
+                        join client in _clientRepository.GetAll() on (interview != null?interview.ClientGuid :placement.ClientGuid) equals client.Guid into CliGrp
+                        from client in CliGrp.DefaultIfEmpty()
+                        join position in _positionRepository.GetAll() on client.Guid equals position.ClientGuid into PosGrp
+                        from position in PosGrp.DefaultIfEmpty()
+                        join role in _roleRepository.GetAll() on accountrole.RoleGuid equals role.Guid into RoleGrp
+                        from role in RoleGrp.DefaultIfEmpty()
+                        where employee.Guid == id
+                        select new GetAccountDetail
+                        {
+                            FullName = employee.FirstName + " " + employee.LastName,
+                            Email = employee.Email,
+                            Gender = employee.Gender,
+                            Status = employee.Status,
+                            Skill = employee.Skill,
+                            NIK = employee.NIK,
+                            PhoneNumber = employee.PhoneNumber,
+                            RoleName = role != null ? role.Name : null,
+                            ClientInterviewName = interview != null ? client.Name : null,
+                            InterviewDate = interview != null ? interview.InterviewDate : null,
+                            PositionInterviewName = interview != null ? position.Name : null,
+                            GradeName = grade != null ? grade.Name : null,
+                            Salary = grade != null ? grade.Salary : null,
+                            PositionPlacementName = placement != null ? position.Name : null,
+                            ClientPlacementName = placement != null ? client.Name : null,
+                            Contract = placement != null? (placement.EndDate-placement.StartDate).TotalDays: null
+                        };
+            if(!merge.Any())
+            {
+                return null;
+            }
+            return merge.FirstOrDefault();
         }
         public IEnumerable<GetAccountwithNameAndRoles>? GetAccountwithNamesAndRolesOuterJoin()
         {
@@ -295,14 +350,11 @@ namespace API.Services
 
         public AccountDto? Create(NewAccountDto newAccountDto)
         {
-            var account = _accountRepository.Create(new AccountDto
-            {
-                Password = HashingHandler.GenerateHash(newAccountDto.Password),
-                Guid = newAccountDto.Guid,
-                ExpiredTime = null,
-                OTP = null,
-                IsUsed = true
-            });
+            Account accounttoCreate = newAccountDto;
+            accounttoCreate.OTP = null;
+            accounttoCreate.ExpiredTime = null;
+            accounttoCreate.IsUsed = true;
+            var account = _accountRepository.Create(accounttoCreate);
             if (account is null)
             {
                 return null; // Account is null or not found;

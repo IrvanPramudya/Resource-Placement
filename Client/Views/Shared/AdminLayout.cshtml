@@ -17,6 +17,16 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css" />
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" />
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+    <!-- Nucleo Icons -->
+    <link href="~/soft-ui/assets/css/nucleo-icons.css" rel="stylesheet" />
+    <link href="~/soft-ui/assets/css/nucleo-svg.css" rel="stylesheet" />
+    <!-- Font Awesome Icons -->
+    <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+    <link href="~/soft-ui/assets/css/nucleo-svg.css" rel="stylesheet" />
+    <!-- CSS Files -->
+    <link id="pagestyle" href="~/soft-ui/assets/css/soft-ui-dashboard.css?v=1.0.7" rel="stylesheet" />
     @await RenderSectionAsync("CSS", required: false)
     <title>Resource Placement</title>
 </head>
@@ -35,18 +45,107 @@
                 Academy
             </div>
         </a>
-        <ul class="side-menu ">
-            <li><a asp-controller="ResourcePlacement" asp-action="Index"><i class='bx bxs-dashboard'></i></i>Dashboard</a></li>
-            <li><a asp-controller="ResourcePlacement" asp-action="AccountIndex"><i class='bx bx-user'></i>Account</a></li>
-            <li><a asp-controller="ResourcePlacement" asp-action="AccountRoleIndex"><i class='bx bxs-user-detail'></i>Account Role</a></li>
-            <li><a asp-controller="ResourcePlacement" asp-action="EmployeeIndex"><i class='bx bx-group'></i>Employee</a></li>
-            <li><a asp-controller="ResourcePlacement" asp-action="InterviewIndex"><i class='bx bx-calendar-event'></i>Interview</a></li>
-            <li><a asp-controller="ResourcePlacement" asp-action="NotifikasiIndex"><i class='bx bx-message-detail'></i></i>Notifikasi</a></li>
-            <li><a asp-controller="ResourcePlacement" asp-action="ClientIndex"><i class='bx bx-buildings'></i>Client</a></li>
-            <li><a asp-controller="ResourcePlacement" asp-action="GradeIndex"><i class='bx bx-award'></i>Grade</a></li>
-            <li><a asp-controller="ResourcePlacement" asp-action="PositionIndex"><i class='bx bx-been-here'></i>Position</a></li>
-            <li><a asp-controller="ResourcePlacement" asp-action="PlacementIndex"><i class='bx bx-building'></i>Placement</a></li>
-            <li><a asp-controller="ResourcePlacement" asp-action="RoleIndex"><i class='bx bxs-user-badge'></i>Role</a></li>
+        <ul class="side-menu">
+                <li>
+                    <a asp-controller="ResourcePlacement" asp-action="Index">
+                        <i class='bx bxs-dashboard'></i>
+                        Dashboard
+                    </a>
+                </li>
+
+                <li>
+                    <a asp-controller="ResourcePlacement" asp-action="DetailIndex">
+                        <i class='bx bxs-user-badge'></i>
+                        Detail
+                    </a>
+                </li>
+                @if(@User.IsInRole("Admin"))
+                {
+                <li>
+                    <a asp-controller="ResourcePlacement" asp-action="AccountIndex">
+                        <i class='bx bx-user'></i>
+                        Account
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="ResourcePlacement" asp-action="AccountRoleIndex">
+                        <i class='bx bxs-user-detail'></i>
+                        Account Role
+                    </a>
+                </li>
+
+                <li>
+                    <a asp-controller="ResourcePlacement" asp-action="RoleIndex">
+                        <i class='bx bxs-user-badge'></i>
+                        Role
+                    </a>
+                </li>
+                }
+                @if(User.IsInRole("Admin")||User.IsInRole("Trainer")||User.IsInRole("Operasional"))
+                {
+                <li>
+                    <a asp-controller="ResourcePlacement" asp-action="EmployeeIndex">
+                        <i class='bx bx-group'></i>
+                        Employee
+                    </a>
+                </li>
+                }
+                @if(User.IsInRole("Admin")||User.IsInRole("Trainer"))
+                {
+                    <li>
+                        <a asp-controller="ResourcePlacement" asp-action="GradeIndex">
+                            <i class='bx bx-award'></i>
+                            Grade
+                        </a>
+                    </li>
+                }
+                @if(User.IsInRole("Admin")||User.IsInRole("Operasional"))
+                {
+                    <li>
+                        <a asp-controller="ResourcePlacement" asp-action="InterviewIndex">
+                            <i class='bx bx-calendar-event'></i>
+                            Interview
+                        </a>
+                    </li>
+
+                    <li>
+                        <a asp-controller="ResourcePlacement" asp-action="ClientIndex">
+                            <i class='bx bx-buildings'></i>
+                            Client
+                        </a>
+                    </li>
+
+                    <li>
+                        <a asp-controller="ResourcePlacement" asp-action="PositionIndex">
+                            <i class='bx bx-been-here'></i>
+                            Position
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-controller="ResourcePlacement" asp-action="ResultIndex">
+                            <i class='bx bx-building'></i>
+                            Result
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-controller="ResourcePlacement" asp-action="PlacementIndex">
+                            <i class='bx bx-building'></i>
+                            Placement
+                        </a>
+                    </li>
+                }
+                @if(User.IsInRole("Admin")||User.IsInRole("Employee"))
+                {
+                    <li>
+                        <a asp-controller="ResourcePlacement" asp-action="NotifikasiIndex">
+                            <i class='bx bx-message-detail'></i>
+                            Notifikasi
+                        </a>
+                    </li>
+                }
+
+
+            
         </ul>
         <ul class="side-menu">
             <li>
@@ -98,6 +197,10 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/tempus-dominus/dist/js/tempus-dominus.min.js"></script>
+    <script src="~/soft-ui/assets/js/core/popper.min.js"></script>
+    <script src="~/soft-ui/assets/js/core/bootstrap.min.js"></script>
+    <script src="~/soft-ui/assets/js/plugins/perfect-scrollbar.min.js"></script>
+    <script src="~/soft-ui/assets/js/plugins/smooth-scrollbar.min.js"></script>
     @*Online Library*@
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -114,6 +217,20 @@
     <script src="https://momentjs.com/downloads/moment.min.js"></script>
     <script src="https://cdn.datatables.net/plug-ins/1.10.13/sorting/datetime-moment.js"></script>
     <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+
+    
+    <script>
+        var win = navigator.platform.indexOf('Win') > -1;
+        if (win && document.querySelector('#sidenav-scrollbar')) {
+            var options = {
+                damping: '0.5'
+            }
+            Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+        }
+    </script>
+    <!-- Github buttons -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
     @*Page Script*@
     @await RenderSectionAsync("Scripts", required: false)
 </body>

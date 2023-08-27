@@ -103,10 +103,11 @@ namespace API.Services
             var merging = from employee in _employeeRepository.GetAll()
                           join interview in _interviewRepository.GetAll() on employee.Guid equals interview.Guid
                           join client in _clientRepository.GetAll() on interview.ClientGuid equals client.Guid
-                          join position in _positionRepository.GetAll() on client.Guid equals position.Guid
+                          join position in _positionRepository.GetAll() on client.Guid equals position.ClientGuid
                           where employee.Guid == guid && client.IsAvailable == true
                           select new GetEmployeeNotification
                           {
+                              ClientGuid = client.Guid,
                               ClientName = client.Name,
                               PositionName = position.Name,
                               InterviewDate = interview.InterviewDate,
