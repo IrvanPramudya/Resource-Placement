@@ -1,4 +1,6 @@
-﻿namespace API.DTOs.Interviews
+﻿using API.Utilities.Enums;
+
+namespace API.DTOs.Interviews
 {
     public class InformatifInterview
     {
@@ -8,6 +10,8 @@
         public string ClientName { get; set; }
         public string Text { get; set; }
         public DateTime InterviewDate { get; set; }
+        public bool? IsAccepted { get; set; }
+        public InterviewLevel? Status { get; set; }
 
     }
 }

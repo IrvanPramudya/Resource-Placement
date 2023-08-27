@@ -116,7 +116,7 @@ namespace API.Controllers
         public IActionResult Insert(NewPlacementDto newPlacementDto)
         {
             var result = _placementService.Create(newPlacementDto);
-            var deleteInterview = _interviewService.Delete(newPlacementDto.EmployeeGuid);
+            var deleteInterview = _interviewService.Delete(newPlacementDto.Guid);
             if (result is null)
             {
                 return StatusCode(500, new ResponseHandler<PlacementDto>

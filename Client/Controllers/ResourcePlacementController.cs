@@ -58,6 +58,8 @@ namespace Client.Controllers
         public IActionResult RoleIndex() => View();
         public IActionResult AccountRoleIndex() => View();
         public IActionResult NotifikasiIndex() => View();
+        public IActionResult DetailIndex() => View();
+        public IActionResult ResultIndex() => View();
         public IActionResult ChangePassword() => View();
     }
 }

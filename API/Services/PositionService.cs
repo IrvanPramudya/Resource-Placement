@@ -20,10 +20,11 @@ namespace API.Services
         public IEnumerable<GetClientName> GetClientName()
         {
             var merge = from client in _clientRepository.GetAll()
-                        join position in _positionRepository.GetAll() on client.Guid equals position.Guid
+                        join position in _positionRepository.GetAll() on client.Guid equals position.ClientGuid
                         select new GetClientName
                         {
                             Guid = position.Guid,
+                            ClientGuid = position.ClientGuid,
                             ClientName = client.Name,
                             PositionName = position.Name,
                             Capacity = position.Capacity,
@@ -37,14 +38,25 @@ namespace API.Services
             {
                 if( client.Capacity ==  0 )
                 {
-                    var getclient = _clientRepository.GetByGuid( client.Guid );
+                    var getclient = _clientRepository.GetByGuid( client.ClientGuid );
                     _clientRepository.Update(new ClientDto
                     {
-                        Guid= client.Guid,
+                        Guid= client.ClientGuid,
                         Email = getclient.Email,
                         IsAvailable = false,
                         Name = getclient.Name
                     });
+                }
+                else if( client.Capacity > 0 )
+                {
+                    var getclient = _clientRepository.GetByGuid(client.ClientGuid);
+                    _clientRepository.Update(new ClientDto
+                    {
+                        Guid = client.ClientGuid,
+                        Email = getclient.Email,
+                        IsAvailable = true,
+                        Name = getclient.Name
+                    }) ;
                 }
             }
             return merge;
@@ -85,7 +97,7 @@ namespace API.Services
             {
                 return null; // Position is null or not found;
             }
-            var client = _clientRepository.GetByGuid(position.Guid);
+            var client = _clientRepository.GetByGuid(position.ClientGuid);
             var clientUpdate = _clientRepository.Update(new ClientDto
             {
                 Guid = client.Guid,

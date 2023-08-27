@@ -62,26 +62,15 @@ namespace API.Services
 
         public ClientDto? Create(NewClientDto newClientDto)
         {
-            var client = new ClientDto
-            {
-                Email = newClientDto.Email,
-                Name = newClientDto.Name,
-                IsAvailable = false
-                
-            };
+            Client clienttoCreate = newClientDto;
+            clienttoCreate.IsAvailable = false;
+            var client = _clientRepository.Create(clienttoCreate);
             if (client is null)
             {
                 return null; // Client is null or not found;
             }
-            Client clientCreate = client;
-            clientCreate.CreatedDate = DateTime.Now;
-            var CreatedClient = _clientRepository.Create(clientCreate);
-            if (CreatedClient is null)
-            {
-                return null; // Client is null or not found;
-            }
 
-            return (ClientDto)CreatedClient; // Client is found;
+            return (ClientDto)client; // Client is found;
         }
 
         public int Update(UpdateClientDto clientDto)

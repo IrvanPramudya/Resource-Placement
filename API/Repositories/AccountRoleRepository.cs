@@ -18,10 +18,10 @@ namespace API.Repositories
 
             return result;
         }
-        public bool IsNotExist(Guid RoleGuid)
+        /*public bool IsNotExist(Guid guid,Guid RoleGuid)
         {
-            return _context.Set<AccountRole>()
+            return _context.Set<AccountRole>().Find(guid).
                             .SingleOrDefault(e => e.RoleGuid == RoleGuid) is null;
-        }
+        }*/
     }
 }

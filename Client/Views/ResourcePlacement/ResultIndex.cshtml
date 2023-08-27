@@ -1,0 +1,142 @@
+﻿@{
+}
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-4">
+                <div class="card-header pb-0">
+                    <h6>Result Interview Table</h6>
+                </div>
+                <div class="card-body px-0 pt-0 pb-2">
+                    <div class="table-responsive p-0">
+                        <table class="table align-items-center mb-0" id="resultTable">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>No</th>
+                                    <th>Name</th>
+                                    <th>Client</th>
+                                    <th>Interview Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts
+{
+    <script>
+        $(document).ready(()=>{
+            loadResultData()
+        })
+        function loadResultData() {
+            $('#resultTable').DataTable({
+                ajax: {
+                    url: "https://localhost:7273/api/interviews/InterviewBeforeAcceptedbyClient",
+                    dataType: "JSON",
+                    dataSrc: "data"
+                },
+                columns: [
+                    {
+                        data: null,
+                        render: function (data, type, row, meta) {
+                            return meta.row + 1;
+                        }
+                    },
+                    { data: "fullName" },
+                    { data: "clientName" },
+                    {
+                        data: 'interviewDate',
+                        render: function (data, type, row) {
+                            return moment(data).format("D MMMM YYYY, HH:mm");;
+                        }
+                    },
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            return `<button onclick="InterviewAcceptedbyClient('${row.guid}')" class="btn btn-outline-info" data-bs-placement="top" title="Accepted Employee"><box-icon name='check' color="green" size="sm"></box-icon></button>` +
+                                   `<button onclick="InterviewRejectedbyClient('${row.guid}')" class="btn btn-outline-danger ms-2"  data-bs-placement="top" title="Rejected Employee"><box-icon name='x' color="red" size="sm"></box-icon></button>
+                                   <input type="hidden" value="${row.clientGuid}" id="client"/>
+                                   <input type="hidden" value="${row.interviewDate}" id="interviewDate"/>
+                                   <input type="hidden" value="${row.text}" id="note"/>`;
+                        }
+                    }
+                ],
+                "dom":
+                    "<'row'<'col-md-8'B><'col-md-4'f>>" +
+                    "<'row'<'col-sm-12'tr>>" + // Tabel
+                    "<'row'<'col-md-5'i><'col-md-3 mt-2 mx-auto'l><'col-md-4'p>>",
+                "buttons": [
+                    'copy', 'csv', 'excel', 'pdf', 'print', 'colvis'
+                ],
+                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                "pageLength": 25
+            });
+        }
+        function InterviewAcceptedbyClient(guidEmployee) {
+            let data = {
+                guid: guidEmployee,
+                interviewDate: $("#interviewDate").val(),
+                clientGuid: $("#client").val(),
+                text: $("#note").val(),
+                isAccepted: true,
+                status: 3,
+            }
+            $.ajax({
+                url: "https://localhost:7273/api/interviews/UpdateFullInterview",
+                type: "PUT",
+                contentType: "application/json",
+                data: JSON.stringify(data)
+            }).done((result) => {
+                Swal.fire({
+                    title: 'Success',
+                    text: 'Data Interview has been successfully updated',
+                    icon: 'success'
+                }).then(function () {
+                    location.reload();
+                });
+            }).fail((error) => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Failed to Updated data Interview! Please try again.'
+                })
+                console.log(error)
+            })
+        }
+        function InterviewRejectedbyClient(guidEmployee) {
+            let data = {
+                guid: guidEmployee,
+                interviewDate: $("#interviewDate").val(),
+                clientGuid: $("#client").val(),
+                text: $("#note").val(),
+                isAccepted: false,
+                status: 4,
+            }
+            $.ajax({
+                url: "https://localhost:7273/api/interviews/UpdateFullInterview",
+                type: "PUT",
+                contentType: "application/json",
+                data: JSON.stringify(data)
+            }).done((result) => {
+                Swal.fire({
+                    title: 'Success',
+                    text: 'Data Interview has been successfully updated',
+                    icon: 'success'
+                }).then(function () {
+                    location.reload();
+                });
+            }).fail((error) => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Failed to Updated data Interview! Please try again.'
+                })
+                console.log(error)
+            })
+        }
+    </script>
+}

@@ -1,4 +1,6 @@
-﻿namespace API.DTOs.Interviews
+﻿using API.Utilities.Enums;
+
+namespace API.DTOs.Interviews
 {
     public class GetRemainingEmployee
     {
@@ -8,5 +10,7 @@
         public DateTime? StartDate { get; set; }
         public Guid? ClientGuid { get; set; }
         public Guid? PlacementGuid { get; set; }
+        public InterviewLevel? Status { get; set; }
+        
     }
 }

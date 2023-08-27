@@ -5,6 +5,8 @@ namespace API.Models
     [Table("tb_m_positions")]
     public class Position:BaseEntity
     {
+        [Column("client_guid")]
+        public Guid ClientGuid { get; set; }
         [Column("name")]
         public string Name { get; set; }
         [Column("capacity")]

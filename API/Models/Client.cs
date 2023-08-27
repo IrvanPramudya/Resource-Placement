@@ -13,7 +13,7 @@ namespace API.Models
         public bool IsAvailable { get; set; }
         //Cardinality
         /*public Employee? Employee { get; set;}*/
-        public Interview? Interview { get; set;}
+        public ICollection<Interview>? Interviews { get; set;}
         public ICollection<Position>? Positions { get; set;}
         public ICollection<Placement>? Placements { get; set;}
 

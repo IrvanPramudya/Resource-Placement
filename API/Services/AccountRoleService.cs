@@ -48,16 +48,17 @@ namespace API.Services
                         from accountrole in accountrolegroup.DefaultIfEmpty()
                         select new GetEmployeehasAccount
                         {
+                            AccountGuidAccountRole = accountrole != null?accountrole.AccountGuid:null,
+                            RoleGuidAccountRole =  accountrole != null?accountrole.RoleGuid:null,
                             EmployeeGuid = employee.Guid,
-                            AccountGuid = accountrole != null ? accountrole.Guid : null,
+                            AccountGuid = account.Guid,
                             FullName = employee.FirstName + " " + employee.LastName,
-                            RoleGuid = accountrole != null ? accountrole.RoleGuid : null 
                         };
             if (!merge.Any())
             {
                 return null;
             }
-            return merge.Where(ar=>ar.RoleGuid == null);
+            return merge.Where(ar=>ar.RoleGuidAccountRole == null);
         }
         public IEnumerable<GetCountedAllRole> CountAllRole()
         {

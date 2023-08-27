@@ -2,13 +2,141 @@
 @{
     ViewData["Title"] = "Notification";
 }
-<div class="card" style="width: 40%;">
+@*<div class="card" style="width: 40%;">
     <img src="~/images/user.jpg" class="card-img-top" >
     <div class="container">
         <div class="row" id="cardNotification">
         </div>
     </div>
-    
+</div>*@
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="row">
+                <div class="col-xl-6 mb-xl-0 mb-4">
+                    <div class="card bg-transparent shadow-xl">
+                        <div class="overflow-hidden position-relative border-radius-xl" style="background-image: url('~/soft-ui/assets/img/curved-images/curved14.jpg');">
+                            <span class="mask bg-gradient-dark"></span>
+                            <div class="card-body position-relative z-index-1 p-3">
+                                <i class="fas fa-wifi text-white p-2"></i>
+                                <h5 class="text-white mt-4 mb-5 pb-2">Hello Mr @User.FindFirst("Fullname").Value, You've Got Notification Interview</h5>
+                                <div class="d-flex">
+                                    <div class="d-flex">
+                                        <div class="me-4">
+                                            <p class="text-white text-sm opacity-8 mb-0">Company</p>
+                                            <h6 class="text-white mb-0">Mitra Integrasi Informatika</h6>
+                                        </div>
+                                        <div>
+                                            <p class="text-white text-sm opacity-8 mb-0">Join Date</p>
+                                            <h6 class="text-white mb-0" id="createdDate"></h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-6">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header mx-4 p-3 text-center">
+                                    <div class="icon icon-shape icon-lg bg-gradient-primary shadow text-center border-radius-lg">
+                                        <i class="fas fa-landmark opacity-10"></i>
+                                    </div>
+                                </div>
+                                <div class="card-body pt-0 p-3 text-center">
+                                    <h6 class="text-center mb-0">Client</h6>
+                                    <hr class="horizontal dark my-3">
+                                    <h5 class="mb-0" id="clientName"></h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mt-md-0 mt-4">
+                            <div class="card">
+                                <div class="card-header mx-4 p-3 text-center">
+                                    <span id="inputedInterview"></span>
+                                    <div class="icon icon-shape icon-lg bg-gradient-primary shadow text-center border-radius-lg">
+                                        <i class="fab fa-paypal opacity-10"></i>
+                                    </div>
+                                </div>
+                                <div class="card-body pt-0 p-3 text-center">
+                                    <h6 class="text-center mb-0">Position</h6>
+                                    <hr class="horizontal dark my-3">
+                                    <h5 class="mb-0" id="positionName"></h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 mb-lg-0 mb-4">
+                    <div class="card mt-4">
+                        <div class="card-header pb-0 p-3">
+                            <div class="row">
+                                <div class="col-6 d-flex align-items-center">
+                                    <h6 class="mb-0">Interview Date</h6>
+                                </div>
+                                <div class="col-6 d-flex align-items-center">
+                                    <h6 class="mb-0">Note</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body p-3">
+                            <div class="row">
+                                <div class="col-md-6 mb-md-0 mb-4">
+                                    <div class="card card-body border card-plain border-radius-lg d-flex align-items-center flex-row">
+                                        <img class="w-10 me-3 mb-0" src="~/soft-ui/assets/img/logos/mastercard.png" alt="logo">
+                                        <h6 class="mb-0" id="interviewDate"></h6>
+                                        <i class="fas fa-pencil-alt ms-auto text-dark cursor-pointer" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Card"></i>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card card-body border card-plain border-radius-lg d-flex align-items-center flex-row">
+                                        <img class="w-10 me-3 mb-0" src="~/soft-ui/assets/img/logos/visa.png" alt="logo">
+                                        <h6 class="mb-0" id="note"></h6>
+                                        <i class="fas fa-pencil-alt ms-auto text-dark cursor-pointer" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Card"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card h-100">
+                <div class="card-header pb-0 p-3">
+                    <div class="row">
+                        <div class="col-12 d-flex align-items-center">
+                            <h6 class="mb-0">DO YOU WANT TO ATTEND IT?</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body p-3 pb-0">
+                    <ul class="list-group">
+                        <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+                            <div class="d-flex flex-column" id="interviewAccepted">
+                            </div>
+                            <div class="d-flex align-items-center text-sm">
+                                ACCEPT INTERVIEW SCHEDULE
+                            </div>
+                        </li>
+                        <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+                            <div class="d-flex flex-column" id="interviewRejected">
+                            </div>
+                            <div class="d-flex align-items-center text-sm">
+                                REJECT INTERVIEW SCHEDULE
+                            </div>
+                        </li>
+                        <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+                            <div class="d-flex flex-column">
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 @section Scripts
 {
@@ -21,27 +149,81 @@
             }
         }).done((result)=>{
             console.log(result)
-            $("#clientName").val(result.data.clientName);
-            interviewDate = moment($("#interviewDate").val(result.data.interviewDate)).format("dddd, D MMMM YYYY, HH:mm");
-            $("#positionName").val(result.data.positionName);
-            $("#capacityClient").val(result.data.capacityClient);
-            $("#note").val(result.data.note);
-            let dataNotifikasi = `<div class="col">
-                                              <div class="card-body text-bg-warning">
-                                                    <h5 class="card-title mx-auto">You've got an Interview Notification</h5>
-                                                                    <p class="card-text uppercase">Client  &nbsp;: ${result.data.clientName}</p>
-                                                                    <p class="card-text uppercase">Position  &nbsp;: ${result.data.positionName}</p>
-                                                                    <p class="card-text uppercase">Interview Date  &nbsp;: ${interviewDate}</p>
-                                                            <p class="card-text uppercase">Note &nbsp;: ${result.data.note}</p>
-                                                </div>
-                                                <div class="card-body mx-auto">
-                                                            <a onclick="interviewAccepted('@User.FindFirst("Guid").Value')"><box-icon name='check' color="green" size="md"></box-icon></a>
-                                                                            <a onclick="interviewRejected('@User.FindFirst("Guid").Value')"><box-icon name='x' color="red" size="md"></box-icon></a>
-                                                </div>
-                                            </div>`
-            $('#cardNotification').html(dataNotifikasi)
+            $('#inputedInterview').html(`<input type="hidden" value="${result.data.clientGuid}" id="clientUpd"/>
+                                        <input type="hidden" value="${result.data.interviewDate}" id="interviewDateUpd"/>
+                                        <input type="hidden" value="${result.data.note}" id="noteUpd"/>`)
+            createdDate = result.data.createdDate != null ? moment($("#createdDate").val(result.data.createdDate)).format("dddd, D MMMM YYYY, HH:mm") : null;
+            interviewDate = result.data.interviewDate != null ? moment($("#interviewDate").val(result.data.interviewDate)).format("dddd, D MMMM YYYY, HH:mm") : null;
+            $('#createdDate').html(`${result.data.createdDate != null ? moment(result.data.createdDate).format("dddd, D MMMM YYYY, HH:mm") : null}`)
+            $('#clientName').html(`${result.data.clientName}`)
+            $('#positionName').html(`${result.data.positionName}`)
+            $('#note').html(`${result.data.note}`)
+            $('#interviewAccepted').html(`<a onclick="interviewAccepted('@User.FindFirst("Guid").Value')"><box-icon name='check' color="green" size="lg"></box-icon></a>`)
+            $('#interviewRejected').html(`<a onclick="interviewRejected('@User.FindFirst("Guid").Value')"><box-icon name='x' color="red" size="lg"></box-icon></a>`)
+            $('#interviewDate').html(`${result.data.interviewDate != null ? moment(result.data.interviewDate).format("dddd, D MMMM YYYY, HH:mm") : null}`)
         })
-            
+        function interviewAccepted(guidEmployee){
+            let data = {
+                guid : guidEmployee,
+                interviewDate : $("#interviewDateUpd").val(),
+                clientGuid : $("#clientUpd").val(),
+                text : $("#noteUpd").val(),
+                isAccepted : false,
+                status : 1,
+            }
+            $.ajax({
+                url : "https://localhost:7273/api/interviews/UpdateFullInterview",
+                type: "PUT",
+                contentType: "application/json",
+                data: JSON.stringify(data)
+            }).done((result) => {
+                Swal.fire({
+                    title: 'Success',
+                    text: 'Data Interview has been successfully updated',
+                    icon: 'success'
+                }).then(function () {
+                    location.reload();
+                });
+            }).fail((error) => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Failed to Updated data Interview! Please try again.'
+                })
+                console.log(error)
+            })
+        }
+        function interviewRejected(guidEmployee){
+            let data = {
+                guid : guidEmployee,
+                interviewDate : $("#interviewDateUpd").val(),
+                clientGuid : $("#clientUpd").val(),
+                text : $("#noteUpd").val(),
+                isAccepted : false,
+                status : 2,
+            }
+            $.ajax({
+                url : "https://localhost:7273/api/interviews/UpdateFullInterview",
+                type: "PUT",
+                contentType: "application/json",
+                data: JSON.stringify(data)
+            }).done((result) => {
+                Swal.fire({
+                    title: 'Success',
+                    text: 'Data Interview has been successfully updated',
+                    icon: 'success'
+                }).then(function () {
+                    location.reload();
+                });
+            }).fail((error) => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Failed to Updated data Interview! Please try again.'
+                })
+                console.log(error)
+            })
+        }    
         
     </script>
 }

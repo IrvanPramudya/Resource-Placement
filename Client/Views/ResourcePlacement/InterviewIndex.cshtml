@@ -58,6 +58,7 @@
                 <th>Client</th>
                 <th>Interview Date</th>
                 <th>Is Accepted</th>
+                <th>Status</th>
                 <th>Text</th>
                 <th>Action</th>
             </tr>
@@ -107,7 +108,7 @@
             loadInterviewData();
 
             $.ajax({
-                url: "https://localhost:7273/api/interviews/GetRemainingEmployee"
+                url: "https://localhost:7273/api/interviews/GetRemainingEmployeeinInterview"
             }).done(function (result) {
                 console.log(result)
                 let getName = ""
@@ -150,13 +151,39 @@
                     {
                         data: 'interviewDate',
                         render: function (data, type, row) {
-                            return moment(data).format("DD/MM/YYYY");;
+                            return moment(data).format("D MMMM YYYY, HH:mm");;
                         }
                     },
                     {
                         data: "isAccepted",
                         render: function (data, type, row) {
-                            return data === 1 ? `<box-icon type='solid' name='user-check' color='green' size='md'></box-icon>` : `<box-icon type='solid' name='user-x' color ='red' size='md'></box-icon>`;
+                            return data === true ? `<box-icon type='solid' name='user-check' color='green' size='md'></box-icon>` : `<box-icon type='solid' name='user-x' color ='red' size='md'></box-icon>`;
+                        }
+                    },
+                    {
+                        data: "status",
+                        render: function (data, type, row) {
+                            if(data == 0)
+                            {
+                                return `<box-icon name='loader'></box-icon>`
+                            }
+                            if(data == 1)
+                            {
+                                return `<box-icon name='calendar-check' ></box-icon>`
+                            }
+                            if(data == 2)
+                            {
+                                return `<box-icon name='calendar-x' type='solid' ></box-icon>`
+                            }
+                            if(data == 3)
+                            {
+                                return `<box-icon type='solid' name='check-circle'></box-icon>`
+                            }
+                            if(data == 4)
+                            {
+                                return `<box-icon type='solid' name='x-circle'></box-icon>`
+                            }
+                            return data === true ? `<box-icon type='solid' name='user-check' color='green' size='md'></box-icon>` : `<box-icon type='solid' name='user-x' color ='red' size='md'></box-icon>`;
                         }
                     },
                     { data: "text" },
@@ -209,6 +236,7 @@
                     text: 'Failed to insert data. Please try again.',
                     icon: 'error'
                 });
+                console.log(error)
             });
         }
 

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using API.Utilities.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.Models
 {
@@ -12,9 +13,9 @@ namespace API.Models
         [Column("client_guid")]
         public Guid ClientGuid { get; set; }
         [Column("is_accepted")]
-        public bool IsAccepted { get; set; }
-        /*[Column("position_guid")]
-        public Guid PositionGuid { get; set; }*/
+        public bool? IsAccepted { get; set; }
+        [Column("status")]
+        public InterviewLevel Status { get; set; }
 
         //Cardinality
         public Employee? Employee { get; set; }
