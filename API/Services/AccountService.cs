@@ -154,7 +154,7 @@ namespace API.Services
             var claims = new List<Claim>
             {
                 new Claim("Guid", getEmployee.Guid.ToString()),
-                new Claim("Fullname", $"{getEmployee.FirstName}{getEmployee.LastName}"),
+                new Claim("Fullname", $"{getEmployee.FirstName} {getEmployee.LastName}"),
                 new Claim("Email", getEmployee.Email)
             };
 

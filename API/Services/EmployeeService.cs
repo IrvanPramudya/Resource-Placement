@@ -111,7 +111,8 @@ namespace API.Services
                               ClientName = client.Name,
                               PositionName = position.Name,
                               InterviewDate = interview.InterviewDate,
-                              Note = interview.Text
+                              Note = interview.Text,
+                              CreatedDate = employee.CreatedDate
                           };
             if (!merging.Any())
             {

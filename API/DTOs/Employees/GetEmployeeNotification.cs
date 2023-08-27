@@ -7,5 +7,6 @@
         public DateTime InterviewDate { get; set; }
         public string PositionName { get; set; }
         public string Note { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 }
