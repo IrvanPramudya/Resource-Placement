@@ -60,5 +60,6 @@ namespace Client.Controllers
         public IActionResult NotifikasiIndex() => View();
         public IActionResult DetailIndex() => View();
         public IActionResult ResultIndex() => View();
+        public IActionResult ChangePassword() => View();
     }
 }

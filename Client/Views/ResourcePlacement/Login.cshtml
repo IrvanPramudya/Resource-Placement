@@ -3,27 +3,287 @@
     Layout = "LoginLayout";
 }
 
-<div class="login-card">
+@*<div class="login-card">
+
     <h2>Login</h2>
-    <h3>Enter your credentials</h3>
+    <h3>Resource Placement</h3>
 
     <form action="/resourceplacement/login/" method="post" class="login-form">
         <input type="email" asp-for="Email" placeholder="Email">
         <span asp-validation-for="Email" class="text-danger"></span>
         <input type="password" asp-for="Password" placeholder=" Password">
         <div class="row">
-            <div class="col-4">
-                <button type="submit" class="btn btn-outline-primary">LOGIN</button>
+            <button type="submit" class="btn btn-primary mb-3">Sign in</button>
+        </div>
+        <div class="row">
+            <div class="col-md-12 d-flex justify-content-center">
+                <!-- Simple link -->
+                <a class="text-primary" data-bs-toggle="modal" data-bs-target="#modalForgotPassword" style="cursor: pointer; text-decoration: underline;">
+                    Forgot password?
+                </a>
             </div>
-            <div class="col-4">
-                <a class="btn btn-outline-warning" href="/Register">REGISTER</a>
-            </div>
-            <div class="col-4">
-                <a class="btn btn-outline-danger" href="/Forgot">FORGOT</a>
+        </div>
+        <div class="row">
+            <div class="text-center">
+                <p>Don't have account? <a class="text-primary" data-bs-toggle="modal" data-bs-target="#modalRegister" style="cursor: pointer; text-decoration: underline;">Register</a> </p>
             </div>
         </div>
     </form>
-</div>
-@section Scripts{
+</div>*@
 
+<div class="login-card">
+    <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">LOGIN</p>
+    <div class="container-fluid">
+        <div class="row d-flex">
+            <div class="col-md-9 col-lg-6 col-xl-5">
+                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
+                     class="img-fluid" alt="Sample image">
+            </div>
+            <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+                <form action="/resourceplacement/login/" method="post">
+                    <!-- Email input -->
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="Email">Email address</label>
+                        <input type="email" asp-for="Email" class="form-control"
+                               placeholder="Enter a valid email address" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <!-- Password input -->
+                    <div class="form-outline mb-3">
+                        <label class="form-label" for="Password">Password</label>
+                        <input type="password" asp-for="Password" class="form-control"
+                               placeholder="Enter password" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a class="link-primary" data-bs-toggle="modal" data-bs-target="#modalForgotPassword" style="cursor: pointer; text-decoration: underline;">Forgot password?</a>
+                    </div>
+
+                    <div class="text-center text-lg-start mt-4 pt-2">
+                        <button type="submit" class="btn btn-primary"
+                                style="padding-left: 2.5rem; padding-right: 2.5rem;">
+                            Login
+                        </button>
+                        <p class="small fw-bold mt-2 pt-1 mb-0">
+                            Don't have an account? <a class="link-primary" data-bs-toggle="modal" data-bs-target="#modalRegister" style="cursor: pointer;">Register</a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="register">
+    <div class="modal" id="modalRegister" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h3 class="mb-3 pb-2 pb-md-0 mb-md-5">Registration Form</h3>
+                    <form>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <!-- Name input -->
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="registerName">First Name</label>
+                                    <input type="text" id="firstName" class="form-control" placeholder="First Name" />
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <!-- Username input -->
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="registerUsername">Last Name</label>
+                                    <input type="text" id="lastName" class="form-control" placeholder="Last Name" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <!-- Email input -->
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="registerEmail">Email</label>
+                                    <input type="email" id="email" class="form-control" placeholder="Email" />
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <!-- Password input -->
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="registerPassword">Password</label>
+                                    <input type="password" id="password" class="form-control" placeholder="Password" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <!-- Phone Number -->
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="registerPhoneNumber">Phone Number</label>
+                                    <input type="tel" id="phoneNumber" class="form-control" placeholder="Phone Number" />
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <!-- Gender -->
+                                <div class="form-outline mb-4">
+                                    <label for="gender" class="col-form-label">Gender</label>
+                                    <select class="form-control" id="gender" required>
+                                        <option selected>Select Gender</option>
+                                        <option value="1">Male</option>
+                                        <option value="0">Female</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <!-- Skill -->
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="registerSkill">Skill</label>
+                                    <input type="text" id="skill" class="form-control" placeholder="Skill" />
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                            </div>
+                        </div>      
+                        <div class="row">
+                            <div class="col-sm-6 mb-4">
+                                <button type="button" onclick="register()" class="btn btn-primary" data-bs-dismiss="modal">Register</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="forgot-password">
+    <div class="modal" id="modalForgotPassword" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Forgot Password</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>                      
+                        <!-- Email input -->
+                        <div class="form-outline mb-4">
+                            <label class="form-label" for="forgotEmail">Email</label>
+                            <input type="email" id="emailforgot" class="form-control" placeholder="Email">
+                        </div>
+                        <p>Have you received the OTP code? <a asp-controller="ResourcePlacement" asp-action="ChangePassword" class="text-primary" style="cursor: pointer; text-decoration: underline;">Click Here</a> </p>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="forgotpassword()" class="btn btn-primary d-inline-block">Send OTP</button>
+                    <button type="button" class="btn btn-secondary d-inline-block" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        function register() {
+            var registerData = {
+                firstName: $("#firstName").val(),
+                lastName: $("#lastName").val(),
+                password: $("#password").val(),
+                email: $("#email").val(),
+                phoneNumber: $("#phoneNumber").val(),
+                gender: parseInt($("#gender").val()),
+                skill: $("#skill").val()
+            };
+
+            $.ajax({
+                url: "https://localhost:7273/api/accounts/Register",
+                type: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: JSON.stringify(registerData),
+            }).done(function (result) {
+                Swal.fire({
+                    title: 'Success',
+                    text: 'Data has been registered',
+                    icon: 'success'
+                }).then(function () {
+                    location.reload();
+                });
+            }).fail(function (error) {
+                Swal.fire({
+                    title: 'Oops',
+                    text: 'Failed to register. Please try again.',
+                    icon: 'error'
+                });
+                console.log(error)
+            });
+        }
+
+        function forgotpassword() {
+            var forgotpassword = {
+                email: $("#emailforgot").val()
+            };
+
+            $.ajax({
+                url: "https://localhost:7273/api/accounts/forgot-password",
+                type: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: JSON.stringify(forgotpassword),
+            }).done(function (result) {
+                Swal.fire({
+                    title: 'Success',
+                    text: 'Otp has been sent to your email',
+                    icon: 'success'
+                }).then(function () {
+                });
+            }).fail(function (error) {
+                Swal.fire({
+                    title: 'Oops',
+                    text: 'Failed to send email. Please try again.',
+                    icon: 'error'
+                });
+                console.log(error)
+            });
+        }
+
+        function changepassword() {
+            var  changepassword = {
+                email: $("#emailchange").val(),
+                password: $("#passwordchange").val(),
+                newPassword: $("#newPassword").val(),
+                otp: $("#otp").val()
+            };
+
+            $.ajax({
+                url: "https://localhost:7273/api/accounts/changepassword",
+                type: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: JSON.stringify(changepassword),
+            }).done(function (result) {
+                Swal.fire({
+                    title: 'Success',
+                    text: 'Otp has been sent to your email',
+                    icon: 'success'
+                }).then(function () {
+                    location.reload();
+                });
+            }).fail(function (error) {
+                Swal.fire({
+                    title: 'Oops',
+                    text: 'Failed to send email. Please try again.',
+                    icon: 'error'
+                });
+                console.log(error)
+            });
+        }
+
+    </script>
 }

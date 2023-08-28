@@ -24,25 +24,26 @@ body{
 .login-card{
     position: relative;
     z-index: 3;
-    width: 100%;
     margin: 0 20px;
-    padding: 70px 30px 44px;
+    padding: 44px 30px 44px;
     border-radius: 1.25rem;
     background: #fff;
-    text-align: center;
+    text-align: left;
 }
 
-.login-card > h2{
+.login-card > h2 {
     font-size: 36px;
     font-weight: 600;
     margin: 0 0 12px;
+    text-align: center;
 }
 
-.login-card > h3{
+.login-card > h3 {
     color: rgba(0, 0, 0, 0.38);
     margin: 0 0 30px;
     font-weight: 500;
     font-size: 1rem;
+    text-align: center;
 }
 
 .login-form{
@@ -84,6 +85,7 @@ body{
     text-align: center;
     letter-spacing: 2px;
     transition: all 0.375s;
+    margin:auto;
 }
 
 .login-form > button:hover{
@@ -113,13 +115,25 @@ body{
     body{
         padding: 0;
     }
-    .login-card{
+    .login-card {
         margin: 0;
-        width: 400px;
     }
 }
 
-.btn btn-primary {
-    --bs-tooltip-bg: var(--bd-violet-bg);
-    --bs-tooltip-color: var(--bs-white);
+.divider:after,
+.divider:before {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #eee;
+}
+
+.h-custom {
+    height: calc(100% - 73px);
+}
+
+@media (max-width: 450px) {
+    .h-custom {
+        height: 100%;
+    }
 }
