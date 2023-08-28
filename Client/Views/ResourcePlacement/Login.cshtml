@@ -3,7 +3,7 @@
     Layout = "LoginLayout";
 }
 
-<div class="login-card">
+@*<div class="login-card">
 
     <h2>Login</h2>
     <h3>Resource Placement</h3>
@@ -13,15 +13,6 @@
         <span asp-validation-for="Email" class="text-danger"></span>
         <input type="password" asp-for="Password" placeholder=" Password">
         <div class="row">
-            @*<div class="col-4">
-            <button type="submit" class="btn btn-outline-primary">LOGIN</button>
-            </div>
-            <div class="col-4">
-            <a class="btn btn-outline-warning" href="/Register">REGISTER</a>
-            </div>
-            <div class="col-4">
-            <a class="btn btn-outline-danger" href="/Forgot">FORGOT</a>
-            </div>*@
             <button type="submit" class="btn btn-primary mb-3">Sign in</button>
         </div>
         <div class="row">
@@ -38,69 +29,129 @@
             </div>
         </div>
     </form>
+</div>*@
+
+<div class="login-card">
+    <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">LOGIN</p>
+    <div class="container-fluid">
+        <div class="row d-flex">
+            <div class="col-md-9 col-lg-6 col-xl-5">
+                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
+                     class="img-fluid" alt="Sample image">
+            </div>
+            <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+                <form action="/resourceplacement/login/" method="post">
+                    <!-- Email input -->
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="Email">Email address</label>
+                        <input type="email" asp-for="Email" class="form-control"
+                               placeholder="Enter a valid email address" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <!-- Password input -->
+                    <div class="form-outline mb-3">
+                        <label class="form-label" for="Password">Password</label>
+                        <input type="password" asp-for="Password" class="form-control"
+                               placeholder="Enter password" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a class="link-primary" data-bs-toggle="modal" data-bs-target="#modalForgotPassword" style="cursor: pointer; text-decoration: underline;">Forgot password?</a>
+                    </div>
+
+                    <div class="text-center text-lg-start mt-4 pt-2">
+                        <button type="submit" class="btn btn-primary"
+                                style="padding-left: 2.5rem; padding-right: 2.5rem;">
+                            Login
+                        </button>
+                        <p class="small fw-bold mt-2 pt-1 mb-0">
+                            Don't have an account? <a class="link-primary" data-bs-toggle="modal" data-bs-target="#modalRegister" style="cursor: pointer;">Register</a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="register">
     <div class="modal" id="modalRegister" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Register</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
                 <div class="modal-body">
+                    <h3 class="mb-3 pb-2 pb-md-0 mb-md-5">Registration Form</h3>
                     <form>
-                        <!-- Name input -->
-                        <div class="form-outline mb-4">
-                            <label class="form-label" for="registerName">First Name</label>
-                            <input type="text" id="firstName" class="form-control" placeholder="First Name" />
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <!-- Name input -->
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="registerName">First Name</label>
+                                    <input type="text" id="firstName" class="form-control" placeholder="First Name" />
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <!-- Username input -->
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="registerUsername">Last Name</label>
+                                    <input type="text" id="lastName" class="form-control" placeholder="Last Name" />
+                                </div>
+                            </div>
                         </div>
-
-                        <!-- Username input -->
-                        <div class="form-outline mb-4">
-                            <label class="form-label" for="registerUsername">Last Name</label>
-                            <input type="text" id="lastName" class="form-control" placeholder="Last Name" />
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <!-- Email input -->
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="registerEmail">Email</label>
+                                    <input type="email" id="email" class="form-control" placeholder="Email" />
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <!-- Password input -->
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="registerPassword">Password</label>
+                                    <input type="password" id="password" class="form-control" placeholder="Password" />
+                                </div>
+                            </div>
                         </div>
-
-                        <!-- Email input -->
-                        <div class="form-outline mb-4">
-                            <label class="form-label" for="registerEmail">Email</label>
-                            <input type="email" id="email" class="form-control" placeholder="Email" />
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <!-- Phone Number -->
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="registerPhoneNumber">Phone Number</label>
+                                    <input type="tel" id="phoneNumber" class="form-control" placeholder="Phone Number" />
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <!-- Gender -->
+                                <div class="form-outline mb-4">
+                                    <label for="gender" class="col-form-label">Gender</label>
+                                    <select class="form-control" id="gender" required>
+                                        <option selected>Select Gender</option>
+                                        <option value="1">Male</option>
+                                        <option value="0">Female</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
-
-                        <!-- Password input -->
-                        <div class="form-outline mb-4">
-                            <label class="form-label" for="registerPassword">Password</label>
-                            <input type="password" id="password" class="form-control" placeholder="Password" />
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <!-- Skill -->
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="registerSkill">Skill</label>
+                                    <input type="text" id="skill" class="form-control" placeholder="Skill" />
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                            </div>
+                        </div>      
+                        <div class="row">
+                            <div class="col-sm-6 mb-4">
+                                <button type="button" onclick="register()" class="btn btn-primary" data-bs-dismiss="modal">Register</button>
+                            </div>
                         </div>
-
-                        <!-- Phone Number -->
-                        <div class="form-outline mb-4">
-                            <label class="form-label" for="registerRepeatPassword">Phone Number</label>
-                            <input type="tel" id="phoneNumber" class="form-control" placeholder="Phone Number" />
-                        </div>
-
-                        <!-- Gender -->
-                        <div class="form-outline mb-4">
-                            <label for="gender" class="col-form-label">Gender:</label>
-                            <select class="form-control" id="gender" required>
-                                <option selected>Select Gender</option>
-                                <option value="1">Male</option>
-                                <option value="0">Female</option>
-                            </select>
-                        </div>
-
-                        <!-- Skill -->
-                        <div class="form-outline mb-4">
-                            <label class="form-label" for="registerRepeatPassword">Skill</label>
-                            <input type="text" id="skill" class="form-control" placeholder="Skill" />
-                        </div>
-                       
                     </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" onclick="register()" class="btn btn-primary d-inline-block" data-bs-dismiss="modal">Register</button>
-                    <button type="button" class="btn btn-secondary d-inline-block" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -122,11 +173,11 @@
                             <label class="form-label" for="forgotEmail">Email</label>
                             <input type="email" id="emailforgot" class="form-control" placeholder="Email">
                         </div>
-                        <p>Sudah menerima OTP ? <a asp-controller="ResourcePlacement" asp-action="ChangePassword" class="text-primary" style="cursor: pointer; text-decoration: underline;">Click Here</a> </p>
+                        <p>Have you received the OTP code? <a asp-controller="ResourcePlacement" asp-action="ChangePassword" class="text-primary" style="cursor: pointer; text-decoration: underline;">Click Here</a> </p>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" onclick="forgotpassword()" class="btn btn-primary d-inline-block" data-bs-dismiss="modal">Send OTP</button>
+                    <button type="button" onclick="forgotpassword()" class="btn btn-primary d-inline-block">Send OTP</button>
                     <button type="button" class="btn btn-secondary d-inline-block" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
@@ -153,7 +204,7 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                data: JSON.stringify(accountData),
+                data: JSON.stringify(registerData),
             }).done(function (result) {
                 Swal.fire({
                     title: 'Success',
@@ -183,14 +234,13 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                data: JSON.stringify(accountData),
+                data: JSON.stringify(forgotpassword),
             }).done(function (result) {
                 Swal.fire({
                     title: 'Success',
                     text: 'Otp has been sent to your email',
                     icon: 'success'
                 }).then(function () {
-                    location.reload();
                 });
             }).fail(function (error) {
                 Swal.fire({
@@ -205,7 +255,7 @@
         function changepassword() {
             var  changepassword = {
                 email: $("#emailchange").val(),
-                password: $("#passwordchange").val(),,
+                password: $("#passwordchange").val(),
                 newPassword: $("#newPassword").val(),
                 otp: $("#otp").val()
             };
@@ -216,7 +266,7 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                data: JSON.stringify(accountData),
+                data: JSON.stringify(changepassword),
             }).done(function (result) {
                 Swal.fire({
                     title: 'Success',
