@@ -48,6 +48,7 @@ namespace Client.Controllers
             }
             return View();
         }
+
         public IActionResult EmployeeIndex() => View();
         public IActionResult ClientIndex() => View();
         public IActionResult InterviewIndex() => View();
