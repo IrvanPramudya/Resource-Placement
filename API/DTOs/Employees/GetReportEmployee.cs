@@ -10,6 +10,7 @@ namespace API.DTOs.Employees
         public string PhoneNumber { get; set; }
         public GenderLevel Gender { get; set; }
         public string Skill { get; set; }
+        public StatusLevel Status { get; set; }
         public string Grade { get; set; }
         public int Salary { get; set; }
     }

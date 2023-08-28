@@ -1,0 +1,40 @@
+﻿@{
+}
+<div class="container-fluid py-4">
+    <h1 class="text-center"><span class="badge rounded-pill text-bg-dark">LIST EMPLOYEE ACCEPTED SCHEDULE</span></h1>
+    <div class="row mt-4" id="employeeCard">
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $.ajax({
+            url: 'https://localhost:7273/api/interviews/GetAllEmployeeAcceptedbyEmployee'
+        }).done((result) => {
+            let employeeCard = ""
+            $.each(result.data, (key, val) => {
+                employeeCard += `<div class="col-lg-4">
+                                                            <div class="card h-100 p-3">
+                                                                <div class="overflow-hidden position-relative border-radius-lg bg-cover h-100" style="background-image: url('~/soft-ui/assets/img/ivancik.jpg');">
+                                                                    <span class="mask bg-gradient-dark"></span>
+                                                                    <div class="card-body position-relative z-index-1 d-flex flex-column h-100 p-3">
+                                                                                <h5 class="text-white font-weight-bolder mb-4 pt-2">${val.fullName}</h5>
+                                                                                                <div class="row text-light">
+                                                                                                    <div class="col-4">Client Name</div>
+                                                                                                    <div class="col-8">${val.clientName}</div>
+                                                                                                </div>
+                                                                                                <div class="row text-light">
+                                                                                            <div class="col-4">Interview Date</div>
+                                                                                            <div class="col-8">${val.interviewDate != null ? moment(val.interviewDate).format("dddd, D MMMM YYYY, HH:mm") : null}</div>
+                                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>`
+
+            })
+            $("#employeeCard").html(employeeCard)
+        })
+    </script>
+
+}

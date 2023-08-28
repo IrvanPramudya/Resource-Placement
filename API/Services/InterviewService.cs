@@ -38,10 +38,13 @@ namespace API.Services
                         from placement in placementgroup.DefaultIfEmpty()
                         join interview in _interviewRepository.GetAll() on employee.Guid equals interview.Guid into interviewgroup
                         from interview in interviewgroup.DefaultIfEmpty()
+                        join client in _clientRepository.GetAll() on (interview != null ? interview.ClientGuid : placement.ClientGuid) equals client.Guid into CliGrp
+                        from client in CliGrp.DefaultIfEmpty()
                         select new GetRemainingEmployee
                         {
                             Guid = employee.Guid,
                             Status = interview != null? interview.Status : null,
+                            ClientName = interview != null? client.Name :null,
                             ClientGuid = interview != null? interview.ClientGuid:null,
                             InterviewDate = interview !=null? interview.InterviewDate:null,
                             FullName = employee.FirstName + " " + employee.LastName,
@@ -55,6 +58,26 @@ namespace API.Services
             }
             return merge;
         }
+        /*public IEnumerable<GetRemainingEmployee> GetAllEmployeeWaitingRespons()
+        {
+             return GetAllInterviewEmployeePlacement().Where(inter=>inter.Status == Utilities.Enums.InterviewLevel.EmployeeResponWaiting);
+        }
+        public IEnumerable<GetRemainingEmployee> GetAllEmployeeAcceptedbyEmployee()
+        {
+             return GetAllInterviewEmployeePlacement().Where(inter=>inter.Status == Utilities.Enums.InterviewLevel.AcceptedbyEmployee);
+        }
+        public IEnumerable<GetRemainingEmployee> GetAllEmployeeRejectedbyEmployee()
+        {
+             return GetAllInterviewEmployeePlacement().Where(inter=>inter.Status == Utilities.Enums.InterviewLevel.RejectedbyEmployee);
+        }
+        public IEnumerable<GetRemainingEmployee> GetAllEmployeeAcceptedbyClient()
+        {
+             return GetAllInterviewEmployeePlacement().Where(inter=>inter.Status == Utilities.Enums.InterviewLevel.AcceptedbyClient);
+        }
+        public IEnumerable<GetRemainingEmployee> GetAllEmployeeRejectedbyClient()
+        {
+             return GetAllInterviewEmployeePlacement().Where(inter=>inter.Status == Utilities.Enums.InterviewLevel.RejectedbyClient);
+        }*/
         public IEnumerable<GetRemainingEmployee> GetEmployeeOuterJoinInterview()
         {
              return GetAllInterviewEmployeePlacement().Where(inter=>inter.InterviewDate == null && inter.PlacementGuid == null);

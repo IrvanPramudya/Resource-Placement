@@ -18,6 +18,117 @@ namespace API.Controllers
         {
             _interviewService = interviewService;
         }
+
+        [HttpGet("GetAllEmployeeRejectedbyClient")]
+        public IActionResult GetAllEmployeeRejectedbyClient()
+        {
+            var result = _interviewService.GetAllInterviewEmployeePlacement().Where(inter=>inter.Status == Utilities.Enums.InterviewLevel.RejectedbyClient);
+            if (!result.Any())
+            {
+                return NotFound(new ResponseHandler<GetRemainingEmployee>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data Not Found"
+                });
+            }
+
+            return Ok(new ResponseHandler<IEnumerable<GetRemainingEmployee>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success Retrieve Data",
+                Data = result
+            });
+        }
+        [HttpGet("GetAllEmployeeAcceptedbyClient")]
+        public IActionResult GetAllEmployeeAcceptedbyClient()
+        {
+            var result = _interviewService.GetAllInterviewEmployeePlacement().Where(inter=>inter.Status == Utilities.Enums.InterviewLevel.AcceptedbyClient);
+            if (!result.Any())
+            {
+                return NotFound(new ResponseHandler<GetRemainingEmployee>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data Not Found"
+                });
+            }
+
+            return Ok(new ResponseHandler<IEnumerable<GetRemainingEmployee>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success Retrieve Data",
+                Data = result
+            });
+        }
+        [HttpGet("GetAllEmployeeRejectedbyEmployee")]
+        public IActionResult GetAllEmployeeRejectedbyEmployee()
+        {
+            var result = _interviewService.GetAllInterviewEmployeePlacement().Where(inter=>inter.Status == Utilities.Enums.InterviewLevel.RejectedbyEmployee);
+            if (!result.Any())
+            {
+                return NotFound(new ResponseHandler<GetRemainingEmployee>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data Not Found"
+                });
+            }
+
+            return Ok(new ResponseHandler<IEnumerable<GetRemainingEmployee>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success Retrieve Data",
+                Data = result
+            });
+        }
+        [HttpGet("GetAllEmployeeAcceptedbyEmployee")]
+        public IActionResult GetAllEmployeeAcceptedbyEmployee()
+        {
+            var result = _interviewService.GetAllInterviewEmployeePlacement().Where(inter=>inter.Status == Utilities.Enums.InterviewLevel.AcceptedbyEmployee);
+            if (!result.Any())
+            {
+                return NotFound(new ResponseHandler<GetRemainingEmployee>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data Not Found"
+                });
+            }
+
+            return Ok(new ResponseHandler<IEnumerable<GetRemainingEmployee>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success Retrieve Data",
+                Data = result
+            });
+        }
+        [HttpGet("GetAllEmployeeWaiting")]
+        public IActionResult GetAllEmployeeWaiting()
+        {
+            var result = _interviewService.GetAllInterviewEmployeePlacement().Where(inter=>inter.Status == Utilities.Enums.InterviewLevel.EmployeeResponWaiting);
+            if (!result.Any())
+            {
+                return NotFound(new ResponseHandler<GetRemainingEmployee>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data Not Found"
+                });
+            }
+
+            return Ok(new ResponseHandler<IEnumerable<GetRemainingEmployee>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success Retrieve Data",
+                Data = result
+            });
+        }
         [HttpPut("UpdateFullInterview")]
         public IActionResult UpdateFullInterview(InterviewDto interviewDto)
         {

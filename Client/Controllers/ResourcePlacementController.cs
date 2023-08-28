@@ -42,7 +42,7 @@ namespace Client.Controllers
             }
             else if (result.Code == 200)
             {
-                TempData["Success"] = $"Successfully Login! - {result.Data.Token}";
+                TempData["Success"] = $"Successfully Login!";
                 HttpContext.Session.SetString("JWToken", result.Data.Token);
                 return RedirectToAction("Index", "ResourcePlacement");
             }

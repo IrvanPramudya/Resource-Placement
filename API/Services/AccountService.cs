@@ -98,7 +98,7 @@ namespace API.Services
                             IsUsed = account != null ? account.IsUsed : false,
                             OTP = account != null ? account.OTP : null,
                             Password = account != null ? account.Password : null,
-                            RoleGuid = accountRole != null ? accountRole.RoleGuid : null
+                            RoleGuid = accountRole != null ? accountRole.RoleGuid : null,
                         };
             return merge;
         }

@@ -20,6 +20,48 @@ namespace API.Controllers
         {
             _employeeService = employeeService;
         }
+        [HttpGet("GetAllEmployeeinIdle")]
+        public IActionResult GetAllEmployeeinIdle()
+        {
+            var data = _employeeService.GetAllEmployeeinIdle();
+            if (data == null)
+            {
+                return StatusCode(404, new ResponseHandler<GetReportEmployee>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data is not Found",
+                });
+            }
+            return Ok(new ResponseHandler<IEnumerable<GetReportEmployee>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Data Success Retrieved",
+                Data = data
+            });
+        }
+        [HttpGet("GetAllEmployeeinSite")]
+        public IActionResult GetAllEmployeeinSite()
+        {
+            var data = _employeeService.GetAllEmployeeinSite();
+            if (data == null)
+            {
+                return StatusCode(404, new ResponseHandler<GetReportEmployee>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data is not Found",
+                });
+            }
+            return Ok(new ResponseHandler<IEnumerable<GetReportEmployee>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Data Success Retrieved",
+                Data = data
+            });
+        }
         [HttpGet("GetEmployeeOuterJoin")]
         public IActionResult GetEmployeeOuterJoin()
         {

@@ -6,6 +6,7 @@ namespace API.DTOs.Interviews
     {
         public Guid Guid { get; set; }
         public string FullName { get; set; }
+        public string? ClientName { get; set; }
         public DateTime? InterviewDate { get; set; }
         public DateTime? StartDate { get; set; }
         public Guid? ClientGuid { get; set; }

@@ -35,7 +35,14 @@ namespace API.Services
             _accountRoleRepository = accountRoleRepository;
             _accountRepository = accountRepository;
         }
-
+        public IEnumerable<GetReportEmployee>? GetAllEmployeeinSite()
+        {
+            return GetAllReportedEmployee().Where(employee => employee.Status == Utilities.Enums.StatusLevel.Site);
+        }
+        public IEnumerable<GetReportEmployee>? GetAllEmployeeinIdle()
+        {
+            return GetAllReportedEmployee().Where(employee => employee.Status == Utilities.Enums.StatusLevel.Idle);
+        }
         public IEnumerable<GetEmployeeinGrade>? GetEmployeeinGrade()
         {
             var merge = 
@@ -67,7 +74,8 @@ namespace API.Services
                                  Gender = employee.Gender,
                                  Skill = employee.Skill,
                                  Grade = grade.Name,
-                                 Salary = grade.Salary
+                                 Salary = grade.Salary,
+                                 Status = employee.Status
                              };
             if (!mergetable.Any())
             {

@@ -133,6 +133,48 @@
                             Placement
                         </a>
                     </li>
+                    <li>
+                        <a asp-controller="Interview" asp-action="EmployeeAccepted">
+                            <i class='bx bx-building'></i>
+                            Employee Accept
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-controller="Interview" asp-action="EmployeeRejected">
+                            <i class='bx bx-building'></i>
+                            Employee Reject
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-controller="Interview" asp-action="EmployeeWaiting">
+                            <i class='bx bx-building'></i>
+                            Employee Waiting
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-controller="Interview" asp-action="ClientAccepted">
+                            <i class='bx bx-building'></i>
+                            Client Accept
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-controller="Interview" asp-action="ClientRejected">
+                            <i class='bx bx-building'></i>
+                            Client Reject
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-controller="Employee" asp-action="EmployeeSite">
+                            <i class='bx bx-building'></i>
+                            Employee in Site
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-controller="Employee" asp-action="EmployeeIdle">
+                            <i class='bx bx-building'></i>
+                            Employee Idle
+                        </a>
+                    </li>
                 }
                 @if(User.IsInRole("Admin")||User.IsInRole("Employee"))
                 {
