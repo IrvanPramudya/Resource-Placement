@@ -589,7 +589,7 @@ progress {
 }
 
 .img-fluid {
-  max-width: 100%;
+  max-width: 90%!important;
   height: auto;
 }
 
@@ -5418,6 +5418,7 @@ textarea.form-control-lg {
   overflow-x: hidden;
   overflow-y: auto;
   outline: 0;
+  
 }
 
 .modal-dialog {
@@ -5468,7 +5469,7 @@ textarea.form-control-lg {
   background-color: #fff;
   background-clip: padding-box;
   border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 0.3rem;
+  border-radius: 1.25rem!important;
   outline: 0;
 }
 
