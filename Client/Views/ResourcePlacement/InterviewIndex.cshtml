@@ -108,7 +108,7 @@
             loadInterviewData();
 
             $.ajax({
-                url: "https://localhost:7273/api/interviews/GetRemainingEmployeeinInterview"
+                url: "https://localhost:7273/api/interviews/GetAllEmployee"
             }).done(function (result) {
                 console.log(result)
                 let getName = ""
