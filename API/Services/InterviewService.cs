@@ -129,11 +129,11 @@ namespace API.Services
         }
         public IEnumerable<GetRemainingEmployee> GetEmployeeOuterJoinInterview()
         {
-             return GetAllInterviewEmployeePlacement().Where(inter=>inter.InterviewDate == null && inter.PlacementGuid == null);
+             return GetAllEmployee().Where(inter=>inter.InterviewDate == null && inter.PlacementGuid == null);
         }
         public IEnumerable<GetRemainingEmployee> GetEmployeeOuterJoinPlacement()
         {
-             return GetAllInterviewEmployeePlacement().Where(inter=> inter.PlacementGuid == null && inter.Status == Utilities.Enums.InterviewLevel.AcceptedbyClient);
+             return GetAllEmployee().Where(inter=> inter.PlacementGuid == null && inter.Status == Utilities.Enums.InterviewLevel.AcceptedbyClient);
         }
         public int UpdateFullInterview(InterviewDto interviewDto)
         {
