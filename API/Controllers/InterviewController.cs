@@ -19,6 +19,50 @@ namespace API.Controllers
             _interviewService = interviewService;
         }
 
+        [HttpGet("GetAllEmployee")]
+        public IActionResult GetAllEmployee()
+        {
+            var result = _interviewService.GetAllEmployee().Where(inter => inter.InterviewDate == null && inter.PlacementGuid == null); ;
+            if (result == null)
+            {
+                return NotFound(new ResponseHandler<GetRemainingEmployee>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data Not Found"
+                });
+            }
+
+            return Ok(new ResponseHandler<IEnumerable<GetRemainingEmployee>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success Retrieve Data",
+                Data = result
+            });
+        }
+        [HttpGet("CountEmployeeStatusinInterview")]
+        public IActionResult CountEmployeeStatusinInterview()
+        {
+            var result = _interviewService.CountInterviewStatus();
+            if (result == null)
+            {
+                return NotFound(new ResponseHandler<GetCountedInterviewStatus>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data Not Found"
+                });
+            }
+
+            return Ok(new ResponseHandler<GetCountedInterviewStatus>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success Retrieve Data",
+                Data = result
+            });
+        }
         [HttpGet("GetAllEmployeeRejectedbyClient")]
         public IActionResult GetAllEmployeeRejectedbyClient()
         {

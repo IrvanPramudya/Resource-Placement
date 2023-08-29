@@ -125,6 +125,7 @@
         </div>
     </div>
 </div>
+
 @section Scripts{
     <script>
         const tooltipTriggerList = document.querySelectorAll('[data-bs-placement="top"]')
@@ -160,7 +161,7 @@
                     {
                         data: "gender",
                         render: function (data, type, row) {
-                            return data === 1 ? `<box-icon name='male' color='blue' size='md' class='mx-auto'></box-icon>` : `<box-icon name='female' size='md' color='#F61491'></box-icon>`;
+                            return data === 1 ? `<box-icon name='male' color='blue' size='md' class='mx-auto'><span></span></box-icon>` : `<span><box-icon name='female' size='md' color='#F61491'></box-icon></span>`;
                         }
                     },
                     {
