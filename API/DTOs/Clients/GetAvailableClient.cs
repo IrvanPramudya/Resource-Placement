@@ -4,6 +4,5 @@
     {
         public string Name { get; set; }
         public bool IsAvailable { get; set; }
-        public int Capacity { get; set; }
     }
 }

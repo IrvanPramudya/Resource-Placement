@@ -14,7 +14,7 @@
             <div class="col-xl-1 col-sm-4 mb-xl-0 mb-4">
             </div>
                 <div class="col-xl-2 col-sm-4 mb-xl-0 mb-4">
-                    <div class="card" style="background-color:#EBECF0" onclick="loadWaitingRespon()">
+                    <div class="card cursor-pointer" style="background-color:#EBECF0" onclick="loadWaitingRespon()">
                         <div class="card-body p-3">
                             <div class="row">
                                 <div class="col-12">
@@ -29,7 +29,7 @@
                     </div>
                 </div>
                 <div class="col-xl-2 col-sm-4 mb-xl-0 mb-4">
-                <div class="card" style="background-color:#00ffff" onclick="loadEmployeeAccepted()">
+                <div class="card cursor-pointer" style="background-color:#00ffff" onclick="loadEmployeeAccepted()">
                         <div class="card-body p-3">
                             <div class="row">
                                 <div class="col-12">
@@ -44,7 +44,7 @@
                     </div>
                 </div>
                 <div class="col-xl-2 col-sm-4 mb-xl-0 mb-4">
-                <div class="card" style="background-color:#FD5E53" onclick="loadEmployeeRejected()">
+                <div class="card cursor-pointer" style="background-color:#FD5E53" onclick="loadEmployeeRejected()">
                         <div class="card-body p-3">
                             <div class="row">
                                 <div class="col-12">
@@ -59,7 +59,7 @@
                     </div>
                 </div>
                 <div class="col-xl-2 col-sm-4 mb-xl-0 mb-4">
-                <div class="card" style="background-color:#98FB98" onclick="loadClientAccepted()">
+                <div class="card cursor-pointer" style="background-color:#98FB98" onclick="loadClientAccepted()">
                         <div class="card-body p-3">
                             <div class="row">
                                 <div class="col-12">
@@ -74,7 +74,7 @@
                     </div>
                 </div>
                 <div class="col-xl-2 col-sm-4 mb-xl-0 mb-4">
-                <div class="card" style="background-color:#FFF700" onclick="loadClientRejected()">
+                <div class="card cursor-pointer" style="background-color:#FFF700" onclick="loadClientRejected()">
                         <div class="card-body p-3">
                             <div class="row">
                                 <div class="col-12">
@@ -95,21 +95,21 @@
                 <div class="row">
                     <h3 class="text-center"><span class="badge text-bg-info my-2">EMPLOYEE</span></h3>
                     <div class="col-md-6">
-                        <div class="card" onclick="loadEmployeeSite()">
+                        <div class="card cursor-pointer" onclick="loadEmployeeSite()">
                             <div class="card-header mx-4 p-3 text-center">
                                 <div class="icon icon-shape icon-lg bg-gradient-primary shadow text-center border-radius-lg">
                                     <i class="fas fa-landmark opacity-10"></i>
                                 </div>
                             </div>
                             <div class="card-body pt-0 p-3 text-center">
-                                <h6 class="text-center mb-0">EMPLOYEE SITE</h6>
+                                <h6 class="text-center mb-0">SITE</h6>
                                 <hr class="horizontal dark my-3">
                                 <h5 class="mb-0" id="countSite"></h5>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6 mt-md-0 mt-4">
-                        <div class="card" onclick="loadEmployeeIdle()">
+                        <div class="card cursor-pointer" onclick="loadEmployeeIdle()">
                             <div class="card-header mx-4 p-3 text-center">
                                 <span id="inputedInterview"></span>
                                 <div class="icon icon-shape icon-lg bg-gradient-primary shadow text-center border-radius-lg">
@@ -117,7 +117,7 @@
                                 </div>
                             </div>
                             <div class="card-body pt-0 p-3 text-center">
-                                <h6 class="text-center mb-0">EMPLOYEE IDLE</h6>
+                                <h6 class="text-center mb-0">IDLE</h6>
                                 <hr class="horizontal dark my-3">
                                 <h5 class="mb-0" id="countIdle"></h5>
                             </div>
@@ -129,14 +129,14 @@
                 <div class="row">
                     <h3 class="text-center"><span class="badge text-bg-info my-2">TRAINER</span></h3>
                     <div class="col-md-12">
-                        <div class="card" onclick="loadEmployeeSite()">
+                        <div class="card cursor-pointer" onclick="loadTrainer()">
                             <div class="card-header mx-4 p-3 text-center">
                                 <div class="icon icon-shape icon-lg bg-gradient-primary shadow text-center border-radius-lg">
                                     <i class="fas fa-landmark opacity-10"></i>
                                 </div>
                             </div>
                             <div class="card-body pt-0 p-3 text-center">
-                                <h6 class="text-center mb-0">TRAINER AVAILABLE</h6>
+                                <h6 class="text-center mb-0">AVAILABLE</h6>
                                 <hr class="horizontal dark my-3">
                                 <h5 class="mb-0" id="countTrainer"></h5>
                             </div>
@@ -148,28 +148,28 @@
                 <div class="row">
                     <h3 class="text-center"><span class="badge text-bg-info my-2">CLIENT</span></h3>
                     <div class="col-md-6">
-                        <div class="card" onclick="loadEmployeeSite()">
+                        <div class="card cursor-pointer" onclick="loadEmployeeSite()">
                             <div class="card-header mx-4 p-3 text-center">
                                 <div class="icon icon-shape icon-lg bg-gradient-primary shadow text-center border-radius-lg">
                                     <i class="fas fa-landmark opacity-10"></i>
                                 </div>
                             </div>
                             <div class="card-body pt-0 p-3 text-center">
-                                <h6 class="text-center mb-0">CLIENT AVAILABLE</h6>
+                                <h6 class="text-center mb-0">AVAILABLE</h6>
                                 <hr class="horizontal dark my-3">
                                 <h5 class="mb-0" id="countAvailable"></h5>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="card" onclick="loadEmployeeSite()">
+                        <div class="card cursor-pointer" onclick="loadEmployeeSite()">
                             <div class="card-header mx-4 p-3 text-center">
                                 <div class="icon icon-shape icon-lg bg-gradient-primary shadow text-center border-radius-lg">
                                     <i class="fas fa-landmark opacity-10"></i>
                                 </div>
                             </div>
                             <div class="card-body pt-0 p-3 text-center">
-                                <h6 class="text-center mb-0">CLIENT UNAVAILABLE</h6>
+                                <h6 class="text-center mb-0">UNAVAILABLE</h6>
                                 <hr class="horizontal dark my-3">
                                 <h5 class="mb-0" id="countUnAvailable"></h5>
                             </div>
@@ -503,6 +503,12 @@
             url: "https://localhost:7273/api/accountroles/GetCountAllRole"
         }).done((result)=>{
             $("#countTrainer").html(`${result.data[0].countRole}`)
+        })
+        $.ajax({
+            url: "https://localhost:7273/api/clients/GetCountClient"
+        }).done((result)=>{
+            $("#countAvailable").html(`${result.data.countAvailable}`)
+            $("#countUnAvailable").html(`${result.data.countUnAvailable}`)
         })
     </script>
 }

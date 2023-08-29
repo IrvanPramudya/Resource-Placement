@@ -14,6 +14,23 @@ namespace API.Services
             _clientRepository = clientRepository;
             _positionRepository = positionRepository;
         }
+        public GetCountClient? CountClient()
+        {
+            var data = _clientRepository.GetAll();
+            var clientdata = new GetCountClient();
+            foreach (var client in data) 
+            {
+                if(client.IsAvailable == true)
+                {
+                    clientdata.CountAvailable++;
+                }
+                else
+                {
+                    clientdata.CountUnAvailable++;
+                }
+            }
+            return clientdata;
+        }
         public IEnumerable<GetAvailableClient> CountAvailableClient()
         {
             var data = _clientRepository.GetAll();
