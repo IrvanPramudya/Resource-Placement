@@ -34,14 +34,15 @@ namespace API.Services
         public IEnumerable<GetAvailableClient> GetAllClient()
         {
             var data = from client in _clientRepository.GetAll()
-                       join position in _positionRepository.GetAll() on client.Guid equals position.ClientGuid
+                       join position in _positionRepository.GetAll() on client.Guid equals position.ClientGuid into positionGroup
+                       from position in positionGroup.DefaultIfEmpty()
                        select new GetAvailableClient
                        {
-                           Capacity = position.Capacity,
+                           Capacity = position!= null? position.Capacity:0,
+                           PositionName = position != null ? position.Name:null,
                            Email = client.Email,
-                           IsAvailable= true,
+                           IsAvailable = client.IsAvailable,
                            Name = client.Name,
-                           PositionName = position.Name
                        };
             /*var listclient = new List<GetAvailableClient>();
             foreach (var client in data) 

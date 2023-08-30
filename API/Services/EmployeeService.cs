@@ -176,6 +176,8 @@ namespace API.Services
         public GetCountedStatus? CountStatus()
         {
             var data = from employee in _employeeRepository.GetAll()
+                       join account in _accountRepository.GetAll() on employee.Guid equals account.Guid
+                       join accountrole in _accountRoleRepository.GetEmployeewithEmployeeRole() on account.Guid equals accountrole.AccountGuid
                        join interview in _interviewRepository.GetAll() on employee.Guid equals interview.Guid into interviewGroup
                        from interview in interviewGroup.DefaultIfEmpty()
                        select new GetReportEmployee
