@@ -19,7 +19,6 @@ namespace API.Services
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IAccountRepository _accountRepository;
         private readonly IAccountRoleRepository _accountroleRepository;
-        private readonly IRoleRepository _roleRepository;
         private readonly IClientRepository _clientRepository;
         private readonly IPositionRepository _positionRepository;
         private readonly IPlacementRepository _placementRepository;
@@ -151,16 +150,16 @@ namespace API.Services
                 return -1; // Interview is null or not found;
             }
             Interview toUpdate = interviewDto;
-            if (interview.Status!= InterviewLevel.AcceptedbyClient) 
+            /*if (interview.Status!= InterviewLevel.AcceptedbyClient) 
             { 
             toUpdate.IsAccepted = false;
             toUpdate.CreatedDate = interview.CreatedDate;
             }
             else
-            {
-                toUpdate.IsAccepted = true;
-                toUpdate.CreatedDate = interview.CreatedDate;
-            }
+            {*/
+                /*toUpdate.IsAccepted = true;*/
+            /*}*/
+            toUpdate.CreatedDate = interview.CreatedDate;
             var result = _interviewRepository.Update(toUpdate);
             return result ? 1 // Interview is updated;
             : 0; // Interview failed to update;

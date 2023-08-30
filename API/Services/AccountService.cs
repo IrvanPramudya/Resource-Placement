@@ -47,7 +47,7 @@ namespace API.Services
                         join grade in _gradeRepository.GetAll() on employee.Guid equals grade.Guid into GrdGrp
                         from grade in GrdGrp.DefaultIfEmpty()
                         join account in _accountRepository.GetAll() on employee.Guid equals account.Guid
-                        join accountrole in _accountRoleRepository.GetAll() on account.Guid equals accountrole.AccountGuid
+                        join accountrole in _accountRoleRepository.GetEmployeewithEmployeeRole() on account.Guid equals accountrole.AccountGuid
                         join placement in _placementRepository.GetAll() on employee.Guid equals placement.Guid into PlcGrp
                         from placement in PlcGrp.DefaultIfEmpty()
                         join interview in _interviewRepository.GetAll() on employee.Guid equals interview.Guid into InterGrp
