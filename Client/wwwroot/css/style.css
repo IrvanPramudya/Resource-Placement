@@ -81,6 +81,7 @@ body {
         z-index: 500;
         padding-bottom: 20px;
         box-sizing: content-box;
+        position:sticky;
     }
 
         .sidebar .logo .logo-name span {
@@ -623,7 +624,3 @@ body {
         min-width: 340px;
     }
 }
-
-.btn btn-primary {
-    --bs-tooltip-bg: var(--bd-violet-bg);
-    --bs-tooltip-color: var(--bs-white);

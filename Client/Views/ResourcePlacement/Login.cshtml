@@ -34,14 +34,14 @@
 <div class="login-card">
     <p class="text-center h1 fw-bold mb-4 mx-auto mt-1">LOGIN</p>
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-6">
+        <div class="row justify-content-center">
+            <div class="col-sm-4">
                 <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
                      class="img-fluid" alt="Sample image">
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-4">
                 <form action="/resourceplacement/login/" method="post">
-                    <!-- Email input -->
+                    @*<!-- Email input -->
                     <div class="form-outline mb-4">
                         <label class="form-label" for="Email">Email address</label>
                         <input type="email" asp-for="Email" class="form-control"
@@ -55,6 +55,24 @@
                         <input type="password" asp-for="Password" class="form-control"
                                placeholder="Enter password" />
                         <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>*@
+
+                    <div class="d-flex flex-row align-items-center mb-4 mt-2">
+                        <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
+                        <div class="form-outline flex-fill mb-0">
+                            <input type="email" asp-for="Email" class="form-control"
+                                   placeholder="Enter a valid email address" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-row align-items-center mb-4">
+                        <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
+                        <div class="form-outline flex-fill mb-0">
+                            <input type="password" asp-for="Password" class="form-control"
+                                   placeholder="Enter password" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
                     </div>
 
                     <div class="d-flex justify-content-between align-items-center">
@@ -162,24 +180,28 @@
                 </div>
                 <div class="modal-body">
                     <div class="row justify-content-center mb-3">
-                        <div class="col-sm-10 col-md-6 d-flex align-items-center order-1">
+                        <div class="col-sm-10 col-md-3 d-flex align-items-center order-1">
                             <img src="~/images/forgot-password.jpeg"
                                  class="img-fluid" alt="Sample image">
-                        </div>
+                        </div>                        
                     </div>
-                    <form>                      
-                        <!-- Email input -->
-                        <div class="form-outline mb-4">
-                            <label class="form-label" for="forgotEmail">Email</label>
-                            <input type="email" id="emailforgot" class="form-control" placeholder="Email">
+                    <div class="row justify-content-center mb-3">
+                        <div class="col-md-8">
+                            <form>
+                                <!-- Email input -->
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="forgotEmail">Email</label>
+                                    <input type="email" id="emailforgot" class="form-control" placeholder="Your Email">
+                                </div>
+                                <div class="d-flex justify-content-center mb-3 mb-lg-4">
+                                    <button type="button" onclick="forgotpassword()" class="btn btn-primary d-inline-block" style="padding-left: 2.5rem; padding-right: 2.5rem;">Send OTP</button>
+                                </div>
+                                <div class="d-flex justify-content-center mb-3">
+                                    <p>Have you received the OTP code? <a asp-controller="ResourcePlacement" asp-action="ChangePassword" class="text-primary" style="cursor: pointer; text-decoration: underline;">Click Here</a> </p>
+                                </div>
+                            </form>
                         </div>
-                        <div class="d-flex justify-content-center mb-3 mb-lg-4">
-                            <button type="button" onclick="forgotpassword()" class="btn btn-primary d-inline-block" style="padding-left: 2.5rem; padding-right: 2.5rem;">Send OTP</button>
-                        </div>
-                        <div class="d-flex justify-content-center mb-3 mb-lg-4">
-                            <p>Have you received the OTP code? <a asp-controller="ResourcePlacement" asp-action="ChangePassword" class="text-primary" style="cursor: pointer; text-decoration: underline;">Click Here</a> </p>
-                        </div>
-                    </form>
+                    </div> 
                 </div>
             </div>
         </div>

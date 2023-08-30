@@ -55,7 +55,7 @@
 
                 <li>
                     <a asp-controller="ResourcePlacement" asp-action="DetailIndex">
-                        <i class='bx bxs-user-badge'></i>
+                    <i class='bx bxs-user-detail'></i>
                         Detail
                     </a>
                 </li>
@@ -69,7 +69,7 @@
                 </li>
                 <li>
                     <a asp-controller="ResourcePlacement" asp-action="AccountRoleIndex">
-                        <i class='bx bxs-user-detail'></i>
+                        <i class='bx bxs-user-account'></i>
                         Account Role
                     </a>
                 </li>
@@ -110,7 +110,7 @@
 
                     <li>
                         <a asp-controller="ResourcePlacement" asp-action="ClientIndex">
-                            <i class='bx bx-buildings'></i>
+                            <i class='bx bx-building'></i>
                             Client
                         </a>
                     </li>
@@ -123,55 +123,55 @@
                     </li>
                     <li>
                         <a asp-controller="ResourcePlacement" asp-action="ResultIndex">
-                            <i class='bx bx-building'></i>
+                        <i class='bx bx-chart'></i>
                             Result
                         </a>
                     </li>
                     <li>
                         <a asp-controller="ResourcePlacement" asp-action="PlacementIndex">
-                            <i class='bx bx-building'></i>
+                        <i class='bx bx-building-house'></i>
                             Placement
                         </a>
                     </li>
                     <li>
                         <a asp-controller="Interview" asp-action="EmployeeAccepted">
-                            <i class='bx bx-building'></i>
+                            <i class='bx bx-user-check'></i>
                             Employee Accept
                         </a>
                     </li>
                     <li>
                         <a asp-controller="Interview" asp-action="EmployeeRejected">
-                            <i class='bx bx-building'></i>
+                            <i class='bx bx-user-x'></i>
                             Employee Reject
                         </a>
                     </li>
                     <li>
                         <a asp-controller="Interview" asp-action="EmployeeWaiting">
-                            <i class='bx bx-building'></i>
+                        <i class='bx bx-time-five'></i>
                             Employee Waiting
                         </a>
                     </li>
                     <li>
                         <a asp-controller="Interview" asp-action="ClientAccepted">
-                            <i class='bx bx-building'></i>
+                        <i class='bx bx-message-square-check'></i>
                             Client Accept
                         </a>
                     </li>
                     <li>
                         <a asp-controller="Interview" asp-action="ClientRejected">
-                            <i class='bx bx-building'></i>
+                        <i class='bx bx-message-square-x'></i>
                             Client Reject
                         </a>
                     </li>
                     <li>
                         <a asp-controller="Employee" asp-action="EmployeeSite">
-                            <i class='bx bx-building'></i>
+                        <i class='bx bx-user-pin'></i>
                             Employee in Site
                         </a>
                     </li>
                     <li>
                         <a asp-controller="Employee" asp-action="EmployeeIdle">
-                            <i class='bx bx-building'></i>
+                        <i class='bx bx-user-circle'></i>
                             Employee Idle
                         </a>
                     </li>
@@ -181,7 +181,7 @@
                     <li>
                         <a asp-controller="ResourcePlacement" asp-action="NotifikasiIndex">
                             <i class='bx bx-message-detail'></i>
-                            Notifikasi
+                            Notification
                         </a>
                     </li>
                 }
@@ -211,6 +211,22 @@
                 </div>
             </form>
             <input type="checkbox" id="theme-toggle" hidden>
+            @if (User.IsInRole("Admin"))
+            {
+                <span class="badge rounded-pill bg-primary fs-6">Admin</span>
+            }
+            @if (User.IsInRole("Operasional"))
+            {
+                <span class="badge rounded-pill bg-primary fs-6">Operational</span>
+            }
+            @if (User.IsInRole("Employee"))
+            {
+                <span class="badge rounded-pill bg-primary fs-6">Employee</span>
+            }
+            @if (User.IsInRole("Trainer"))
+            {
+                <span class="badge rounded-pill bg-primary fs-6">Trainer</span>
+            }
             <label for="theme-toggle" class="theme-toggle"></label>
             <a href="#" class="notif">
                 <i class='bx bx-bell'></i>
