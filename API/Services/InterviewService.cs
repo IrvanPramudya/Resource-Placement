@@ -93,7 +93,6 @@ namespace API.Services
             var count2 = 0;
             var count3 = 0;
             var count4 = 0;
-            var listinterview = new List<GetCountedInterviewStatus>();
             foreach (var item in interview)
             {
                 if(item.Status == InterviewLevel.EmployeeResponWaiting)

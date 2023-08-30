@@ -1,0 +1,54 @@
+﻿@{
+}
+    <section class="min-vh-100 mb-8">
+        <div class="page-header align-items-start min-vh-50 pt-5 pb-11 m-3 border-radius-lg" style="background-image: url('~/soft-ui/assets/img/curved-images/curved14.jpg');">
+            <span class="mask bg-gradient-dark opacity-6"></span>
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-5 text-center mx-auto">
+                        <h1 class="text-white mb-2 mt-5">UNAVAILABLE CLIENT</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row mt-lg-n10 mt-md-n11 mt-n10">
+                <div class="col-xl-4 col-lg-5 col-md-7 mx-auto" id="clientCard">
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+    
+ @section Scripts
+ {
+     <script>
+         $.ajax({
+             url:"https://localhost:7273/api/clients/GetUnavailableClient"
+         }).done((result)=>{
+             let clientCard = ""
+             $.each(result.data,(key,val)=>{
+                 clientCard += `<div class="card z-index-0">
+                                    <div class="card-header text-center pt-4">
+                                        <h5>${val.name}</h5>
+                                    </div>
+                                    <div class="row px-xl-5 px-sm-4 px-3">
+                                        <div class="col-6">Email</div>
+                                        <div class="col-6">${val.email}</div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-6">Position</div>
+                                            <div class="col-6">${val.positionName}</div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6">Capacity</div>
+                                            <div class="col-6">${val.capacity}</div>
+                                        </div>
+                                    </div>
+                                </div>`
+             })
+             $("#clientCard").html(clientCard)
+         })
+     </script>
+ }

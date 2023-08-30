@@ -11,15 +11,61 @@
         </div>
     </div>
 </div>
+<div class="add-account">
+    <div class="modal" id="modalAddInterview" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Interview Schedule</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3" id="inputGuid">
+                        </div>
+                        <div class="mb-3">
+                            <label for="interviewDate" class="form-label"> Interview Date</label>
+                            <input type="datetime-local" class="form-control" id="interviewDate" placeholder="Interview Date">
+                        </div>
+                        <div class="mb-3">
+                            <label for="clientGuid" class="form-label"> Client Guid</label>
+                            <select class="form-select selectClientinInterview" aria-label="Default select example" id="guidClient"></select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="text" class="form-label">Notes</label>
+                            <input type="text" class="form-control" id="text" placeholder="Text">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="addInterview()" class="btn btn-primary d-inline-block" data-bs-dismiss="modal">Add Interview</button>
+                    <button type="button" class="btn btn-secondary d-inline-block" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @section Scripts{
     <script>
+        $.ajax({
+            url: "https://localhost:7273/api/clients"
+        }).done(function (result) {
+            // Assuming the API response contains a property named "totalEmployees"
+            console.log(result)
+            let getClientinInterview = ""
+            $.each(result.data, (key, val) => {
+                console.log(result)
+                getClientinInterview += ` <option value="${val.guid}">${val.name}</option>`
+            })
+            $('.selectClientinInterview').html(getClientinInterview)
+        })
         $.ajax({
             url: "https://localhost:7273/api/employees/GetAllEmployeeinIdle"
         }).done((result)=>{
             let cardEmployee =""
             $.each(result.data,(key,val)=>{
                 cardEmployee += `<div class="col-xl-3 col-md-6 mb-xl-0 mb-4 ms-2">
-                            <div class="card card-blog card-plain">
+                                    <div class="card card-blog card-plain" data-bs-toggle="modal" data-bs-target="#modalAddInterview">
                                 <div class="position-relative">
                                     <a class="d-block shadow-xl border-radius-xl">
                                                <img src="https://w7.pngwing.com/pngs/81/570/png-transparent-profile-logo-computer-icons-user-user-blue-heroes-logo-thumbnail.png" class="img-fluid shadow border-radius-xl">
@@ -53,8 +99,41 @@
                                 </div>
                             </div>
                         </div>`
+                $("#inputGuid").html(`<input type="hidden" value="${val.employeeGuid}" id="guidEmployee" />`)
             })
             $("#employeeCard").html(cardEmployee)
         })
+        function addInterview() {
+            var interviewData = {
+                guid: $("#guidEmployee").val(),
+                interviewDate: $("#interviewDate").val(),
+                clientGuid: $("#guidClient").val(),
+                text: $("#text").val()
+            };
+
+            $.ajax({
+                url: "https://localhost:7273/api/interviews",
+                type: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: JSON.stringify(interviewData),
+            }).done(function (result) {
+                Swal.fire({
+                    title: 'Success',
+                    text: 'Data has been successfully inserted',
+                    icon: 'success'
+                }).then(function () {
+                    location.reload();
+                });
+            }).fail(function (error) {
+                Swal.fire({
+                    title: 'Oops',
+                    text: 'Failed to insert data. Please try again.',
+                    icon: 'error'
+                });
+                console.log(error)
+            });
+        }
     </script>
 }
