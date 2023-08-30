@@ -53,12 +53,7 @@
                     </a>
                 </li>
 
-                <li>
-                    <a asp-controller="ResourcePlacement" asp-action="DetailIndex">
-                    <i class='bx bxs-user-detail'></i>
-                        Detail
-                    </a>
-                </li>
+                
                 @if(@User.IsInRole("Admin"))
                 {
                 <li>
@@ -184,10 +179,13 @@
                             Notification
                         </a>
                     </li>
+                    <li>
+                        <a asp-controller="ResourcePlacement" asp-action="DetailIndex">
+                            <i class='bx bxs-user-detail'></i>
+                            Detail
+                        </a>
+                    </li>
                 }
-
-
-            
         </ul>
         <ul class="side-menu">
             <li>
