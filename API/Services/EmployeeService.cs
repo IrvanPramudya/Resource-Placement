@@ -47,7 +47,9 @@ namespace API.Services
         public IEnumerable<GetEmployeeinGrade>? GetEmployeeinGrade()
         {
             var merge = 
-                        from employee in _employeeRepository.GetAll() 
+                        from employee in _employeeRepository.GetAll()
+                        join account in _accountRepository.GetAll() on employee.Guid equals account.Guid
+                        join accountrole in _accountRoleRepository.GetEmployeewithEmployeeRole() on account.Guid equals accountrole.AccountGuid
                         join grade in _gradeRepository.GetAll() on employee.Guid equals grade.Guid into tbl
                         from grade in tbl.DefaultIfEmpty()
                         select new GetEmployeeinGrade
@@ -65,6 +67,8 @@ namespace API.Services
         public IEnumerable<GetReportEmployee>? GetAllReportedEmployee()
         {
             var mergetable = from employee in _employeeRepository.GetAll()
+                             join account in _accountRepository.GetAll() on employee.Guid equals account.Guid
+                             join accountrole in _accountRoleRepository.GetEmployeewithEmployeeRole() on account.Guid equals accountrole.AccountGuid
                              join grade in _gradeRepository.GetAll() on employee.Guid equals grade.Guid into gradegrp
                              from grade in gradegrp.DefaultIfEmpty()
                              join interview in _interviewRepository.GetAll() on employee.Guid equals interview.Guid into interviewgrp
