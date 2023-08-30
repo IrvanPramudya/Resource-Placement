@@ -31,23 +31,39 @@ namespace API.Services
             }
             return clientdata;
         }
-        public IEnumerable<GetAvailableClient> CountAvailableClient()
+        public IEnumerable<GetAvailableClient> GetAllClient()
         {
-            var data = _clientRepository.GetAll();
-            var listclient = new List<GetAvailableClient>();
+            var data = from client in _clientRepository.GetAll()
+                       join position in _positionRepository.GetAll() on client.Guid equals position.ClientGuid
+                       select new GetAvailableClient
+                       {
+                           Capacity = position.Capacity,
+                           Email = client.Email,
+                           IsAvailable= true,
+                           Name = client.Name,
+                           PositionName = position.Name
+                       };
+            /*var listclient = new List<GetAvailableClient>();
             foreach (var client in data) 
             {
                 var countclient = new GetAvailableClient()
                 {
+                    PositionName = client.PositionName,
+                    Capacity = client.Capacity,
                     Name = client.Name,
+                    Email = client.Email,
                     IsAvailable = client.IsAvailable,
                 };
                 if(countclient.IsAvailable == true)
                 {
                     listclient.Add(countclient);
                 }
+            }*/
+            if(!data.Any())
+            {
+                return null;
             }
-            return listclient;
+            return data;
         }
         public IEnumerable<ClientDto> GetAll()
         {

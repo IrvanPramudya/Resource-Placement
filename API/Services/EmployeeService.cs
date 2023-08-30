@@ -4,6 +4,7 @@ using API.DTOs.AccountRoles;
 using API.DTOs.Employees;
 using API.Models;
 using API.Repositories;
+using API.Utilities.Enums;
 using API.Utilities.Handlers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -41,7 +42,7 @@ namespace API.Services
         }
         public IEnumerable<GetReportEmployee>? GetAllEmployeeinIdle()
         {
-            return GetAllReportedEmployee().Where(employee => employee.Status == Utilities.Enums.StatusLevel.Idle);
+            return GetAllReportedEmployee().Where(employee => employee.Status == Utilities.Enums.StatusLevel.Idle && employee.InterviewDate==null);
         }
         public IEnumerable<GetEmployeeinGrade>? GetEmployeeinGrade()
         {
@@ -64,18 +65,23 @@ namespace API.Services
         public IEnumerable<GetReportEmployee>? GetAllReportedEmployee()
         {
             var mergetable = from employee in _employeeRepository.GetAll()
-                             join grade in _gradeRepository.GetAll() on employee.Guid equals grade.Guid
+                             join grade in _gradeRepository.GetAll() on employee.Guid equals grade.Guid into gradegrp
+                             from grade in gradegrp.DefaultIfEmpty()
+                             join interview in _interviewRepository.GetAll() on employee.Guid equals interview.Guid into interviewgrp
+                             from interview in interviewgrp.DefaultIfEmpty()
                              select new GetReportEmployee
                              {
+                                 EmployeeGuid = employee.Guid,
                                  NIK = employee.NIK,
                                  FullName = employee.FirstName + " " + employee.LastName,
                                  PhoneNumber = employee.PhoneNumber,
                                  Email = employee.Email,
                                  Gender = employee.Gender,
                                  Skill = employee.Skill,
-                                 Grade = grade.Name,
-                                 Salary = grade.Salary,
-                                 Status = employee.Status
+                                 Grade = grade!=null?grade.Name:null,
+                                 Salary = grade!=null?grade.Salary:0,
+                                 Status = employee.Status,
+                                 InterviewDate = interview!=null?interview.InterviewDate:null
                              };
             if (!mergetable.Any())
             {
@@ -165,26 +171,33 @@ namespace API.Services
 
         public GetCountedStatus? CountStatus()
         {
-            var data = _employeeRepository.GetAll();
-            var countidle = 0;
-            var countsite = 0;
+            var data = from employee in _employeeRepository.GetAll()
+                       join interview in _interviewRepository.GetAll() on employee.Guid equals interview.Guid into interviewGroup
+                       from interview in interviewGroup.DefaultIfEmpty()
+                       select new GetReportEmployee
+                       {
+                           Status = employee.Status,
+                           InterviewDate = interview!=null?interview.InterviewDate:null,
+                           ClientGuid = interview!=null?interview.ClientGuid:null,
+                       };
 
+            var countemployee = new GetCountedStatus();
             foreach (var item in data)
             {
-                if (item.Status == 0)
+                if (item.Status == StatusLevel.Idle)
                 {
-                    countidle++;
+                    if(item.InterviewDate == null)
+                    {
+                        countemployee.CountIdleUngraded++;
+                    }
+                    countemployee.CountIdle++;
                 }
-                else
+                else if(item.Status == StatusLevel.Site)
                 {
-                    countsite++;
+                    countemployee.CountSite++;
                 }
             }
-            return new GetCountedStatus
-            {
-                CountIdle = countidle,
-                CountSite = countsite
-            };
+            return countemployee;
         }
 
 

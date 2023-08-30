@@ -9,5 +9,6 @@ namespace Client.Controllers
     {
         public IActionResult EmployeeSite() => View();
         public IActionResult EmployeeIdle() => View();
+        public IActionResult GetTrainer() => View();
     }
 }

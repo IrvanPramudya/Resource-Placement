@@ -14,7 +14,46 @@ namespace API.Services
             _gradeRepository = gradeRepository;
             _employeeRepository = employeeRepository;
         }
-
+        public CountEmployee CountEmployeeinGrade()
+        {
+            var grade = GetAllEmployeewithGrade();
+            var newgrade = new CountEmployee();
+            foreach (var item in grade)
+            {
+                if (item.GradeName == null)
+                {
+                    newgrade.CountUngraded++;
+                }
+                else
+                {
+                    newgrade.CountGraded++;
+                }
+            }
+            return newgrade;
+        }
+        public IEnumerable<GradewithName>? GetAllEmployeewithGrade()
+        {
+            var merge = from employee in _employeeRepository.GetAll()
+                        join grade in _gradeRepository.GetAll() on employee.Guid equals grade.Guid into gradegroup
+                        from grade in gradegroup.DefaultIfEmpty()
+                        select new GradewithName
+                        {
+                            Guid = employee.Guid,
+                            EmployeeName = employee.FirstName + " " + employee.LastName,
+                            GradeName = grade != null ? grade.Name : null,
+                            Salary = grade != null ? grade.Salary : 0,
+                            Email = employee.Email,
+                            Gender = employee.Gender,
+                            NIK = employee.NIK,
+                            PhoneNumber = employee.PhoneNumber,
+                            Skill = employee.Skill
+                        };
+            if (!merge.Any())
+            {
+                return null;
+            }
+            return merge;
+        }
         public IEnumerable<GradewithName>? GetwithName()
         {
             var merge = from employee in _employeeRepository.GetAll()
