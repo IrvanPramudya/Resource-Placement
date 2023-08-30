@@ -17,13 +17,16 @@ namespace API.Services
         private readonly IInterviewRepository _interviewRepository;
         private readonly IGradeRepository _gradeRepository;
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IAccountRepository _accountRepository;
+        private readonly IAccountRoleRepository _accountroleRepository;
+        private readonly IRoleRepository _roleRepository;
         private readonly IClientRepository _clientRepository;
         private readonly IPositionRepository _positionRepository;
         private readonly IPlacementRepository _placementRepository;
         private readonly IEmailHandler _emailHandler;
         private readonly PlacementDbContext _dbContext;
 
-        public InterviewService(IInterviewRepository interviewRepository, IEmployeeRepository employeeRepository, IClientRepository clientRepository, IPositionRepository positionRepository, IEmailHandler emailHandler, IPlacementRepository placementRepository, IGradeRepository gradeRepository, PlacementDbContext dbContext)
+        public InterviewService(IInterviewRepository interviewRepository, IEmployeeRepository employeeRepository, IClientRepository clientRepository, IPositionRepository positionRepository, IEmailHandler emailHandler, IPlacementRepository placementRepository, IGradeRepository gradeRepository, PlacementDbContext dbContext, IAccountRepository accountRepository, IAccountRoleRepository accountroleRepository)
         {
             _interviewRepository = interviewRepository;
             _employeeRepository = employeeRepository;
@@ -33,10 +36,14 @@ namespace API.Services
             _placementRepository = placementRepository;
             _gradeRepository = gradeRepository;
             _dbContext = dbContext;
+            _accountRepository = accountRepository;
+            _accountroleRepository = accountroleRepository;
         }
         public IEnumerable<GetRemainingEmployee> GetAllInterviewEmployeePlacement()
         {
             var merge = from employee in _employeeRepository.GetAll()
+                        join account in _accountRepository.GetAll() on employee.Guid equals account.Guid
+                        join accountrole in _accountroleRepository.GetEmployeewithEmployeeRole() on account.Guid equals accountrole.AccountGuid
                         join placement in _placementRepository.GetAll() on employee.Guid equals placement.Guid into placementgroup
                         from placement in placementgroup.DefaultIfEmpty()
                         join interview in _interviewRepository.GetAll() on employee.Guid equals interview.Guid into interviewgroup
@@ -64,6 +71,8 @@ namespace API.Services
         public IEnumerable<GetRemainingEmployee> GetAllEmployee()
         {
             var merge = from employee in _employeeRepository.GetAll()
+                        join account in _accountRepository.GetAll() on employee.Guid equals account.Guid
+                        join accountrole in _accountroleRepository.GetEmployeewithEmployeeRole() on account.Guid equals accountrole.AccountGuid
                         join placement in _placementRepository.GetAll() on employee.Guid equals placement.Guid into placementgroup
                         from placement in placementgroup.DefaultIfEmpty()
                         join interview in _interviewRepository.GetAll() on employee.Guid equals interview.Guid into interviewgroup
@@ -141,13 +150,23 @@ namespace API.Services
             {
                 return -1; // Interview is null or not found;
             }
-
             Interview toUpdate = interviewDto;
+            if (interview.Status!= InterviewLevel.AcceptedbyClient) 
+            { 
+            toUpdate.IsAccepted = false;
             toUpdate.CreatedDate = interview.CreatedDate;
+            }
+            else
+            {
+                toUpdate.IsAccepted = true;
+                toUpdate.CreatedDate = interview.CreatedDate;
+            }
             var result = _interviewRepository.Update(toUpdate);
-
             return result ? 1 // Interview is updated;
-                : 0; // Interview failed to update;
+            : 0; // Interview failed to update;
+
+
+
         }
         public IEnumerable<InformatifInterview> GetUnresultInterviews()
         {
