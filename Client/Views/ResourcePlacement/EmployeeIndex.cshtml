@@ -167,7 +167,7 @@
                     {
                         data: "status",
                         render: function (data, type, row) {
-                            return data === 1 ? `<span class="badge rounded-pill bg-success fs-6">Site</span>` : `<span class="badge rounded-pill bg-warning fs-6" > Idle </span>`;
+                            return data === 1 ? `<span class="badge rounded-pill bg-success fs-6">Site</span>` : `<span class="badge rounded-pill bg-primary fs-6" > Idle </span>`;
                         }
                     },
                     { data: "skill" },
@@ -181,10 +181,40 @@
                 ],
                 "dom":
                     "<'row'<'col-md-8'B><'col-md-4'f>>" +
-                    "<'row'<'col-sm-12'tr>>" + // Tabel
+                    "<'row'<'col-md-12'tr>>" + // Tabel
                     "<'row'<'col-md-5'i><'col-md-3 mt-2 mx-auto'l><'col-md-4 mt-0'p>>",
                 "buttons": [
-                    'copy', 'csv', 'excel', 'pdf', 'print', 'colvis'
+                    {
+                        extend: 'copy',
+                        text: '<i class="bx bxs-copy"></i>',
+                        className: 'btn btn-custom',
+                        title:'Copy'
+                    },
+                    {
+                        extend: 'csv',
+                        text: '<i class="bx bxs-file-export"></i>',
+                        className: 'btn btn-custom'
+                    },
+                    {
+                        extend: 'excel',
+                        text: '<i class="bx bx-file-blank"></i>',
+                        className: 'btn btn-custom'
+                    },
+                    {
+                        extend: 'pdf',
+                        text: '<i class="bx bxs-file-pdf"></i>',
+                        className: 'btn btn-custom'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="bx bx-printer"></i>',
+                        className: 'btn btn-custom'
+                    },
+                    {
+                        extend: 'colvis',
+                        text: '<i class="bx bx-show-alt"></i>', // Ganti teks dengan ikon Boxicons
+                        className: 'btn btn-custom-column-vis'
+                    }
                 ],
                 "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                 "pageLength": 25

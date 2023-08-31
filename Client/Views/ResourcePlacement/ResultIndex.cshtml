@@ -58,8 +58,8 @@
                     {
                         data: null,
                         render: function (data, type, row) {
-                            return `<button onclick="InterviewAcceptedbyClient('${row.guid}')" class="btn btn-outline-info" data-bs-placement="top" title="Accepted Employee"><box-icon name='check' color="green" size="sm"></box-icon></button>` +
-                                   `<button onclick="InterviewRejectedbyClient('${row.guid}')" class="btn btn-outline-danger ms-2"  data-bs-placement="top" title="Rejected Employee"><box-icon name='x' color="red" size="sm"></box-icon></button>
+                            return `<button onclick="InterviewAcceptedbyClient('${row.guid}')" class="btn btn-info" data-bs-placement="top" title="Accepted Employee"><box-icon name='check' color="white" size="sm"></box-icon></button>` +
+                                   `<button onclick="InterviewRejectedbyClient('${row.guid}')" class="btn btn-danger ms-2"  data-bs-placement="top" title="Rejected Employee"><box-icon name='x' color="white" size="sm"></box-icon></button>
                                    <input type="hidden" value="${row.clientGuid}" id="client"/>
                                    <input type="hidden" value="${row.interviewDate}" id="interviewDate"/>
                                    <input type="hidden" value="${row.text}" id="note"/>`;

@@ -150,8 +150,28 @@
                             }
                         },
                         { data: "employeeName" },
-                        { data: "grade" },
-                        { data: "salary" },
+                        {
+                            data: "grade",
+                            render: function (data, type, row) {
+                                if (data == "A") {
+                                    return `<span class="badge rounded-pill bg-success fs-6"> A </span>`
+                                }
+                                if (data == "B") {
+                                    return `<span class="badge rounded-pill bg-primary fs-6" > B </span>`
+                                }
+                            }
+                        },
+                        {
+                            data: "salary",
+                            render: function (data, type, row) {
+                                if (data == 5500000) {
+                                    return `<span class="badge rounded-pill bg-success fs-6"> 5.500.000 </span>`
+                                }
+                                if (data == 5000000) {
+                                    return `<span class="badge rounded-pill bg-primary fs-6" > 5.000.000 </span>`
+                                }
+                            }
+                        },
                         {
                             data: null,
                             render: function (data, type, row) {
@@ -165,7 +185,36 @@
                     "<'row'<'col-sm-12'tr>>" + // Tabel
                     "<'row'<'col-md-5'i><'col-md-3 mt-2 mx-auto'l><'col-md-4'p>>",
                 "buttons": [
-                    'copy', 'csv', 'excel', 'pdf', 'print', 'colvis'
+                    {
+                        extend: 'copy',
+                        text: '<i class="bx bxs-copy"></i>',
+                        className: 'btn btn-custom'
+                    },
+                    {
+                        extend: 'csv',
+                        text: '<i class="bx bxs-file-export"></i>',
+                        className: 'btn btn-custom'
+                    },
+                    {
+                        extend: 'excel',
+                        text: '<i class="bx bx-file-blank"></i>',
+                        className: 'btn btn-custom'
+                    },
+                    {
+                        extend: 'pdf',
+                        text: '<i class="bx bxs-file-pdf"></i>',
+                        className: 'btn btn-custom'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="bx bx-printer"></i>',
+                        className: 'btn btn-custom'
+                    },
+                    {
+                        extend: 'colvis',
+                        text: '<i class="bx bx-show-alt"></i>', // Ganti teks dengan ikon Boxicons
+                        className: 'btn btn-custom-column-vis'
+                    }
                 ],
                 "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                 "pageLength": 25
