@@ -52,7 +52,7 @@ namespace API.Services
                         from placement in PlcGrp.DefaultIfEmpty()
                         join interview in _interviewRepository.GetAll() on employee.Guid equals interview.Guid into InterGrp
                         from interview in InterGrp.DefaultIfEmpty()
-                        join client in _clientRepository.GetAll() on (interview != null?interview.ClientGuid :placement.ClientGuid) equals client.Guid into CliGrp
+                        join client in _clientRepository.GetAll() on (interview != null ? interview.ClientGuid : placement.ClientGuid) equals client.Guid into CliGrp
                         from client in CliGrp.DefaultIfEmpty()
                         join position in _positionRepository.GetAll() on client.Guid equals position.ClientGuid into PosGrp
                         from position in PosGrp.DefaultIfEmpty()
@@ -76,7 +76,7 @@ namespace API.Services
                             Salary = grade != null ? grade.Salary : null,
                             PositionPlacementName = placement != null ? position.Name : null,
                             ClientPlacementName = placement != null ? client.Name : null,
-                            Contract = placement != null? (placement.EndDate-placement.StartDate).TotalDays: null
+                            Contract = placement != null ? (placement.EndDate - placement.StartDate).Days : 0
                         };
             if(!merge.Any())
             {
@@ -150,6 +150,7 @@ namespace API.Services
             }
 
             var getRoles = _accountRoleRepository.GetRoleNamesByAccountGuid(getEmployee.Guid);
+            var getInterview = _interviewRepository.GetByGuid(getEmployee.Guid);
 
             var claims = new List<Claim>
             {
