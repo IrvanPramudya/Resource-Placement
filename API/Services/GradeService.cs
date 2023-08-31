@@ -1,12 +1,15 @@
 ﻿using API.Contracts;
 using API.DTOs.Grades;
 using API.Models;
+using API.Repositories;
 
 namespace API.Services
 {
     public class GradeService
     {
         private readonly IGradeRepository _gradeRepository;
+        private readonly IAccountRepository _accountRepository;
+        private readonly IAccountRoleRepository _accountRoleRepository;
         private readonly IEmployeeRepository _employeeRepository;
 
         public GradeService(IGradeRepository gradeRepository, IEmployeeRepository employeeRepository)
@@ -33,7 +36,10 @@ namespace API.Services
         }
         public IEnumerable<GradewithName>? GetAllEmployeewithGrade()
         {
+
             var merge = from employee in _employeeRepository.GetAll()
+                        join account in _accountRepository.GetAll() on employee.Guid equals account.Guid
+                        join accountrole in _accountRoleRepository.GetEmployeewithEmployeeRole() on account.Guid equals accountrole.AccountGuid
                         join grade in _gradeRepository.GetAll() on employee.Guid equals grade.Guid into gradegroup
                         from grade in gradegroup.DefaultIfEmpty()
                         select new GradewithName
