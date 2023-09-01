@@ -243,6 +243,7 @@ namespace API.Migrations
                     b.Property<DateTime>("ModifiedDate")
                         .HasColumnType("datetime2")
                         .HasColumnName("modified_date");
+
                     b.Property<Guid>("PositionGuid")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("position_guid");
@@ -250,6 +251,7 @@ namespace API.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int")
                         .HasColumnName("status");
+
                     b.Property<string>("Text")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("text");
@@ -361,49 +363,29 @@ namespace API.Migrations
                         new
                         {
                             Guid = new Guid("ae259a90-e2e8-442f-ce18-08db91a71ab9"),
-<<<<<<< Updated upstream
-                            CreatedDate = new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4537),
-                            ModifiedDate = new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4547),
-=======
-                            CreatedDate = new DateTime(2023, 9, 1, 9, 30, 59, 622, DateTimeKind.Local).AddTicks(2997),
-                            ModifiedDate = new DateTime(2023, 9, 1, 9, 30, 59, 622, DateTimeKind.Local).AddTicks(3007),
->>>>>>> Stashed changes
+                            CreatedDate = new DateTime(2023, 9, 1, 13, 30, 22, 853, DateTimeKind.Local).AddTicks(148),
+                            ModifiedDate = new DateTime(2023, 9, 1, 13, 30, 22, 853, DateTimeKind.Local).AddTicks(160),
                             Name = "Employee"
                         },
                         new
                         {
                             Guid = new Guid("4ec90656-e89c-4871-d9e5-08db8a7d0f37"),
-<<<<<<< Updated upstream
-                            CreatedDate = new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4550),
-                            ModifiedDate = new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4551),
-=======
-                            CreatedDate = new DateTime(2023, 9, 1, 9, 30, 59, 622, DateTimeKind.Local).AddTicks(3012),
-                            ModifiedDate = new DateTime(2023, 9, 1, 9, 30, 59, 622, DateTimeKind.Local).AddTicks(3012),
->>>>>>> Stashed changes
+                            CreatedDate = new DateTime(2023, 9, 1, 13, 30, 22, 853, DateTimeKind.Local).AddTicks(165),
+                            ModifiedDate = new DateTime(2023, 9, 1, 13, 30, 22, 853, DateTimeKind.Local).AddTicks(165),
                             Name = "Trainer"
                         },
                         new
                         {
                             Guid = new Guid("c0689b0a-5c87-46f1-ce19-08db91a71ab9"),
-<<<<<<< Updated upstream
-                            CreatedDate = new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4555),
-                            ModifiedDate = new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4555),
-=======
-                            CreatedDate = new DateTime(2023, 9, 1, 9, 30, 59, 622, DateTimeKind.Local).AddTicks(3015),
-                            ModifiedDate = new DateTime(2023, 9, 1, 9, 30, 59, 622, DateTimeKind.Local).AddTicks(3016),
->>>>>>> Stashed changes
+                            CreatedDate = new DateTime(2023, 9, 1, 13, 30, 22, 853, DateTimeKind.Local).AddTicks(168),
+                            ModifiedDate = new DateTime(2023, 9, 1, 13, 30, 22, 853, DateTimeKind.Local).AddTicks(168),
                             Name = "Operasional"
                         },
                         new
                         {
                             Guid = new Guid("5fb9adc0-7d08-45d4-cd66-08db9c7a678f"),
-<<<<<<< Updated upstream
-                            CreatedDate = new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4558),
-                            ModifiedDate = new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4559),
-=======
-                            CreatedDate = new DateTime(2023, 9, 1, 9, 30, 59, 622, DateTimeKind.Local).AddTicks(3018),
-                            ModifiedDate = new DateTime(2023, 9, 1, 9, 30, 59, 622, DateTimeKind.Local).AddTicks(3019),
->>>>>>> Stashed changes
+                            CreatedDate = new DateTime(2023, 9, 1, 13, 30, 22, 853, DateTimeKind.Local).AddTicks(171),
+                            ModifiedDate = new DateTime(2023, 9, 1, 13, 30, 22, 853, DateTimeKind.Local).AddTicks(172),
                             Name = "Admin"
                         });
                 });

@@ -233,58 +233,21 @@ namespace API.Services
 
         public InterviewDto? Create(NewInterviewDto newInterviewDto)
         {
+                var grade = _gradeRepository.GetByGuid(newInterviewDto.Guid);
+                if (grade == null)
+                {
+                    return null;
+                }
+                _gradeRepository.Clear();
+                var placement = _placementRepository.GetByGuid(newInterviewDto.Guid);
+                if (placement != null)
+                {
+                    return null;
+                }
+                _placementRepository.Clear();
             using var transaction = _dbContext.Database.BeginTransaction();
             try
             {
-                var grade = _gradeRepository.GetByGuid(newInterviewDto.Guid);
-                if (grade == null)
-                {
-                    return null;
-                }
-                _gradeRepository.Clear();
-                var placement = _placementRepository.GetByGuid(newInterviewDto.Guid);
-                if (placement != null)
-                {
-                    return null;
-                }
-                _placementRepository.Clear();
-                Interview interviewtoCreate = newInterviewDto;
-                interviewtoCreate.IsAccepted = false;
-                interviewtoCreate.Status = Utilities.Enums.InterviewLevel.EmployeeResponWaiting;
-                var interview = _interviewRepository.Create(interviewtoCreate);
-                if (interview is null)
-                {
-                    return null; // Interview is null or not found;
-                }
-                _interviewRepository.Clear();
-                var position = _positionRepository.GetByClientGuid(newInterviewDto.ClientGuid); //Revisi Menggunakan GetByClient
-                _positionRepository.Clear();
-                var positionUpdate = _positionRepository.Update(new Position
-                {
-                    Guid = position.Guid,
-                    ClientGuid = newInterviewDto.ClientGuid,
-                    Name = position.Name,
-                    Capacity = position.Capacity - 1,
-                    CreatedDate = position.CreatedDate,
-                    ModifiedDate = DateTime.Now
-            var interview = _interviewRepository.Create(newInterviewDto);
-            if (interview is null)
-            {
-<<<<<<< Updated upstream
-                return null; // Interview is null or not found;
-=======
-                var grade = _gradeRepository.GetByGuid(newInterviewDto.Guid);
-                if (grade == null)
-                {
-                    return null;
-                }
-                _gradeRepository.Clear();
-                var placement = _placementRepository.GetByGuid(newInterviewDto.Guid);
-                if (placement != null)
-                {
-                    return null;
-                }
-                _placementRepository.Clear();
                 Interview interviewtoCreate = newInterviewDto;
                 interviewtoCreate.Comment = null;
                 interviewtoCreate.IsAccepted = false;
@@ -296,7 +259,7 @@ namespace API.Services
                 }
                 _interviewRepository.Clear();
                 var getposition = _positionRepository.GetByClientGuid(newInterviewDto.ClientGuid);
-                var position = getposition.Where(interview=>interview.Guid.Equals(newInterviewDto.PositionGuid)).FirstOrDefault(); //Revisi Menggunakan GetByClient
+                var position = getposition.Where(interview => interview.Guid.Equals(newInterviewDto.PositionGuid)).FirstOrDefault(); //Revisi Menggunakan GetByClient
                 /*var selectedPosition = _positionRepository.GetByGuid*/
                 _positionRepository.Clear();
                 var positionUpdate = _positionRepository.Update(new Position
@@ -336,47 +299,7 @@ namespace API.Services
                             $"<td>{formattedDate}</td>    " +
                             $"<td>{interview.Text}</td>" +
                         $"</tr>" +
-                    $"</table>"+
-                    $"<br /> Thank your for the attention hope we will get better at our collaboration");
-                transaction.Commit();
-                return (InterviewDto)interview; // Interview is found;
-            }
-            catch
-            {
-                transaction.Rollback();
-                return null;
->>>>>>> Stashed changes
-            }
-
-                });
-                _positionRepository.Clear();
-                var employee = _employeeRepository.GetByGuid(interview.Guid);
-                var client = _clientRepository.GetByGuid(interview.ClientGuid);
-                var formattedDate = interview.InterviewDate.ToString("dddd, dd/MM/yy HH:mm");
-                var gender = employee.Gender == 0 ? "Female" : "Male";
-
-                _emailHandler.SendEmail(employee.Email, $"Interview Schedule with {client.Name}",
-                    $"Congratulations you've been given chance to get interview with {client.Name} on {formattedDate} " +
-                    $"and this is the remarks that our company give : {interview.Text}.<br /> Please be Prepared and Keep up the Spirit");
-                _emailHandler.SendEmail(client.Email, $"Interview Schedule with {employee.FirstName} {employee.LastName}",
-                    $"For the honours of our Company we want you to check Interview Schedule that arranged earlier this is " +
-                    $"few data of the schedule<br /> " +
-                    $"<table style='border:1px'>" +
-                        $"<tr>" +
-                            $"<th>Employee Name</th>    " +
-                            $"<th>Gender</th>    " +
-                            $"<th>Skill</th>    " +
-                            $"<th>Interview Date</th>    " +
-                            $"<th>Note</th>" +
-                        $"</tr>" +
-                        $"<tr>    " +
-                            $"<td>{employee.FirstName} {employee.LastName}</td>    " +
-                            $"<td>{gender}</td>    " +
-                            $"<td>{employee.Skill}</td>    " +
-                            $"<td>{formattedDate}</td>    " +
-                            $"<td>{interview.Text}</td>" +
-                        $"</tr>" +
-                    $"</table>"+
+                    $"</table>" +
                     $"<br /> Thank your for the attention hope we will get better at our collaboration");
                 transaction.Commit();
                 return (InterviewDto)interview; // Interview is found;
@@ -386,6 +309,7 @@ namespace API.Services
                 transaction.Rollback();
                 return null;
             }
+
         }
 
         public int Update(NewInterviewDto interviewDto)

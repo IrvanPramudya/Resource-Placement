@@ -79,7 +79,6 @@ namespace API.Services
                 return null;
             }
             return merge;
->>>>>>> Stashed changes
         }
 
         public IEnumerable<GetEmployeeName> GetEmployeeNames()

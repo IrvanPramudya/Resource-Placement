@@ -15,60 +15,12 @@ namespace API.Services
         {
             _positionRepository = positionRepository;
             _clientRepository = clientRepository;
-<<<<<<< Updated upstream
-=======
             _clientRepository = clientRepository;
         }
         public IEnumerable<GetClientName> GetPositionwithClientGuid(Guid guid) 
         { 
              return GetClientName().Where(Position=>Position.ClientGuid == guid);        
         }
-        public IEnumerable<GetClientName> GetClientName()
-        {
-            var merge = from client in _clientRepository.GetAll()
-                        join position in _positionRepository.GetAll() on client.Guid equals position.ClientGuid
-                        select new GetClientName
-                        {
-                            Guid = position.Guid,
-                            ClientGuid = position.ClientGuid,
-                            ClientName = client.Name,
-                            PositionName = position.Name,
-                            Capacity = position.Capacity,
-
-                        };
-            if(!merge.Any() )
-            {
-                return null;
-            }
-            foreach( var client in merge )
-            {
-                if( client.Capacity ==  0 )
-                {
-                    var getclient = _clientRepository.GetByGuid( client.ClientGuid );
-                    _clientRepository.Update(new ClientDto
-                    {
-                        Guid= client.ClientGuid,
-                        Email = getclient.Email,
-                        IsAvailable = false,
-                        Name = getclient.Name
-                    });
-                }
-                else if( client.Capacity > 0 )
-                {
-                    var getclient = _clientRepository.GetByGuid(client.ClientGuid);
-                    _clientRepository.Update(new ClientDto
-                    {
-                        Guid = client.ClientGuid,
-                        Email = getclient.Email,
-                        IsAvailable = true,
-                        Name = getclient.Name
-                    }) ;
-                }
-            }
-            return merge;
->>>>>>> Stashed changes
-        }
-
         public IEnumerable<GetClientName> GetClientName()
         {
             var merge = from client in _clientRepository.GetAll()

@@ -14,14 +14,7 @@ namespace API.Services
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IPlacementRepository _placementRepository;
         private readonly IInterviewRepository _interviewRepository;
-        private readonly PlacementDbContext _dbContext;
-
-        public PlacementService(IPlacementRepository placementRepository, IClientRepository clientRepository, IEmployeeRepository employeeRepository, IInterviewRepository interviewRepository, PlacementDbContext dbContext)
-        {
-            _placementRepository = placementRepository;
-=======
         private readonly IPositionRepository _positionRepository;
-        private readonly IInterviewRepository _interviewRepository;
         private readonly PlacementDbContext _dbContext;
 
         public PlacementService(IPlacementRepository placementRepository, IClientRepository clientRepository, IEmployeeRepository employeeRepository, IInterviewRepository interviewRepository, PlacementDbContext dbContext, IPositionRepository positionRepository)
@@ -33,7 +26,7 @@ namespace API.Services
             _dbContext = dbContext;
             _positionRepository = positionRepository;
         }
-        public IEnumerable<GetEmployeeClientName> GetEmployeeClientName()
+        public IEnumerable<GetEmployeeClientName>? GetEmployeeClientName()
         {
             var merge = from e in _employeeRepository.GetAll()
                         join p in _placementRepository.GetAll() on e.Guid equals p.Guid
@@ -51,29 +44,6 @@ namespace API.Services
                             EmployeeName = e.FirstName + " " +e.LastName,
                             ClientName = c.Name,
                             PositionName = pos.Name,
-                            
-                        };
-            if (!merge.Any())
-            {
-                return null;
-            }
-            return merge;
->>>>>>> Stashed changes
-        }
-        public IEnumerable<GetEmployeeClientName> GetEmployeeClientName()
-        {
-            var merge = from e in _employeeRepository.GetAll()
-                        join p in _placementRepository.GetAll() on e.Guid equals p.Guid
-                        join c in _clientRepository.GetAll() on p.ClientGuid equals c.Guid
-                        select new GetEmployeeClientName
-                        {
-                            Guid = p.Guid,
-                            EmployeeGuid = e.Guid,
-                            ClientGuid = c.Guid,
-                            StartDate = p.StartDate,
-                            EndDate = p.EndDate,
-                            EmployeeName = e.FirstName + " " +e.LastName,
-                            ClientName = c.Name
                             
                         };
             if (!merge.Any())
@@ -135,18 +105,15 @@ namespace API.Services
 
         public PlacementDto? Create(NewPlacementDto newPlacementDto)
         {
-            var placement = _placementRepository.Create(newPlacementDto);
-            if (placement is null)
+            var interview = _interviewRepository.GetByGuid(newPlacementDto.Guid);
+            if (interview is null)
             {
                 return null; // Placement is null or not found;
             }
-<<<<<<< Updated upstream
-
-            return (PlacementDto)placement; // Placement is found;
-=======
             using var transaction = _dbContext.Database.BeginTransaction();
             try
             {
+                
                 Placement createplacement = newPlacementDto;
                 createplacement.ClientGuid = interview.ClientGuid;
                 createplacement.PositionGuid = interview.PositionGuid;
@@ -184,7 +151,6 @@ namespace API.Services
                 return null;
             }
             
->>>>>>> Stashed changes
         }
 
         public int Update(PlacementDto placementDto)
