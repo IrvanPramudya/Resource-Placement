@@ -12,10 +12,12 @@ namespace API.Services
         private readonly IAccountRoleRepository _accountRoleRepository;
         private readonly IEmployeeRepository _employeeRepository;
 
-        public GradeService(IGradeRepository gradeRepository, IEmployeeRepository employeeRepository)
+        public GradeService(IGradeRepository gradeRepository, IEmployeeRepository employeeRepository, IAccountRepository accountRepository, IAccountRoleRepository accountRoleRepository)
         {
             _gradeRepository = gradeRepository;
             _employeeRepository = employeeRepository;
+            _accountRepository = accountRepository;
+            _accountRoleRepository = accountRoleRepository;
         }
         public CountEmployee CountEmployeeinGrade()
         {
@@ -38,10 +40,11 @@ namespace API.Services
         {
 
             var merge = from employee in _employeeRepository.GetAll()
-                        join account in _accountRepository.GetAll() on employee.Guid equals account.Guid
-                        join accountrole in _accountRoleRepository.GetEmployeewithEmployeeRole() on account.Guid equals accountrole.AccountGuid
                         join grade in _gradeRepository.GetAll() on employee.Guid equals grade.Guid into gradegroup
                         from grade in gradegroup.DefaultIfEmpty()
+                        join account in _accountRepository.GetAll() on employee.Guid equals account.Guid
+                        join accountrole in _accountRoleRepository.GetEmployeewithEmployeeRole() on account.Guid equals accountrole.AccountGuid
+                        
                         select new GradewithName
                         {
                             Guid = employee.Guid,
@@ -76,6 +79,7 @@ namespace API.Services
                 return null;
             }
             return merge;
+>>>>>>> Stashed changes
         }
 
         public IEnumerable<GetEmployeeName> GetEmployeeNames()

@@ -20,8 +20,12 @@
                                                                     <div class="card-body position-relative z-index-1 d-flex flex-column h-100 p-3">
                                                                                 <h5 class="text-white font-weight-bolder mb-4 pt-2">${val.fullName}</h5>
                                                                                                 <div class="row text-light">
-                                                                                                    <div class="col-4">Client Name</div>
+                                                                                                    <div class="col-4">Client</div>
                                                                                                     <div class="col-8">${val.clientName}</div>
+                                                                                                </div>
+                                                                                                <div class="row text-light">
+                                                                                                    <div class="col-4">Position</div>
+                                                                                                    <div class="col-8">${val.positionName}</div>
                                                                                                 </div>
                                                                                                 <div class="row text-light">
                                                                                             <div class="col-4">Interview Date</div>
@@ -32,8 +36,8 @@
                                                                                                <input type="hidden" value="${val.text}" id="note"/>
                                                                                                 <div class="row mt-2">
                                                                                             <div class="col">
-                                                                                                    <button onclick="InterviewAcceptedbyClient('${val.guid}')" class="btn btn-info" data-bs-placement="top" title="Accepted Employee"><box-icon name='check' color="white" size="md"></box-icon></button>
-                                                                                                            <button onclick="InterviewRejectedbyClient('${val.guid}')" class="btn btn-danger ms-2"  data-bs-placement="top" title="Rejected Employee"><box-icon name='x' color="white" size="md"></box-icon></button>
+                                                                                                    <button onclick="InterviewAcceptedbyClient('${val.guid}')" class="btn btn-outline-info" data-bs-placement="top" title="Accepted Employee"><box-icon name='check' color="white" size="sm"></box-icon></button>
+                                                                                                    <button onclick="InterviewRejectedbyClient('${val.guid}')" class="btn btn-outline-danger ms-2"  data-bs-placement="top" title="Rejected Employee"><box-icon name='x' color="red" size="sm"></box-icon></button>
                                                                                              </div>
                                                                                         </div>
                                                                     </div>
@@ -47,9 +51,7 @@
         function InterviewAcceptedbyClient(guidEmployee) {
             let data = {
                 guid: guidEmployee,
-                interviewDate: $("#interviewDate").val(),
-                clientGuid: $("#client").val(),
-                text: $("#note").val(),
+                comment:null,
                 isAccepted: true,
                 status: 3,
             }
@@ -78,9 +80,7 @@
         function InterviewRejectedbyClient(guidEmployee) {
             let data = {
                 guid: guidEmployee,
-                interviewDate: $("#interviewDate").val(),
-                clientGuid: $("#client").val(),
-                text: $("#note").val(),
+                comment:null,
                 isAccepted: false,
                 status: 4,
             }

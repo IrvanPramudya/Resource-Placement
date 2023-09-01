@@ -8,7 +8,9 @@ namespace API.DTOs.Interviews
         public Guid Guid { get; set; }
         public DateTime InterviewDate { get; set; }
         public Guid ClientGuid { get; set; }
+        public Guid PositionGuid { get; set; }
         public string? Text { get; set; }
+        public string? Comment { get; set; }
         public bool? IsAccepted { get; set; }
         public InterviewLevel Status { get; set; }
 
@@ -19,6 +21,7 @@ namespace API.DTOs.Interviews
                 Guid = interview.Guid,
                 InterviewDate = interview.InterviewDate,
                 ClientGuid = interview.ClientGuid,
+                PositionGuid = interview.PositionGuid,
                 Text = interview.Text,
                 IsAccepted = interview.IsAccepted,
                 Status = interview.Status,
@@ -32,6 +35,7 @@ namespace API.DTOs.Interviews
                 Guid = interview.Guid,
                 InterviewDate = interview.InterviewDate,
                 ClientGuid = interview.ClientGuid,
+                PositionGuid = interview.PositionGuid,
                 IsAccepted = interview.IsAccepted,
                 Status = interview.Status,
                 Text = interview.Text,

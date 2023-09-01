@@ -7,6 +7,7 @@ namespace API.DTOs.Interviews
         public Guid Guid { get; set; }
         public DateTime InterviewDate { get; set; }
         public Guid ClientGuid { get; set; }
+        public Guid PositionGuid { get; set; }
         public string? Text { get; set; }
 
         public static implicit operator Interview(NewInterviewDto interview)
@@ -16,6 +17,7 @@ namespace API.DTOs.Interviews
                 Guid = interview.Guid,
                 InterviewDate = interview.InterviewDate,
                 ClientGuid = interview.ClientGuid,
+                PositionGuid = interview.PositionGuid,
                 Text = interview.Text,
                 CreatedDate = DateTime.Now,
                 ModifiedDate = DateTime.Now,
@@ -28,6 +30,7 @@ namespace API.DTOs.Interviews
                 Guid = interview.Guid,
                 InterviewDate = interview.InterviewDate,
                 ClientGuid = interview.ClientGuid,
+                PositionGuid = interview.PositionGuid,
                 Text = interview.Text,
             };
         }

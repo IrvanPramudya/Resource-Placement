@@ -38,6 +38,7 @@ namespace API.Services
             _accountRepository = accountRepository;
             _accountroleRepository = accountroleRepository;
         }
+
         public IEnumerable<GetRemainingEmployee> GetAllInterviewEmployeePlacement()
         {
             var merge = from employee in _employeeRepository.GetAll()
@@ -45,21 +46,24 @@ namespace API.Services
                         join accountrole in _accountroleRepository.GetEmployeewithEmployeeRole() on account.Guid equals accountrole.AccountGuid
                         join placement in _placementRepository.GetAll() on employee.Guid equals placement.Guid into placementgroup
                         from placement in placementgroup.DefaultIfEmpty()
-                        join interview in _interviewRepository.GetAll() on employee.Guid equals interview.Guid into interviewgroup
-                        from interview in interviewgroup.DefaultIfEmpty()
+                        join interview in _interviewRepository.GetAll() on employee.Guid equals interview.Guid
                         join client in _clientRepository.GetAll() on (interview != null ? interview.ClientGuid : placement.ClientGuid) equals client.Guid into CliGrp
                         from client in CliGrp.DefaultIfEmpty()
+                        join position in _positionRepository.GetAll() on client.Guid equals position.ClientGuid
+                        where interview.PositionGuid == position.Guid 
                         select new GetRemainingEmployee
                         {
                             Guid = employee.Guid,
                             Status = interview != null? interview.Status : null,
                             ClientName = interview != null? client.Name :null,
                             ClientGuid = interview != null? interview.ClientGuid:null,
+                            PositionGuid = interview != null? interview.PositionGuid:null,
                             InterviewDate = interview !=null? interview.InterviewDate:null,
                             FullName = employee.FirstName + " " + employee.LastName,
                             PlacementGuid = placement != null? placement.Guid : null,
                             StartDate = placement != null? placement.StartDate:null,
-                            
+                            PositionName = position.Name,
+
                         };
             if(!merge.Any())
             {
@@ -142,7 +146,7 @@ namespace API.Services
         {
              return GetAllEmployee().Where(inter=> inter.PlacementGuid == null && inter.Status == Utilities.Enums.InterviewLevel.AcceptedbyClient);
         }
-        public int UpdateFullInterview(InterviewDto interviewDto)
+        public int UpdateFullInterview(UpdateInterviewDto interviewDto)
         {
             var interview = _interviewRepository.GetByGuid(interviewDto.Guid);
             if (interview is null)
@@ -160,6 +164,10 @@ namespace API.Services
                 /*toUpdate.IsAccepted = true;*/
             /*}*/
             toUpdate.CreatedDate = interview.CreatedDate;
+            toUpdate.InterviewDate = interview.InterviewDate;
+            toUpdate.PositionGuid = interview.PositionGuid;
+            toUpdate.ClientGuid = interview.ClientGuid;
+            toUpdate.Text = interview.Text;
             var result = _interviewRepository.Update(toUpdate);
             return result ? 1 // Interview is updated;
             : 0; // Interview failed to update;
@@ -177,16 +185,21 @@ namespace API.Services
             var merge = from employee in _employeeRepository.GetAll()
                         join interview in _interviewRepository.GetAll() on employee.Guid equals interview.Guid
                         join client in _clientRepository.GetAll() on interview.ClientGuid equals client.Guid
+                        join position in _positionRepository.GetAll() on client.Guid equals position.ClientGuid
+                        where interview.PositionGuid == position.Guid
                         select new InformatifInterview
                         {
                             ClientGuid = interview.ClientGuid,
+                            PositionGuid = interview.PositionGuid,
                             Guid = employee.Guid,
+                            PositionName = position.Name,
                             ClientName = client.Name,
                             FullName = employee.FirstName+ " "+ employee.LastName,
                             InterviewDate = interview.InterviewDate,
                             IsAccepted = interview.IsAccepted,
                             Status = interview.Status,
-                            Text = interview.Text
+                            Text = interview.Text,
+                            Comment = interview.Comment
                         };
             return merge;
         }
@@ -254,6 +267,86 @@ namespace API.Services
                     Capacity = position.Capacity - 1,
                     CreatedDate = position.CreatedDate,
                     ModifiedDate = DateTime.Now
+            var interview = _interviewRepository.Create(newInterviewDto);
+            if (interview is null)
+            {
+<<<<<<< Updated upstream
+                return null; // Interview is null or not found;
+=======
+                var grade = _gradeRepository.GetByGuid(newInterviewDto.Guid);
+                if (grade == null)
+                {
+                    return null;
+                }
+                _gradeRepository.Clear();
+                var placement = _placementRepository.GetByGuid(newInterviewDto.Guid);
+                if (placement != null)
+                {
+                    return null;
+                }
+                _placementRepository.Clear();
+                Interview interviewtoCreate = newInterviewDto;
+                interviewtoCreate.Comment = null;
+                interviewtoCreate.IsAccepted = false;
+                interviewtoCreate.Status = Utilities.Enums.InterviewLevel.EmployeeResponWaiting;
+                var interview = _interviewRepository.Create(interviewtoCreate);
+                if (interview is null)
+                {
+                    return null; // Interview is null or not found;
+                }
+                _interviewRepository.Clear();
+                var getposition = _positionRepository.GetByClientGuid(newInterviewDto.ClientGuid);
+                var position = getposition.Where(interview=>interview.Guid.Equals(newInterviewDto.PositionGuid)).FirstOrDefault(); //Revisi Menggunakan GetByClient
+                /*var selectedPosition = _positionRepository.GetByGuid*/
+                _positionRepository.Clear();
+                var positionUpdate = _positionRepository.Update(new Position
+                {
+                    Guid = position.Guid,
+                    ClientGuid = newInterviewDto.ClientGuid,
+                    Name = position.Name,
+                    Capacity = position.Capacity - 1,
+                    CreatedDate = position.CreatedDate,
+                    ModifiedDate = DateTime.Now
+
+                });
+                _positionRepository.Clear();
+                var employee = _employeeRepository.GetByGuid(interview.Guid);
+                var client = _clientRepository.GetByGuid(interview.ClientGuid);
+                var formattedDate = interview.InterviewDate.ToString("dddd, dd/MM/yy HH:mm");
+                var gender = employee.Gender == 0 ? "Female" : "Male";
+
+                _emailHandler.SendEmail(employee.Email, $"Interview Schedule with {client.Name}",
+                    $"Congratulations you've been given chance to get interview with {client.Name} on {formattedDate} " +
+                    $"and this is the remarks that our company give : {interview.Text}.<br /> Please be Prepared and Keep up the Spirit");
+                _emailHandler.SendEmail(client.Email, $"Interview Schedule with {employee.FirstName} {employee.LastName}",
+                    $"For the honours of our Company we want you to check Interview Schedule that arranged earlier this is " +
+                    $"few data of the schedule<br /> " +
+                    $"<table style='border:1px'>" +
+                        $"<tr>" +
+                            $"<th>Employee Name</th>    " +
+                            $"<th>Gender</th>    " +
+                            $"<th>Skill</th>    " +
+                            $"<th>Interview Date</th>    " +
+                            $"<th>Note</th>" +
+                        $"</tr>" +
+                        $"<tr>    " +
+                            $"<td>{employee.FirstName} {employee.LastName}</td>    " +
+                            $"<td>{gender}</td>    " +
+                            $"<td>{employee.Skill}</td>    " +
+                            $"<td>{formattedDate}</td>    " +
+                            $"<td>{interview.Text}</td>" +
+                        $"</tr>" +
+                    $"</table>"+
+                    $"<br /> Thank your for the attention hope we will get better at our collaboration");
+                transaction.Commit();
+                return (InterviewDto)interview; // Interview is found;
+            }
+            catch
+            {
+                transaction.Rollback();
+                return null;
+>>>>>>> Stashed changes
+            }
 
                 });
                 _positionRepository.Clear();

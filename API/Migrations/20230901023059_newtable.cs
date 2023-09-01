@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace API.Migrations
 {
-    public partial class newtable : Migration
+    public partial class CreateTable : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -17,6 +17,7 @@ namespace API.Migrations
                     name = table.Column<string>(type: "nvarchar(100)", nullable: false),
                     email = table.Column<string>(type: "nvarchar(100)", nullable: false),
                     is_available = table.Column<bool>(type: "bit", nullable: false),
+                    capacity = table.Column<int>(type: "int", nullable: false),
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     modified_date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -65,9 +66,8 @@ namespace API.Migrations
                 columns: table => new
                 {
                     guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    client_guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    capacity = table.Column<int>(type: "int", nullable: false),
+                    client_guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     modified_date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -88,9 +88,8 @@ namespace API.Migrations
                 {
                     guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    otp = table.Column<int>(type: "int", nullable: true),
+                    otp = table.Column<int>(type: "int", nullable: false),
                     is_used = table.Column<bool>(type: "bit", nullable: false),
-                    expired_time = table.Column<DateTime>(type: "datetime2", nullable: true),
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     modified_date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -135,9 +134,12 @@ namespace API.Migrations
                     text = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     comment = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     client_guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+<<<<<<<< Updated upstream:API/Migrations/20230817091138_CreateTable.cs
+========
                     position_guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     is_accepted = table.Column<bool>(type: "bit", nullable: true),
                     status = table.Column<int>(type: "int", nullable: false),
+>>>>>>>> Stashed changes:API/Migrations/20230901023059_newtable.cs
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     modified_date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -165,6 +167,7 @@ namespace API.Migrations
                     guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     start_date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     end_date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    employee_guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     client_guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     position_guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -180,8 +183,8 @@ namespace API.Migrations
                         principalColumn: "guid",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_tb_tr_placement_tb_m_employees_guid",
-                        column: x => x.guid,
+                        name: "FK_tb_tr_placement_tb_m_employees_employee_guid",
+                        column: x => x.employee_guid,
                         principalTable: "tb_m_employees",
                         principalColumn: "guid",
                         onDelete: ReferentialAction.Cascade);
@@ -262,12 +265,19 @@ namespace API.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_tb_tr_interview_client_guid",
                 table: "tb_tr_interview",
-                column: "client_guid");
+                column: "client_guid",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_tb_tr_placement_client_guid",
                 table: "tb_tr_placement",
                 column: "client_guid");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_tb_tr_placement_employee_guid",
+                table: "tb_tr_placement",
+                column: "employee_guid",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

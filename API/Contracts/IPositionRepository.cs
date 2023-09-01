@@ -5,6 +5,7 @@ namespace API.Contracts
 {
     public interface IPositionRepository : IGeneralRepository<Position>
     {
-        public Position? GetByClientGuid(Guid guid);
+        public IEnumerable<Position>? GetByClientGuid(Guid guid);
+        public Position? GetOneByClientGuid(Guid guid);
     }
 }

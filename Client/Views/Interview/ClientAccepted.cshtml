@@ -19,18 +19,18 @@
                         <div class="mb-3" id="inputclientGuid"></div>
                         <div class="mb-3 date-container">
                             <label for="startDate" class="form-label">Start Date</label>
-                            <input type="datetime-local" class="form-control" onclick="" id="startDate" placeholder="StartDate">
+                            <input type="datetime-local" class="form-control" id="startDate" placeholder="StartDate">
                         </div>
                         <div class="mb-3">
                             <label for="endDate" class="form-label">End Date</label>
                             <input type="datetime-local" class="form-control" id="endDate" placeholder="EndDate">
                         </div>
                         @*<div class="mb-3">
-                            <label for="employeeGuid" class="form-label">Employee Name</label>
+                            <label for="employeeGuid" class="form-label">Employee Guid</label>
                             <select class="form-select selectNameinPlacement" aria-label="Default select example" id="guid"></select>
                         </div>*@
                         @*<div class="mb-3">
-                            <label for="clientGuid" class="form-label">Client Name</label>
+                            <label for="clientGuid" class="form-label">Client Guid</label>
                             <select class="form-select selectClientinPlacement" aria-label="Default select example" id="clientGuid"></select>
                         </div>*@
                     </form>
@@ -74,9 +74,14 @@
                                                     <div class="card-body position-relative z-index-1 d-flex flex-column h-100 p-3">
                                                                 <h5 class="text-white font-weight-bolder mb-4 pt-2">${val.fullName}</h5>
                                                                                 <div class="row text-light">
-                                                                                    <div class="col-4">Client Name</div>
+                                                                                    <div class="col-4">Client</div>
                                                                                     <div class="col-8">${val.clientName}</div>
                                                                                 </div>
+
+                                                                                                        <div class="row text-light">
+                                                                                                            <div class="col-4">Position</div>
+                                                                                                            <div class="col-8">${val.positionName}</div>
+                                                                                                        </div>
                                                                                 <div class="row text-light">
                                                                             <div class="col-4">Interview Date</div>
                                                                             <div class="col-8">${val.interviewDate != null ? moment(val.interviewDate).format("dddd, D MMMM YYYY, HH:mm") : null}</div>

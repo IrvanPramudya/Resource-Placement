@@ -12,11 +12,13 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(PlacementDbContext))]
+<<<<<<<< Updated upstream:API/Migrations/20230817091138_CreateTable.Designer.cs
     [Migration("20230817091138_CreateTable")]
     partial class CreateTable
 ========
     [Migration("20230901023059_newtable")]
     partial class newtable
+>>>>>>>> Stashed changes:API/Migrations/20230901023059_newtable.Designer.cs
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -37,10 +39,6 @@ namespace API.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("created_date");
 
-                    b.Property<DateTime?>("ExpiredTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("expired_time");
-
                     b.Property<bool>("IsUsed")
                         .HasColumnType("bit")
                         .HasColumnName("is_used");
@@ -49,7 +47,7 @@ namespace API.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("modified_date");
 
-                    b.Property<int?>("OTP")
+                    b.Property<int>("OTP")
                         .HasColumnType("int")
                         .HasColumnName("otp");
 
@@ -101,6 +99,10 @@ namespace API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("guid");
+
+                    b.Property<int>("Capacity")
+                        .HasColumnType("int")
+                        .HasColumnName("capacity");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2")
@@ -241,10 +243,6 @@ namespace API.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("interview_date");
 
-                    b.Property<bool?>("IsAccepted")
-                        .HasColumnType("bit")
-                        .HasColumnName("is_accepted");
-
                     b.Property<DateTime>("ModifiedDate")
                         .HasColumnType("datetime2")
                         .HasColumnName("modified_date");
@@ -266,7 +264,8 @@ namespace API.Migrations
 
                     b.HasKey("Guid");
 
-                    b.HasIndex("ClientGuid");
+                    b.HasIndex("ClientGuid")
+                        .IsUnique();
 
                     b.ToTable("tb_tr_interview");
                 });
@@ -274,6 +273,7 @@ namespace API.Migrations
             modelBuilder.Entity("API.Models.Placement", b =>
                 {
                     b.Property<Guid>("Guid")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("guid");
 
@@ -284,6 +284,10 @@ namespace API.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2")
                         .HasColumnName("created_date");
+
+                    b.Property<Guid>("EmployeeGuid")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("employee_guid");
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2")
@@ -305,6 +309,9 @@ namespace API.Migrations
 
                     b.HasIndex("ClientGuid");
 
+                    b.HasIndex("EmployeeGuid")
+                        .IsUnique();
+
                     b.ToTable("tb_tr_placement");
                 });
 
@@ -314,10 +321,6 @@ namespace API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("guid");
-
-                    b.Property<int>("Capacity")
-                        .HasColumnType("int")
-                        .HasColumnName("capacity");
 
                     b.Property<Guid>("ClientGuid")
                         .HasColumnType("uniqueidentifier")
@@ -462,8 +465,8 @@ namespace API.Migrations
             modelBuilder.Entity("API.Models.Interview", b =>
                 {
                     b.HasOne("API.Models.Client", "Client")
-                        .WithMany("Interviews")
-                        .HasForeignKey("ClientGuid")
+                        .WithOne("Interview")
+                        .HasForeignKey("API.Models.Interview", "ClientGuid")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -488,7 +491,7 @@ namespace API.Migrations
 
                     b.HasOne("API.Models.Employee", "Employee")
                         .WithOne("Placement")
-                        .HasForeignKey("API.Models.Placement", "Guid")
+                        .HasForeignKey("API.Models.Placement", "EmployeeGuid")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -515,7 +518,7 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Models.Client", b =>
                 {
-                    b.Navigation("Interviews");
+                    b.Navigation("Interview");
 
                     b.Navigation("Placements");
 

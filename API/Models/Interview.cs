@@ -10,8 +10,12 @@ namespace API.Models
         public DateTime InterviewDate { get; set; }
         [Column("text")]
         public string? Text { get; set; }
+        [Column("comment")]
+        public string? Comment { get; set; }
         [Column("client_guid")]
         public Guid ClientGuid { get; set; }
+        [Column("position_guid")]
+        public Guid PositionGuid { get; set; }
         [Column("is_accepted")]
         public bool? IsAccepted { get; set; }
         [Column("status")]
