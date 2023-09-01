@@ -1,0 +1,35 @@
+.recent-orders table {
+    background-color: var(--color-white);
+    width: 100%;
+    padding: var(--card-padding);
+    text-align: left;
+    box-shadow: var(--box-shadow);
+    border-radius: var(--card-border-radius);
+    transition: all 0.3s ease;
+}
+
+    .recent-orders table:hover {
+        box-shadow: none;
+    }
+
+table tbody td {
+    height: 2.8rem;
+    border-bottom: 1px solid var(--color-light);
+    color: var(--color-dark-variant);
+}
+
+/*table tbody tr:last-child td {
+    border: none;
+}*/
+
+.recent-orders a {
+    text-align: left;
+    display: block;
+    margin: 1rem auto;
+    color: var(--color-primary);
+}
+
+.btn btn-info {
+    --bs-tooltip-bg: var(--bd-violet-bg);
+    --bs-tooltip-color: var(--bs-white);
+}

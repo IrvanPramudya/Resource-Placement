@@ -6,10 +6,8 @@ namespace API.DTOs.Placements
     {
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-<<<<<<< Updated upstream
         public Guid EmployeeGuid { get; set; }
         public Guid ClientGuid { get; set; }
-=======
         public Guid Guid { get; set; }
 >>>>>>> Stashed changes
 
@@ -17,15 +15,11 @@ namespace API.DTOs.Placements
         {
             return new Placement
             {
-                Guid = new Guid(),
                 StartDate = placement.StartDate,
                 EndDate = placement.EndDate,
-<<<<<<< Updated upstream
                 EmployeeGuid = placement.EmployeeGuid,
                 ClientGuid = placement.ClientGuid,
-=======
                 Guid = placement.Guid,
->>>>>>> Stashed changes
                 CreatedDate = DateTime.Now,
                 ModifiedDate = DateTime.Now,
 
@@ -37,12 +31,9 @@ namespace API.DTOs.Placements
             {
                 StartDate = placement.StartDate,
                 EndDate = placement.EndDate,
-<<<<<<< Updated upstream
                 EmployeeGuid = placement.EmployeeGuid,
                 ClientGuid = placement.ClientGuid,
-=======
                 Guid = placement.Guid,
->>>>>>> Stashed changes
 
             };
         }

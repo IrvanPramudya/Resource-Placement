@@ -35,6 +35,10 @@
                             <label for="employeeGuid" class="form-label">Employee Guid</label>
                             <select class="form-select selectNameinPlacement" aria-label="Default select example" id="guid"></select>
                         </div>
+                        <div class="mb-3">
+                            <label for="clientGuid" class="form-label">Client Name</label>
+                            <select class="form-select selectClientinPlacement" aria-label="Default select example" id="clientGuid"></select>
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -84,6 +88,10 @@
                     <div class="mb-3">
                         <label for="endDate" class="form-label">End Date</label>
                         <input type="datetime-local" class="form-control" id="endDateUpd" placeholder="End Date" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="clientGuid" class="form-label">Client Name</label>
+                        <select class="form-select selectClientinPlacement" aria-label="Default select example" id="clientGuidUpd"></select>
                     </div>
                 </form>
             </div>
@@ -197,6 +205,7 @@
                     startDate: $("#startDate").val(),
                     endDate: $("#endDate").val(),
                     guid: $("#guid").val(),
+                    clientGuid: $("#clientGuid").val(),
                 };
 
                 $.ajax({
@@ -262,6 +271,7 @@
                     $("#guidUpd").val(result.data.guid);
                     $("#startDateUpd").val(result.data.startDate);
                     $("#endDateUpd").val(result.data.endDate);
+                    $("#clientGuidUpd").val(result.data.clientGuid);
                 }).fail((error) => {
                     alert("Failed to fetch placement data. Please try again.");
                     console.log(error)
@@ -275,6 +285,7 @@
                     startDate: $("#startDateUpd").val(),
                     endDate: $("#endDateUpd").val(),
                     guid: $("#guidUpd").val(),
+                    clientGuid: $("#clientGuidUpd").val(),
                 };
                 $.ajax({
                     url: "https://localhost:7273/api/placements",

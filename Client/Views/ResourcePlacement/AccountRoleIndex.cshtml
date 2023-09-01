@@ -1,20 +1,22 @@
 ﻿@{
     ViewData["Title"] = "Account Role";
-
+    Layout = "AdminLayout";
 }
 <div class="text-center">
     <h1 class="align-content-center" id="judul">List Account Role</h1>
 </div>
-<div class="text-center mt-3">
-    <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalAddAccountRole">Add Account Role</button>
+<div class="text-center my-3">
+    <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalAddAccountRole" data-bs-placement="top" data-bs-title="Add Account Role">
+        <i class='bx bx-user-plus'></i>
+    </button>
 </div>
-<div class="recent-orders">
-    <table id="accountroleTable">
-        <thead>
+<div class="recent-orders table-responsive">
+    <table class="table table-striped table-hover" id="accountroleTable">
+        <thead class="table-dark">
             <tr>
                 <th>No</th>
                 <th>Full Name</th>
-                <th>Role Name</th>
+                <th>Role</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -59,11 +61,12 @@
             </div>
             <div class="modal-body">
                 <input type="hidden" class="form-control" id="guidUpd">
-                <div class="mb-3">
+                <input type="hidden" class="form-control" id="accountguidUpd">
+                @*<div class="mb-3">
                     <label for="FullName" class="form-label">Account Name</label>
                     <select class="form-select selectName" aria-label="Default select example" id="accountguidUpd" readonly>
                     </select>
-                </div>
+                </div>*@
                 <div class="mb-3">
                     <label for="Role" class="form-label">Role</label>
                     <select class="form-select selectRole" aria-label="Default select example" id="roleguidUpd">
@@ -79,6 +82,9 @@
 </div>
 @section Scripts{
     <script>
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="modal"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+
         $(document).ready(function () {
             loadAccountRoleData();
             $.ajax({
@@ -120,26 +126,70 @@
                         }
                     },
                     { data: "fullName" },
-                    { data: "roleName" },
+                    {
+                        data: "roleName",
+                        render: function (data, type, row) {
+                            if (data == "Admin") {
+                                return `<span class="badge rounded-pill bg-warning fs-6"> Admin </span>`
+                            }
+                            if (data == "Operasional") {
+                                return `<span class="badge rounded-pill bg-primary fs-6" > Operasional </span>`
+                            }
+                            if (data == "Trainer") {
+                                return `<span class="badge rounded-pill bg-success fs-6"> Trainer </span>`
+                            }
+                            if (data == "Employee") {
+                                return `<span class="badge rounded-pill bg-secondary fs-6" > Employee </span>`
+                            }
+                        }
+                    },
                     {
                         data: null,
                         render: function (data, type, row) {
-                            return `<button onclick="ShowUpdateAccountRole('${row.guid}')" data-bs-toggle="modal" data-bs-target="#modalUpdateAccountRole" class="btn btn-primary"> Update </button>` +
-                                `   <button onclick="deleteAccountRole('${row.guid}')" class="btn btn-secondary"> Delete </button>`;
+                            return `<button onclick="ShowUpdateAccountRole('${row.guid}')" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modalUpdateAccountRole" class="btn btn-primary" data-bs-placement="top" title="Update Data"><i class='bx bx-edit'></i></button>` +
+                                `   <button onclick="deleteAccountRole('${row.guid}')" class="btn btn-danger" data-bs-toggle="modal" data-bs-placement="top" title="Delete Data"><i class='bx bxs-trash-alt'></i></button>`;
                         }
                     }
                 ],
-                dom: "Blfrtip",
-                buttons: [
+                "dom":
+                    "<'row'<'col-md-8'B><'col-md-4'f>>" + 
+                    "<'row'<'col-sm-12'tr>>" + // Tabel
+                    "<'row'<'col-md-5'i><'col-md-3 mt-2 mx-auto'l><'col-md-4'p>>", 
+                "buttons": [
+                    {
+                        extend: 'copy',
+                        text: '<i class="bx bxs-copy"></i>',
+                        className: 'btn btn-custom'
+                    },
+                    {
+                        extend: 'csv',
+                        text: '<i class="bx bxs-file-export"></i>',
+                        className: 'btn btn-custom'
+                    },
+                    {
+                        extend: 'excel',
+                        text: '<i class="bx bx-file-blank"></i>',
+                        className: 'btn btn-custom'
+                    },
+                    {
+                        extend: 'pdf',
+                        text: '<i class="bx bxs-file-pdf"></i>',
+                        className: 'btn btn-custom'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="bx bx-printer"></i>',
+                        className: 'btn btn-custom'
+                    },
                     {
                         extend: 'colvis',
-                        postfixButtons: ['colvisRestore'],
-                        collectionLayout: 'fixed two-column',
-                        className: 'btn btn-primary'
+                        text: '<i class="bx bx-show-alt"></i>', // Ganti teks dengan ikon Boxicons
+                        className: 'btn btn-custom-column-vis'
                     }
-                    , 'copy', 'csv', 'excel', 'pdf', 'print'
-                ]
-            })
+                ],
+                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                "pageLength": 25
+            });
         }
 
         function addAccountRole() {

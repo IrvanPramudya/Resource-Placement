@@ -139,7 +139,7 @@
         </div>
             
         
-    </div>
+        </div>
         <div class="row" id="no-notification">
             <div class="col-1"></div>
             <div class="col-10 justify-content-center">
@@ -147,7 +147,7 @@
                     <div class="row g-0">
                         <div class="col-md-4">
                             <img src="https://cdn-icons-png.flaticon.com/512/4610/4610214.png" class="img-fluid rounded-start  my-auto" alt="...">
-                        </div>
+    </div>
                         <div class="col-md-8">
                             <div class="card-body">
                                 <h5 class="card-title">Hello Mr @User.FindFirst("Fullname").Value</h5>
@@ -174,7 +174,7 @@
                     <div class="mb-3">
                         <label for="interviewDate" class="form-label">Comment</label>
                         <input type="text" class="form-control" id="comment" placeholder="comment">
-                    </div>
+</div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -189,11 +189,11 @@
     <script>
         const Token = '@Context.Session.GetString("JWToken")'
         $(document).ready(()=>{
-            $.ajax({
-                url: "https://localhost:7273/api/employees/GetEmployeeNotification/@User.FindFirst("Guid").Value",
-                headers: {
-                    'Authorization': 'Bearer ' + Token
-                }
+        $.ajax({
+            url: "https://localhost:7273/api/employees/GetEmployeeNotification/@User.FindFirst("Guid").Value",
+            headers: {
+                'Authorization': 'Bearer ' + Token
+            }
             }).done((result) => {
                 console.log(result.data)
                 if (result.data == null) {
@@ -204,16 +204,19 @@
                     $("#notification-employee").show();
                     $("#no-notification").hide();
 
-                    console.log(result)
-                    createdDate = result.data.createdDate != null ? moment($("#createdDate").val(result.data.createdDate)).format("dddd, D MMMM YYYY, HH:mm") : null;
-                    interviewDate = result.data.interviewDate != null ? moment($("#interviewDate").val(result.data.interviewDate)).format("dddd, D MMMM YYYY, HH:mm") : null;
-                    $('#createdDate').html(`${result.data.createdDate != null ? moment(result.data.createdDate).format("dddd, D MMMM YYYY, HH:mm") : null}`)
-                    $('#clientName').html(`${result.data.clientName}`)
-                    $('#positionName').html(`${result.data.positionName}`)
-                    $('#note').html(`${result.data.note}`)
-                    $('#interviewAccepted').html(`<a onclick="interviewAccepted('@User.FindFirst("Guid").Value')"><box-icon name='check' color="green" size="lg"></box-icon></a>`)
+            console.log(result)
+            $('#inputedInterview').html(`<input type="hidden" value="${result.data.clientGuid}" id="clientUpd"/>
+                                        <input type="hidden" value="${result.data.interviewDate}" id="interviewDateUpd"/>
+                                        <input type="hidden" value="${result.data.note}" id="noteUpd"/>`)
+            createdDate = result.data.createdDate != null ? moment($("#createdDate").val(result.data.createdDate)).format("dddd, D MMMM YYYY, HH:mm") : null;
+            interviewDate = result.data.interviewDate != null ? moment($("#interviewDate").val(result.data.interviewDate)).format("dddd, D MMMM YYYY, HH:mm") : null;
+            $('#createdDate').html(`${result.data.createdDate != null ? moment(result.data.createdDate).format("dddd, D MMMM YYYY, HH:mm") : null}`)
+            $('#clientName').html(`${result.data.clientName}`)
+            $('#positionName').html(`${result.data.positionName}`)
+            $('#note').html(`${result.data.note}`)
+            $('#interviewAccepted').html(`<a onclick="interviewAccepted('@User.FindFirst("Guid").Value')"><box-icon name='check' color="green" size="lg"></box-icon></a>`)
                     $('#interviewRejected').html(`<a data-bs-toggle="modal" data-bs-target="#modalUpdateComment"><box-icon name='x' color="red" size="lg"></box-icon></a>`)
-                    $('#interviewDate').html(`${result.data.interviewDate != null ? moment(result.data.interviewDate).format("dddd, D MMMM YYYY, HH:mm") : null}`)
+            $('#interviewDate').html(`${result.data.interviewDate != null ? moment(result.data.interviewDate).format("dddd, D MMMM YYYY, HH:mm") : null}`)
                 }
 
             }).fail((error) => {
@@ -255,6 +258,9 @@
         function interviewRejected(guidEmployee){
             let data = {
                 guid : guidEmployee,
+                interviewDate : $("#interviewDateUpd").val(),
+                clientGuid : $("#clientUpd").val(),
+                text : $("#noteUpd").val(),
                 isAccepted : false,
                 comment: $("#comment").val(),
                 status : 2,

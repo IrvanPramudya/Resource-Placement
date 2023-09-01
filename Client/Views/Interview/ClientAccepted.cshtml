@@ -91,6 +91,7 @@
                                             </div>
                                         </div>`
                 $("#inputGuid").html(`<input type="hidden" value="${val.guid}" id="guidEmployee" />`)
+                $("#inputclientGuid").html(`<input type="hidden" value="${val.clientGuid}" id="clientGuid" />`)
 
             })
             $("#employeeCard").html(employeeCard)
@@ -100,6 +101,7 @@
                 startDate: $("#startDate").val(),
                 endDate: $("#endDate").val(),
                 guid: $("#guidEmployee").val(),
+                clientGuid: $("#clientGuid").val(),
             };
 
             $.ajax({

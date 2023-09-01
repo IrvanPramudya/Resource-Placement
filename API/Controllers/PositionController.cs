@@ -19,8 +19,6 @@ namespace API.Controllers
             _positionService = positionService;
         }
 
-<<<<<<< Updated upstream
-=======
         [HttpGet("GetPosition/{guid}")]
         public IActionResult GetPositionwithClientGuid(Guid guid) 
         {
@@ -65,8 +63,6 @@ namespace API.Controllers
             });
 
         }
-
->>>>>>> Stashed changes
         [HttpGet]
         public IActionResult GetAll()
         {

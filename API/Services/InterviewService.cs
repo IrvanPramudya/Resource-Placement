@@ -1,21 +1,44 @@
 ﻿using API.Contracts;
+using API.Data;
+using API.DTOs.AccountRoles;
+using API.DTOs.Accounts;
 using API.DTOs.Interviews;
 using API.Models;
 using API.Repositories;
+using API.Utilities.Enums;
+using API.Utilities.Handlers;
+using Microsoft.OpenApi.Extensions;
+using static System.Net.WebRequestMethods;
 
 namespace API.Services
 {
     public class InterviewService
     {
         private readonly IInterviewRepository _interviewRepository;
+        private readonly IGradeRepository _gradeRepository;
+        private readonly IEmployeeRepository _employeeRepository;
+        private readonly IAccountRepository _accountRepository;
+        private readonly IAccountRoleRepository _accountroleRepository;
+        private readonly IClientRepository _clientRepository;
+        private readonly IPositionRepository _positionRepository;
+        private readonly IPlacementRepository _placementRepository;
+        private readonly IEmailHandler _emailHandler;
+        private readonly PlacementDbContext _dbContext;
 
-        public InterviewService(IInterviewRepository interviewRepository)
+        public InterviewService(IInterviewRepository interviewRepository, IEmployeeRepository employeeRepository, IClientRepository clientRepository, IPositionRepository positionRepository, IEmailHandler emailHandler, IPlacementRepository placementRepository, IGradeRepository gradeRepository, PlacementDbContext dbContext, IAccountRepository accountRepository, IAccountRoleRepository accountroleRepository)
         {
             _interviewRepository = interviewRepository;
+            _employeeRepository = employeeRepository;
+            _clientRepository = clientRepository;
+            _positionRepository = positionRepository;
+            _emailHandler = emailHandler;
+            _placementRepository = placementRepository;
+            _gradeRepository = gradeRepository;
+            _dbContext = dbContext;
+            _accountRepository = accountRepository;
+            _accountroleRepository = accountroleRepository;
         }
-<<<<<<< Updated upstream
 
-=======
         public IEnumerable<GetRemainingEmployee> GetAllInterviewEmployeePlacement()
         {
             var merge = from employee in _employeeRepository.GetAll()
@@ -180,7 +203,6 @@ namespace API.Services
                         };
             return merge;
         }
->>>>>>> Stashed changes
         public IEnumerable<InterviewDto> GetAll()
         {
             var interviews = _interviewRepository.GetAll();
@@ -292,10 +314,47 @@ namespace API.Services
 >>>>>>> Stashed changes
             }
 
-            return (InterviewDto)interview; // Interview is found;
+                });
+                _positionRepository.Clear();
+                var employee = _employeeRepository.GetByGuid(interview.Guid);
+                var client = _clientRepository.GetByGuid(interview.ClientGuid);
+                var formattedDate = interview.InterviewDate.ToString("dddd, dd/MM/yy HH:mm");
+                var gender = employee.Gender == 0 ? "Female" : "Male";
+
+                _emailHandler.SendEmail(employee.Email, $"Interview Schedule with {client.Name}",
+                    $"Congratulations you've been given chance to get interview with {client.Name} on {formattedDate} " +
+                    $"and this is the remarks that our company give : {interview.Text}.<br /> Please be Prepared and Keep up the Spirit");
+                _emailHandler.SendEmail(client.Email, $"Interview Schedule with {employee.FirstName} {employee.LastName}",
+                    $"For the honours of our Company we want you to check Interview Schedule that arranged earlier this is " +
+                    $"few data of the schedule<br /> " +
+                    $"<table style='border:1px'>" +
+                        $"<tr>" +
+                            $"<th>Employee Name</th>    " +
+                            $"<th>Gender</th>    " +
+                            $"<th>Skill</th>    " +
+                            $"<th>Interview Date</th>    " +
+                            $"<th>Note</th>" +
+                        $"</tr>" +
+                        $"<tr>    " +
+                            $"<td>{employee.FirstName} {employee.LastName}</td>    " +
+                            $"<td>{gender}</td>    " +
+                            $"<td>{employee.Skill}</td>    " +
+                            $"<td>{formattedDate}</td>    " +
+                            $"<td>{interview.Text}</td>" +
+                        $"</tr>" +
+                    $"</table>"+
+                    $"<br /> Thank your for the attention hope we will get better at our collaboration");
+                transaction.Commit();
+                return (InterviewDto)interview; // Interview is found;
+            }
+            catch
+            {
+                transaction.Rollback();
+                return null;
+            }
         }
 
-        public int Update(InterviewDto interviewDto)
+        public int Update(NewInterviewDto interviewDto)
         {
             var interview = _interviewRepository.GetByGuid(interviewDto.Guid);
             if (interview is null)
@@ -304,6 +363,7 @@ namespace API.Services
             }
 
             Interview toUpdate = interviewDto;
+            toUpdate.IsAccepted = interview.IsAccepted;
             toUpdate.CreatedDate = interview.CreatedDate;
             var result = _interviewRepository.Update(toUpdate);
 

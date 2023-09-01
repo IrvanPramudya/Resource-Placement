@@ -5,10 +5,10 @@ namespace API.DTOs.Accounts
     public class AccountDto
     {
         public Guid Guid { get; set; }
-        public int OTP { get; set; }
         public string Password { get; set; }
+        public int? OTP { get; set; }
         public bool IsUsed { get; set; }
-        /*public DateTime ExpiredTime { get; set; }*/
+        public DateTime? ExpiredTime { get; set; }
 
         public static implicit operator Account(AccountDto dto)
         {
@@ -18,7 +18,7 @@ namespace API.DTOs.Accounts
                 OTP = dto.OTP,
                 Password = dto.Password,
                 IsUsed = dto.IsUsed,
-                /*ExpiredTime = dto.ExpiredTime,*/
+                ExpiredTime = dto.ExpiredTime,
                 ModifiedDate = DateTime.Now
             };
         }
@@ -30,7 +30,7 @@ namespace API.DTOs.Accounts
                 OTP = account.OTP,
                 Password = account.Password,
                 IsUsed = account.IsUsed,
-                /*ExpiredTime = account.ExpiredTime*/
+                ExpiredTime = account.ExpiredTime
             };
         }
     }

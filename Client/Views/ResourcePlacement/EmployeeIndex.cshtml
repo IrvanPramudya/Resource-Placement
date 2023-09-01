@@ -1,5 +1,6 @@
-﻿@using System.Net.Http
+@using System.Net.Http
 @{
+    ViewData["Title"] = "Employee";
     Layout = "AdminLayout";
 }
 
@@ -7,8 +8,10 @@
 <div class="text-center">
     <h1 class="align-content-center" id="judul">List Employee</h1>
 </div>
-<div class="text-center mt-3">
-    <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalAddEmployee">Add Employee</button>
+<div class="text-center my-3">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAddEmployee" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Add Employee">
+        <i class='bx bx-user-plus'></i>
+    </button>
 </div>
 
 <div class="add-employee">
@@ -31,7 +34,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label"> Email</label>
-                            <input type="text" class="form-control" id="email" placeholder="email">
+                            <input type="text" class="form-control" id="email" placeholder="Email">
                         </div>
                         <div class="mb-3">
                             <label for="phone" class="form-label"> Phone Number</label>
@@ -40,15 +43,8 @@
                         <div class="mb-3">
                             <label for="gender" class="col-form-label">Gender:</label>
                             <select class="form-control" id="gender" required>
-                                <option value="1">Female</option>
-                                <option value="0">Male</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="status" class="col-form-label">Status:</label>
-                            <select class="form-control" id="status" required>
-                                <option value="1">Site</option>
-                                <option value="0">Idle</option>
+                                <option value="0">Female</option>
+                                <option value="1">Male</option>
                             </select>
                         </div>
                         <div class="mb-3">
@@ -66,24 +62,22 @@
     </div>
 </div>
 
-<div class="recent-orders">
-<table id="employeeTable">
-    <thead>
-        <tr>
-            <th>No</th>
-            <th>NIK</th>
-            <th>Nama</th>
-            <th>Email</th>
-            <th>Phone Number</th>
-            <th>Gender</th>
-            <th>Status</th>
-            <th>Skill</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody id="tbodyEmployee">
-    </tbody>
-</table>
+<div class="recent-orders table-responsive">
+    <table class="table table-striped table-hover" id="employeeTable">
+        <thead class="table-dark">
+            <tr>
+                <th>No</th>
+                <th>NIK</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>Gender</th>
+                <th>Status</th>
+                <th>Skill</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+    </table>
 </div>
 
 <div class="modal" id="modalUpdateEmployee" tabindex="-1">
@@ -114,16 +108,9 @@
                 </div>
                 <div class="mb-3">
                     <label for="gender" class="col-form-label">Gender:</label>
-                    <select class="form-control" id="gender" required>
+                    <select class="form-control" id="genderUpd" required>
                         <option value="1">Male</option>
                         <option value="0">Female</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label for="status" class="col-form-label">Status:</label>
-                    <select class="form-control" id="status" required>
-                        <option value="1">Active</option>
-                        <option value="0">Idle</option>
                     </select>
                 </div>
                 <div class="mb-3">
@@ -138,9 +125,12 @@
         </div>
     </div>
 </div>
-@section Scripts
-{
+
+@section Scripts{
     <script>
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-placement="top"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+
         $(document).ready(function () {
             loadEmployeeData();
         });
@@ -171,34 +161,63 @@
                     {
                         data: "gender",
                         render: function (data, type, row) {
-                            return data === 1 ? "Female" : "Male";
+                            return data === 1 ? `<box-icon name='male' color='blue' size='md' class='mx-auto'><span></span></box-icon>` : `<span><box-icon name='female' size='md' color='#F61491'></box-icon></span>`;
                         }
                     },
                     {
                         data: "status",
                         render: function (data, type, row) {
-                            return data === 1 ? "Idle" : "Active";
+                            return data === 1 ? `<span class="badge rounded-pill bg-success fs-6">Site</span>` : `<span class="badge rounded-pill bg-primary fs-6" > Idle </span>`;
                         }
                     },
                     { data: "skill" },
                     {
                         data: null,
                         render: function (data, type, row) {
-                            return `<button onclick="ShowUpdate('${row.guid}')" data-bs-toggle="modal" data-bs-target="#modalUpdateEmployee" class="btn btn-primary"> Update </button>` +
-                                `   <button onclick="deleteEmployee('${row.guid}')" class="btn btn-secondary"> Delete </button>`;
+                            return `<button onclick="ShowUpdateEmployee('${row.guid}')" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modalUpdateEmployee" data-bs-placement="top" title="Update Data"><i class='bx bx-edit'></i></button>` +
+                                `   <button onclick="deleteEmployee('${row.guid}')" class="btn btn-danger" data-bs-toggle="modal" data-bs-placement="top" title="Delete Data"><i class='bx bxs-trash-alt'></i></button>`;
                         }
                     }
                 ],
-                dom: "Blfrtip",
-                buttons: [
+                "dom":
+                    "<'row'<'col-md-8'B><'col-md-4'f>>" +
+                    "<'row'<'col-md-12'tr>>" + // Tabel
+                    "<'row'<'col-md-5'i><'col-md-3 mt-2 mx-auto'l><'col-md-4 mt-0'p>>",
+                "buttons": [
+                    {
+                        extend: 'copy',
+                        text: '<i class="bx bxs-copy"></i>',
+                        className: 'btn btn-custom',
+                        title:'Copy'
+                    },
+                    {
+                        extend: 'csv',
+                        text: '<i class="bx bxs-file-export"></i>',
+                        className: 'btn btn-custom'
+                    },
+                    {
+                        extend: 'excel',
+                        text: '<i class="bx bx-file-blank"></i>',
+                        className: 'btn btn-custom'
+                    },
+                    {
+                        extend: 'pdf',
+                        text: '<i class="bx bxs-file-pdf"></i>',
+                        className: 'btn btn-custom'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="bx bx-printer"></i>',
+                        className: 'btn btn-custom'
+                    },
                     {
                         extend: 'colvis',
-                        postfixButtons: ['colvisRestore'],
-                        collectionLayout: 'fixed two-column',
-                        className: 'btn btn-primary'
+                        text: '<i class="bx bx-show-alt"></i>', // Ganti teks dengan ikon Boxicons
+                        className: 'btn btn-custom-column-vis'
                     }
-                    , 'copy', 'csv', 'excel', 'pdf', 'print'
-                ]
+                ],
+                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                "pageLength": 25
             });
         }
 
@@ -209,33 +228,33 @@
                 email: $("#email").val(),
                 phoneNumber: $("#phoneNumber").val(),
                 gender: parseInt($("#gender").val()),
-                status: parseInt($("#status").val()),
                 skill: $("#skill").val()
             };
 
-            $.ajax({
-                url: "https://localhost:7273/api/employees",
-                type: "POST",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                data: JSON.stringify(employeeData),
-            }).done(function (result) {
-                Swal.fire({
-                    title: 'Success',
-                    text: 'Data has been successfully inserted',
-                    icon: 'success'
-                }).then(function () {
-                    location.reload();
+                $.ajax({
+                    url: "https://localhost:7273/api/employees",
+                    type: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    data: JSON.stringify(employeeData),
+                }).done(function (result) {
+                    Swal.fire({
+                        title: 'Success',
+                        text: 'Data has been successfully inserted',
+                        icon: 'success'
+                    }).then(function () {
+                        location.reload();
+                    });
+                }).fail(function (error) {
+                    Swal.fire({
+                        title: 'Oops',
+                        text: 'Failed to insert data. Please try again.',
+                        icon: 'error'
+                    });
+                    console.log(error)
                 });
-            }).fail(function (error) {
-                Swal.fire({
-                    title: 'Oops',
-                    text: 'Failed to insert data. Please try again.',
-                    icon: 'error'
-                });
-            });
-        }
+            }
 
         function deleteEmployee(guid) {
             Swal.fire({
@@ -265,7 +284,7 @@
                 }
             });
         }
-        function ShowUpdate(guid) {
+            function ShowUpdateEmployee(guid) {
             $.ajax({
                 url: "https://localhost:7273/api/employees/" + guid,
                 type: "GET",
@@ -278,20 +297,8 @@
                 $("#lastNameUpd").val(result.data.lastName);
                 $("#emailUpd").val(result.data.email);
                 $("#phoneNumberUpd").val(result.data.phoneNumber);
-                // Melakukan penyesuaian untuk nilai gender
-                if (result.data.gender === 0) {
-                    $("input[name='gender'][value='Female']").prop("checked", true);
-                } else {
-                    $("input[name='gender'][value='Male']").prop("checked", true);
-                }
-                if (result.data.status === 0) {
-                    $("input[name='status'][value='Active']").prop("checked", true);
-                } else {
-                    $("input[name='status'][value='Idle']").prop("checked", true);
-                }
+                $("#genderUpd").val(result.data.gender);
                 $("#skillUpd").val(result.data.skill);
-
-                $("#modalemp2").modal("show");
             }).fail((error) => {
                 alert("Failed to fetch employee data. Please try again.");
                 console.log(error)
@@ -300,6 +307,7 @@
         }
 
         function UpdateEmployee() {
+
             let data = {
                 guid: $("#guidUpd").val(),
                 nik: $("#nikUpd").val(),
@@ -307,8 +315,7 @@
                 lastName: $("#lastNameUpd").val(),
                 email: $("#emailUpd").val(),
                 phoneNumber: $("#phoneNumberUpd").val(),
-                gender: $("input[name='gender']:checked").val() === "Female" ? 0 : 1,
-                status: $("input[name='status']:checked").val() === "Active" ? 0 : 1,
+                gender: parseInt($("#genderUpd").val()),
                 skill: $("#skillUpd").val(),
             };
             $.ajax({
@@ -317,10 +324,11 @@
                 contentType: "application/json",
                 data: JSON.stringify(data)
             }).done((result) => {
-                Swal.fire(
-                    'Data has been successfully updated!',
-                    'success'
-                ).then(() => {
+                    Swal.fire({
+                        title: 'Success',
+                        text: 'Data has been successfully updated',
+                        icon: 'success'
+                    }).then(function () {
                     location.reload();
                 });
             }).fail((error) => {
@@ -334,3 +342,6 @@
         }
     </script>
 }
+@*@section CSS{
+    <link rel="stylesheet" href="~/css/EmployeeStyle.css" />
+}*@

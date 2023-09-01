@@ -1,18 +1,20 @@
 ﻿using API.Contracts;
 using API.DTOs.Grades;
 using API.Models;
+using API.Repositories;
 
 namespace API.Services
 {
     public class GradeService
     {
         private readonly IGradeRepository _gradeRepository;
+        private readonly IAccountRepository _accountRepository;
+        private readonly IAccountRoleRepository _accountRoleRepository;
+        private readonly IEmployeeRepository _employeeRepository;
 
-<<<<<<< Updated upstream
         public GradeService(IGradeRepository gradeRepository)
         {
             _gradeRepository = gradeRepository;
-=======
         public GradeService(IGradeRepository gradeRepository, IEmployeeRepository employeeRepository, IAccountRepository accountRepository, IAccountRoleRepository accountRoleRepository)
         {
             _gradeRepository = gradeRepository;
@@ -80,9 +82,25 @@ namespace API.Services
                 return null;
             }
             return merge;
->>>>>>> Stashed changes
         }
 
+        public IEnumerable<GetEmployeeName> GetEmployeeNames()
+        {
+            var merge = from e in _employeeRepository.GetAll()
+                        join g in _gradeRepository.GetAll() on e.Guid equals g.Guid
+                        select new GetEmployeeName
+                        {
+                            Guid = e.Guid,
+                            EmployeeName = e.FirstName + " " + e.LastName,
+                            Grade = g.Name,
+                            Salary = g.Salary
+                        };
+            if (!merge.Any())
+            {
+                return null;
+            }
+            return merge;
+        }
         public IEnumerable<GradeDto> GetAll()
         {
             var grades = _gradeRepository.GetAll();

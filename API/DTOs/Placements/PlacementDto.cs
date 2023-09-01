@@ -7,7 +7,6 @@ namespace API.DTOs.Placements
         public Guid Guid { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public Guid EmployeeGuid { get; set; }
         public Guid ClientGuid { get; set; }
         public Guid PositionGuid { get; set; }
 
@@ -15,10 +14,9 @@ namespace API.DTOs.Placements
         {
             return new Placement
             {
-                Guid = placement.Guid,
                 StartDate = placement.StartDate,
                 EndDate = placement.EndDate,
-                EmployeeGuid = placement.EmployeeGuid,
+                Guid = placement.Guid,
                 ClientGuid = placement.ClientGuid,
                 PositionGuid = placement.PositionGuid,
                 ModifiedDate = DateTime.Now,
@@ -32,7 +30,6 @@ namespace API.DTOs.Placements
                 Guid = placement.Guid,
                 StartDate = placement.StartDate,
                 EndDate = placement.EndDate,
-                EmployeeGuid = placement.EmployeeGuid,
                 ClientGuid = placement.ClientGuid,
                 PositionGuid = placement.PositionGuid,
 

@@ -116,7 +116,7 @@
 
         $(document).ready(function () {
             loadInterviewData();
-            
+
             $.ajax({
                 url: "https://localhost:7273/api/interviews/GetRemainingEmployeeinInterview"
             }).done(function (result) {
@@ -129,15 +129,16 @@
                 $('.selectNameinInterview').html(getName)
             })
         });
-        $.ajax({
-            url: "https://localhost:7273/api/clients"
-        }).done(function (result) {
-            console.log(result)
-            let getClientinInterview = ""
-            $.each(result.data, (key, val) => {
+            $.ajax({
+                url: "https://localhost:7273/api/clients"
+            }).done(function (result) {
+                // Assuming the API response contains a property named "totalEmployees"
                 console.log(result)
-                getClientinInterview += ` <option value="${val.guid}">${val.name}</option>`
-            })
+                let getClientinInterview = ""
+                $.each(result.data, (key, val) => {
+                    console.log(result)
+                    getClientinInterview += ` <option value="${val.guid}">${val.name}</option>`
+                })
             $('.selectClientinInterview').append(getClientinInterview);
             $('.selectClientinInterview').on('change', function () {
                 const selectedGuid = $(this).val();
@@ -166,13 +167,13 @@
                                     </select>`
                 $.each(result.data, (key, val) => {
                     getPositioninInterview += ` <option value="${val.guid}">${val.positionName}</option>`
-                })
+            })
                 $('#selectPosition').html(selectLabel)
                 $('#selectPositionUpd').html(selectLabelUpd)
                 $('.selectPositioninInterview').append(getPositioninInterview)
             })
         }
-        
+
         function loadInterviewData() {
             $('#interviewTable').DataTable({
                 ajax: {

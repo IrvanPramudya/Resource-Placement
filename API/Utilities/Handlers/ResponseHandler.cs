@@ -6,5 +6,6 @@
         public string Status { get; set; }
         public string Message { get; set; }
         public TEntity? Data { get; set; }
+        public string? AdditionalMessage { get; set; }
     }
 }

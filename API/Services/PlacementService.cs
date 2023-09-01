@@ -1,21 +1,26 @@
 ﻿using API.Contracts;
+using API.Data;
+using API.DTOs.Employees;
 using API.DTOs.Placements;
 using API.Models;
 using API.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Services
 {
     public class PlacementService
     {
         private readonly IPlacementRepository _placementRepository;
-<<<<<<< Updated upstream
         private readonly IClientRepository _clientRepository;
+        private readonly IEmployeeRepository _employeeRepository;
+        private readonly IPlacementRepository _placementRepository;
+        private readonly IInterviewRepository _interviewRepository;
+        private readonly PlacementDbContext _dbContext;
 
-        public PlacementService(IPlacementRepository placementRepository, IClientRepository clientRepository)
+        public PlacementService(IPlacementRepository placementRepository, IClientRepository clientRepository, IEmployeeRepository employeeRepository, IInterviewRepository interviewRepository, PlacementDbContext dbContext)
         {
             _placementRepository = placementRepository;
             _clientRepository = clientRepository;
-=======
         private readonly IPositionRepository _positionRepository;
         private readonly IInterviewRepository _interviewRepository;
         private readonly PlacementDbContext _dbContext;
@@ -54,7 +59,28 @@ namespace API.Services
                 return null;
             }
             return merge;
->>>>>>> Stashed changes
+        }
+        public IEnumerable<GetEmployeeClientName> GetEmployeeClientName()
+        {
+            var merge = from e in _employeeRepository.GetAll()
+                        join p in _placementRepository.GetAll() on e.Guid equals p.Guid
+                        join c in _clientRepository.GetAll() on p.ClientGuid equals c.Guid
+                        select new GetEmployeeClientName
+                        {
+                            Guid = p.Guid,
+                            EmployeeGuid = e.Guid,
+                            ClientGuid = c.Guid,
+                            StartDate = p.StartDate,
+                            EndDate = p.EndDate,
+                            EmployeeName = e.FirstName + " " +e.LastName,
+                            ClientName = c.Name
+                            
+                        };
+            if (!merge.Any())
+            {
+                return null;
+            }
+            return merge;
         }
         public IEnumerable<GetCountedClient> GetCountedClient()
         {
@@ -114,10 +140,8 @@ namespace API.Services
             {
                 return null; // Placement is null or not found;
             }
-<<<<<<< Updated upstream
 
             return (PlacementDto)placement; // Placement is found;
-=======
             using var transaction = _dbContext.Database.BeginTransaction();
             try
             {
@@ -157,8 +181,6 @@ namespace API.Services
                 transaction.Rollback();
                 return null;
             }
-            
->>>>>>> Stashed changes
         }
 
         public int Update(PlacementDto placementDto)
@@ -179,12 +201,15 @@ namespace API.Services
 
         public int Delete(Guid guid)
         {
+            
             var placement = _placementRepository.GetByGuid(guid);
             if (placement is null)
             {
                 return -1; // Placement is null or not found;
             }
-
+            var employee = _employeeRepository.GetByGuid(placement.Guid);
+            employee.Status = 0;
+            var employeeUpdate = _employeeRepository.Update(employee);
             var result = _placementRepository.Delete(placement);
 
             return result ? 1 // Placement is deleted;

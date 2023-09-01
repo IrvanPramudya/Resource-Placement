@@ -7,29 +7,64 @@ namespace API.Services
     public class ClientService
     {
         private readonly IClientRepository _clientRepository;
+        private readonly IPositionRepository _positionRepository;
 
-        public ClientService(IClientRepository clientRepository)
+        public ClientService(IClientRepository clientRepository, IPositionRepository positionRepository)
         {
             _clientRepository = clientRepository;
+            _positionRepository = positionRepository;
         }
-        public IEnumerable<GetAvailableClient> CountAvailableClient()
+        public GetCountClient? CountClient()
         {
             var data = _clientRepository.GetAll();
-            var listclient = new List<GetAvailableClient>();
+            var clientdata = new GetCountClient();
+            foreach (var client in data) 
+            {
+                if(client.IsAvailable == true)
+                {
+                    clientdata.CountAvailable++;
+                }
+                else
+                {
+                    clientdata.CountUnAvailable++;
+                }
+            }
+            return clientdata;
+        }
+        public IEnumerable<GetAvailableClient> GetAllClient()
+        {
+            var data = from client in _clientRepository.GetAll()
+                       join position in _positionRepository.GetAll() on client.Guid equals position.ClientGuid into positionGroup
+                       from position in positionGroup.DefaultIfEmpty()
+                       select new GetAvailableClient
+                       {
+                           Capacity = position!= null? position.Capacity:0,
+                           PositionName = position != null ? position.Name:null,
+                           Email = client.Email,
+                           IsAvailable = client.IsAvailable,
+                           Name = client.Name,
+                       };
+            /*var listclient = new List<GetAvailableClient>();
             foreach (var client in data) 
             {
                 var countclient = new GetAvailableClient()
                 {
-                    Name = client.Name,
-                    IsAvailable = client.IsAvailable,
+                    PositionName = client.PositionName,
                     Capacity = client.Capacity,
+                    Name = client.Name,
+                    Email = client.Email,
+                    IsAvailable = client.IsAvailable,
                 };
                 if(countclient.IsAvailable == true)
                 {
                     listclient.Add(countclient);
                 }
+            }*/
+            if(!data.Any())
+            {
+                return null;
             }
-            return listclient;
+            return data;
         }
         public IEnumerable<ClientDto> GetAll()
         {
@@ -61,7 +96,9 @@ namespace API.Services
 
         public ClientDto? Create(NewClientDto newClientDto)
         {
-            var client = _clientRepository.Create(newClientDto);
+            Client clienttoCreate = newClientDto;
+            clienttoCreate.IsAvailable = false;
+            var client = _clientRepository.Create(clienttoCreate);
             if (client is null)
             {
                 return null; // Client is null or not found;
@@ -70,15 +107,17 @@ namespace API.Services
             return (ClientDto)client; // Client is found;
         }
 
-        public int Update(ClientDto clientDto)
+        public int Update(UpdateClientDto clientDto)
         {
             var client = _clientRepository.GetByGuid(clientDto.Guid);
             if (client is null)
             {
                 return -1; // Client is null or not found;
             }
-
+            var position = _positionRepository.GetByGuid(clientDto.Guid);
+           
             Client toUpdate = clientDto;
+            toUpdate.IsAvailable = position is null ? false : true;
             toUpdate.CreatedDate = client.CreatedDate;
             var result = _clientRepository.Update(toUpdate);
 

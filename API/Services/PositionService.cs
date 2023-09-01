@@ -1,4 +1,5 @@
 ﻿using API.Contracts;
+using API.DTOs.Clients;
 using API.DTOs.Positions;
 using API.Models;
 using API.Repositories;
@@ -8,12 +9,11 @@ namespace API.Services
     public class PositionService
     {
         private readonly IPositionRepository _positionRepository;
+        private readonly IClientRepository _clientRepository;
 
-        public PositionService(IPositionRepository positionRepository)
+        public PositionService(IPositionRepository positionRepository, IClientRepository clientRepository)
         {
             _positionRepository = positionRepository;
-<<<<<<< Updated upstream
-=======
             _clientRepository = clientRepository;
         }
         public IEnumerable<GetClientName> GetPositionwithClientGuid(Guid guid) 
@@ -63,7 +63,51 @@ namespace API.Services
                 }
             }
             return merge;
->>>>>>> Stashed changes
+        }
+
+        public IEnumerable<GetClientName> GetClientName()
+        {
+            var merge = from client in _clientRepository.GetAll()
+                        join position in _positionRepository.GetAll() on client.Guid equals position.ClientGuid
+                        select new GetClientName
+                        {
+                            Guid = position.Guid,
+                            ClientGuid = position.ClientGuid,
+                            ClientName = client.Name,
+                            PositionName = position.Name,
+                            Capacity = position.Capacity,
+
+                        };
+            if(!merge.Any() )
+            {
+                return null;
+            }
+            foreach( var client in merge )
+            {
+                if( client.Capacity ==  0 )
+                {
+                    var getclient = _clientRepository.GetByGuid( client.ClientGuid );
+                    _clientRepository.Update(new ClientDto
+                    {
+                        Guid= client.ClientGuid,
+                        Email = getclient.Email,
+                        IsAvailable = false,
+                        Name = getclient.Name
+                    });
+                }
+                else if( client.Capacity > 0 )
+                {
+                    var getclient = _clientRepository.GetByGuid(client.ClientGuid);
+                    _clientRepository.Update(new ClientDto
+                    {
+                        Guid = client.ClientGuid,
+                        Email = getclient.Email,
+                        IsAvailable = true,
+                        Name = getclient.Name
+                    }) ;
+                }
+            }
+            return merge;
         }
 
         public IEnumerable<PositionDto> GetAll()
@@ -101,7 +145,14 @@ namespace API.Services
             {
                 return null; // Position is null or not found;
             }
-
+            var client = _clientRepository.GetByGuid(position.ClientGuid);
+            var clientUpdate = _clientRepository.Update(new ClientDto
+            {
+                Guid = client.Guid,
+                Email = client.Email,
+                Name = client.Name,
+                IsAvailable = true
+            });
             return (PositionDto)position; // Position is found;
         }
 

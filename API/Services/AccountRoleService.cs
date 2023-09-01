@@ -32,7 +32,12 @@ namespace API.Services
                             AccountGuid = account.Guid,
                             RoleGuid = role.Guid,
                             FullName = employee.FirstName+ " " + employee.LastName,
-                            RoleName = role.Name
+                            RoleName = role.Name,
+                            Email = employee.Email,
+                            Gender = employee.Gender,
+                            NIK = employee.NIK,
+                            PhoneNumber = employee.PhoneNumber,
+                            Skill = employee.Skill
                         };
             if(!merge.Any())
             {
@@ -40,12 +45,21 @@ namespace API.Services
             }
             return merge;
         }
+        public IEnumerable<GetAccountRolewithFullname>? GetAllTrainer() 
+        {
+            return GetAccountRolewithFullname().Where(account=>account.RoleName == "Trainer");
+        }
         public IEnumerable<GetEmployeehasAccount>? GetEmployeehasAccount()
         {
             var merge = from employee in _employeeRepository.GetAll()
                         join account in _accountRepository.GetAll() on employee.Guid equals account.Guid
+                        join accountrole in _accountRoleRepository.GetAll() on account.Guid equals accountrole?.AccountGuid into accountrolegroup
+                        from accountrole in accountrolegroup.DefaultIfEmpty()
                         select new GetEmployeehasAccount
                         {
+                            AccountGuidAccountRole = accountrole != null?accountrole.AccountGuid:null,
+                            RoleGuidAccountRole =  accountrole != null?accountrole.RoleGuid:null,
+                            EmployeeGuid = employee.Guid,
                             AccountGuid = account.Guid,
                             FullName = employee.FirstName + " " + employee.LastName,
                         };
@@ -53,7 +67,7 @@ namespace API.Services
             {
                 return null;
             }
-            return merge;
+            return merge.Where(ar=>ar.RoleGuidAccountRole == null);
         }
         public IEnumerable<GetCountedAllRole> CountAllRole()
         {

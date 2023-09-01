@@ -80,7 +80,7 @@ namespace API.Data
             modelBuilder.Entity<Employee>()
                         .HasOne(Employee => Employee.Placement)
                         .WithOne(Placement => Placement.Employee)
-                        .HasForeignKey<Placement>(Placement => Placement.EmployeeGuid);
+                        .HasForeignKey<Placement>(Placement => Placement.Guid);
             //Placement
             modelBuilder.Entity<Placement>()
                         .HasOne(Placement => Placement.Client)
@@ -88,12 +88,12 @@ namespace API.Data
                         .HasForeignKey(Placement => Placement.ClientGuid);
             //Client
             modelBuilder.Entity<Client>()
-                        .HasOne(Client => Client.Interview)
+                        .HasMany(Client => Client.Interviews)
                         .WithOne(Interview => Interview.Client)
-                        .HasForeignKey<Interview>(Interview => Interview.ClientGuid);
-            modelBuilder.Entity<Client>()
-                        .HasMany(Client => Client.Positions)
-                        .WithOne(Position => Position.Client)
+                        .HasForeignKey(Interview => Interview.ClientGuid);
+            modelBuilder.Entity<Position>()
+                        .HasOne(Position=>Position.Client)
+                        .WithMany(Client=>Client.Positions)
                         .HasForeignKey(Position => Position.ClientGuid);
             //Position
             /*modelBuilder.Entity<Position>()

@@ -19,8 +19,6 @@ namespace API.Controllers
             _interviewService = interviewService;
         }
 
-<<<<<<< Updated upstream
-=======
         [HttpGet("GetAllEmployee")]
         public IActionResult GetAllEmployee()
         {
@@ -295,7 +293,6 @@ namespace API.Controllers
                 Data = result
             });
         }
->>>>>>> Stashed changes
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -352,7 +349,8 @@ namespace API.Controllers
                 {
                     Code = StatusCodes.Status500InternalServerError,
                     Status = HttpStatusCode.InternalServerError.ToString(),
-                    Message = "Error Retrieve From Database"
+                    Message = "Error Retrieve From Database",
+                    AdditionalMessage = "Employee Already in Site or Employee Have Not Register its Grade yet"
                 });
             }
 
@@ -366,7 +364,7 @@ namespace API.Controllers
         }
 
         [HttpPut]
-        public IActionResult Update(InterviewDto interviewDto)
+        public IActionResult Update(NewInterviewDto interviewDto)
         {
             var result = _interviewService.Update(interviewDto);
 

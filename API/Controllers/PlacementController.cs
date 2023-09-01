@@ -1,4 +1,5 @@
-﻿using API.DTOs.Placements;
+﻿using API.DTOs.Accounts;
+using API.DTOs.Placements;
 using API.Services;
 using API.Utilities.Handlers;
 using Microsoft.AspNetCore.Authorization;
@@ -13,11 +14,36 @@ namespace API.Controllers
     public class PlacementController : ControllerBase
     {
         private readonly PlacementService _placementService;
+        private readonly InterviewService _interviewService;
 
-        public PlacementController(PlacementService placementService)
+        public PlacementController(PlacementService placementService, InterviewService interviewService)
         {
             _placementService = placementService;
+            _interviewService = interviewService;
         }
+
+        [HttpGet("GetEmployeeClientName")]
+        public IActionResult GetEmployeeClientName()
+        {
+            var data = _placementService.GetEmployeeClientName();
+            if (data == null)
+            {
+                return StatusCode(404, new ResponseHandler<GetEmployeeClientName>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data is not Found",
+                });
+            }
+            return Ok(new ResponseHandler<IEnumerable<GetEmployeeClientName>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Data Success Retrieved",
+                Data = data
+            });
+        }
+
         [HttpGet("CountClient")]
         public IActionResult CountEmployee()
         {
@@ -39,6 +65,7 @@ namespace API.Controllers
                 Data = data
             });
         }
+
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -89,13 +116,15 @@ namespace API.Controllers
         public IActionResult Insert(NewPlacementDto newPlacementDto)
         {
             var result = _placementService.Create(newPlacementDto);
+            var deleteInterview = _interviewService.Delete(newPlacementDto.Guid);
             if (result is null)
             {
                 return StatusCode(500, new ResponseHandler<PlacementDto>
                 {
                     Code = StatusCodes.Status500InternalServerError,
                     Status = HttpStatusCode.InternalServerError.ToString(),
-                    Message = "Error Retrieve From Database"
+                    Message = "Error Retrieve From Database",
+                    AdditionalMessage = "Employee Have Not Being Interview Yet"
                 });
             }
 

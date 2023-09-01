@@ -19,6 +19,117 @@ namespace API.Controllers
             _gradeService = gradeService;
         }
 
+        [HttpGet("CountEmployeeinGrade")]
+        public IActionResult CountEmployeeinGrade()
+        {
+            var result = _gradeService.CountEmployeeinGrade();
+            if (result == null)
+            {
+                return NotFound(new ResponseHandler<CountEmployee>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data Not Found"
+                });
+            }
+
+            return Ok(new ResponseHandler<CountEmployee>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success Retrieve Data",
+                Data = result
+            });
+        }
+        [HttpGet("GetEmployeeName")]
+        public IActionResult GetEmployeeName()
+        {
+            var result = _gradeService.GetEmployeeNames();
+            if (!result.Any())
+            {
+                return NotFound(new ResponseHandler<GetEmployeeName>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data Not Found"
+                });
+            }
+
+            return Ok(new ResponseHandler<IEnumerable<GetEmployeeName>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success Retrieve Data",
+                Data = result
+            });
+        }
+
+        [HttpGet("GetUngradedEmployee")]
+        public IActionResult GetUngradedEmployee()
+        {
+            var result = _gradeService.GetAllEmployeewithGrade().Where(grade=>grade.GradeName==null);
+            if (!result.Any())
+            {
+                return NotFound(new ResponseHandler<GradewithName>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data Not Found"
+                });
+            }
+
+            return Ok(new ResponseHandler<IEnumerable<GradewithName>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success Retrieve Data",
+                Data = result
+            });
+        }
+        [HttpGet("GetGradedEmployee")]
+        public IActionResult GetGradedEmployee()
+        {
+            var result = _gradeService.GetAllEmployeewithGrade().Where(grade=>grade.GradeName!=null);
+            if (!result.Any())
+            {
+                return NotFound(new ResponseHandler<GradewithName>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data Not Found"
+                });
+            }
+
+            return Ok(new ResponseHandler<IEnumerable<GradewithName>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success Retrieve Data",
+                Data = result
+            });
+        }
+        [HttpGet("GradewithName")]
+        public IActionResult GradewithName()
+        {
+            var result = _gradeService.GetwithName();
+            if (!result.Any())
+            {
+                return NotFound(new ResponseHandler<GradewithName>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data Not Found"
+                });
+            }
+
+            return Ok(new ResponseHandler<IEnumerable<GradewithName>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success Retrieve Data",
+                Data = result
+            });
+        }
         [HttpGet]
         public IActionResult GetAll()
         {

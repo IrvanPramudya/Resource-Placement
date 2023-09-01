@@ -31,6 +31,9 @@
                                                                                             <div class="col-4">Interview Date</div>
                                                                                             <div class="col-8">${val.interviewDate != null ? moment(val.interviewDate).format("dddd, D MMMM YYYY, HH:mm") : null}</div>
                                                                                         </div>
+                                                                                                <input type="hidden" value="${val.clientGuid}" id="client"/>
+                                                                                               <input type="hidden" value="${val.interviewDate}" id="interviewDate"/>
+                                                                                               <input type="hidden" value="${val.text}" id="note"/>
                                                                                                 <div class="row mt-2">
                                                                                             <div class="col">
                                                                                                     <button onclick="InterviewAcceptedbyClient('${val.guid}')" class="btn btn-outline-info" data-bs-placement="top" title="Accepted Employee"><box-icon name='check' color="white" size="sm"></box-icon></button>
