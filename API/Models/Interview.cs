@@ -9,10 +9,22 @@ namespace API.Models
         public DateTime InterviewDate { get; set; }
         [Column("text")]
         public string? Text { get; set; }
+        [Column("comment")]
+        public string? Comment { get; set; }
         [Column("client_guid")]
         public Guid ClientGuid { get; set; }
+<<<<<<< Updated upstream
         /*[Column("position_guid")]
         public Guid PositionGuid { get; set; }*/
+=======
+        [Column("position_guid")]
+        public Guid PositionGuid { get; set; }
+        [Column("is_accepted")]
+        public bool? IsAccepted { get; set; }
+        [Column("status")]
+        public InterviewLevel Status { get; set; }
+>>>>>>> Stashed changes
+
 
         //Cardinality
         public Employee? Employee { get; set; }

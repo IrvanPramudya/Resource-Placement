@@ -8,9 +8,79 @@ namespace API.Services
     {
         private readonly IGradeRepository _gradeRepository;
 
+<<<<<<< Updated upstream
         public GradeService(IGradeRepository gradeRepository)
         {
             _gradeRepository = gradeRepository;
+=======
+        public GradeService(IGradeRepository gradeRepository, IEmployeeRepository employeeRepository, IAccountRepository accountRepository, IAccountRoleRepository accountRoleRepository)
+        {
+            _gradeRepository = gradeRepository;
+            _employeeRepository = employeeRepository;
+            _accountRepository = accountRepository;
+            _accountRoleRepository = accountRoleRepository;
+        }
+        public CountEmployee CountEmployeeinGrade()
+        {
+            var grade = GetAllEmployeewithGrade();
+            var newgrade = new CountEmployee();
+            foreach (var item in grade)
+            {
+                if (item.GradeName == null)
+                {
+                    newgrade.CountUngraded++;
+                }
+                else
+                {
+                    newgrade.CountGraded++;
+                }
+            }
+            return newgrade;
+        }
+        public IEnumerable<GradewithName>? GetAllEmployeewithGrade()
+        {
+
+            var merge = from employee in _employeeRepository.GetAll()
+                        join grade in _gradeRepository.GetAll() on employee.Guid equals grade.Guid into gradegroup
+                        from grade in gradegroup.DefaultIfEmpty()
+                        join account in _accountRepository.GetAll() on employee.Guid equals account.Guid
+                        join accountrole in _accountRoleRepository.GetEmployeewithEmployeeRole() on account.Guid equals accountrole.AccountGuid
+                        
+                        select new GradewithName
+                        {
+                            Guid = employee.Guid,
+                            EmployeeName = employee.FirstName + " " + employee.LastName,
+                            GradeName = grade != null ? grade.Name : null,
+                            Salary = grade != null ? grade.Salary : 0,
+                            Email = employee.Email,
+                            Gender = employee.Gender,
+                            NIK = employee.NIK,
+                            PhoneNumber = employee.PhoneNumber,
+                            Skill = employee.Skill
+                        };
+            if (!merge.Any())
+            {
+                return null;
+            }
+            return merge;
+        }
+        public IEnumerable<GradewithName>? GetwithName()
+        {
+            var merge = from employee in _employeeRepository.GetAll()
+                        join grade in _gradeRepository.GetAll() on employee.Guid equals grade.Guid
+                        select new GradewithName
+                        {
+                            Guid = employee.Guid,
+                            EmployeeName = employee.FirstName + " " + employee.LastName,
+                            GradeName = grade.Name,
+                            Salary = grade.Salary,
+                        };
+            if (!merge.Any())
+            {
+                return null;
+            }
+            return merge;
+>>>>>>> Stashed changes
         }
 
         public IEnumerable<GradeDto> GetAll()

@@ -8,12 +8,53 @@ namespace API.Services
     public class PlacementService
     {
         private readonly IPlacementRepository _placementRepository;
+<<<<<<< Updated upstream
         private readonly IClientRepository _clientRepository;
 
         public PlacementService(IPlacementRepository placementRepository, IClientRepository clientRepository)
         {
             _placementRepository = placementRepository;
             _clientRepository = clientRepository;
+=======
+        private readonly IPositionRepository _positionRepository;
+        private readonly IInterviewRepository _interviewRepository;
+        private readonly PlacementDbContext _dbContext;
+
+        public PlacementService(IPlacementRepository placementRepository, IClientRepository clientRepository, IEmployeeRepository employeeRepository, IInterviewRepository interviewRepository, PlacementDbContext dbContext, IPositionRepository positionRepository)
+        {
+            _placementRepository = placementRepository;
+            _clientRepository = clientRepository;
+            _employeeRepository = employeeRepository;
+            _interviewRepository = interviewRepository;
+            _dbContext = dbContext;
+            _positionRepository = positionRepository;
+        }
+        public IEnumerable<GetEmployeeClientName> GetEmployeeClientName()
+        {
+            var merge = from e in _employeeRepository.GetAll()
+                        join p in _placementRepository.GetAll() on e.Guid equals p.Guid
+                        join c in _clientRepository.GetAll() on p.ClientGuid equals c.Guid
+                        join pos in _positionRepository.GetAll() on c.Guid equals pos.ClientGuid
+                        where p.PositionGuid == pos.Guid
+                        select new GetEmployeeClientName
+                        {
+                            Guid = p.Guid,
+                            EmployeeGuid = e.Guid,
+                            PositionGuid = p.PositionGuid,
+                            ClientGuid = c.Guid,
+                            StartDate = p.StartDate,
+                            EndDate = p.EndDate,
+                            EmployeeName = e.FirstName + " " +e.LastName,
+                            ClientName = c.Name,
+                            PositionName = pos.Name,
+                            
+                        };
+            if (!merge.Any())
+            {
+                return null;
+            }
+            return merge;
+>>>>>>> Stashed changes
         }
         public IEnumerable<GetCountedClient> GetCountedClient()
         {
@@ -73,8 +114,51 @@ namespace API.Services
             {
                 return null; // Placement is null or not found;
             }
+<<<<<<< Updated upstream
 
             return (PlacementDto)placement; // Placement is found;
+=======
+            using var transaction = _dbContext.Database.BeginTransaction();
+            try
+            {
+                Placement createplacement = newPlacementDto;
+                createplacement.ClientGuid = interview.ClientGuid;
+                createplacement.PositionGuid = interview.PositionGuid;
+                var placement = _placementRepository.Create(createplacement);
+                if (placement is null)
+                {
+                    return null; // Placement is null or not found;
+                }
+                var employee = _employeeRepository.GetByGuid(newPlacementDto.Guid);
+                if (employee is null)
+                {
+                    return null; // employee is null or not found;
+                }
+                var employeeUpdate = new UpdateEmployeeDto
+                {
+                    Guid = newPlacementDto.Guid,
+                    Email = employee.Email,
+                    FirstName = employee.FirstName,
+                    LastName = employee.LastName,
+                    Gender = employee.Gender,
+                    PhoneNumber = employee.PhoneNumber,
+                    Skill = employee.Skill,
+                    Status = Utilities.Enums.StatusLevel.Site
+                };
+                Employee employeeToUpdate = employeeUpdate;
+                employeeToUpdate.NIK = employee.NIK;
+                employeeToUpdate.CreatedDate = employee.CreatedDate;
+                var UpdatedEmployee = _employeeRepository.Update(employeeToUpdate);
+                transaction.Commit();
+                return (PlacementDto)placement; // Placement is found;
+            }
+            catch
+            {
+                transaction.Rollback();
+                return null;
+            }
+            
+>>>>>>> Stashed changes
         }
 
         public int Update(PlacementDto placementDto)
