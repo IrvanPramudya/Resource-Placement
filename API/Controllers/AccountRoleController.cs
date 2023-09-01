@@ -42,6 +42,28 @@ namespace API.Controllers
                 Data = result
             });
         }
+        [HttpGet("GetAllTrainer")]
+        public IActionResult GetAllTrainer()
+        {
+            var result = _accountRoleService.GetAllTrainer();
+            if (!result.Any())
+            {
+                return NotFound(new ResponseHandler<IEnumerable<GetAccountRolewithFullname>>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data Not Found"
+                });
+            }
+
+            return Ok(new ResponseHandler<IEnumerable<GetAccountRolewithFullname>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success Retrieve Data",
+                Data = result
+            });
+        }
         [HttpGet("GetAccountRolewithFullName")]
         public IActionResult GetAccountRolewithFullName()
         {

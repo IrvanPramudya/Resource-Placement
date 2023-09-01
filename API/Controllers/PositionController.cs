@@ -19,6 +19,28 @@ namespace API.Controllers
             _positionService = positionService;
         }
 
+        [HttpGet("GetPosition/{guid}")]
+        public IActionResult GetPositionwithClientGuid(Guid guid) 
+        {
+            var result = _positionService.GetPositionwithClientGuid(guid);
+            if(!result.Any())
+            {
+                return NotFound(new ResponseHandler<GetClientName>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data Not Found"
+                });
+            }
+            return Ok(new ResponseHandler<IEnumerable<GetClientName>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success Retrieve Data",
+                Data = result
+            });
+
+        }
         [HttpGet("GetClientName")]
         public IActionResult GetClientName() 
         {
@@ -41,7 +63,6 @@ namespace API.Controllers
             });
 
         }
-
         [HttpGet]
         public IActionResult GetAll()
         {

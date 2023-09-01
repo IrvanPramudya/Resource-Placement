@@ -1,10 +1,13 @@
 ﻿using API.Contracts;
 using API.Data;
+using API.DTOs.AccountRoles;
 using API.DTOs.Accounts;
 using API.DTOs.Interviews;
 using API.Models;
 using API.Repositories;
+using API.Utilities.Enums;
 using API.Utilities.Handlers;
+using Microsoft.OpenApi.Extensions;
 using static System.Net.WebRequestMethods;
 
 namespace API.Services
@@ -14,13 +17,15 @@ namespace API.Services
         private readonly IInterviewRepository _interviewRepository;
         private readonly IGradeRepository _gradeRepository;
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IAccountRepository _accountRepository;
+        private readonly IAccountRoleRepository _accountroleRepository;
         private readonly IClientRepository _clientRepository;
         private readonly IPositionRepository _positionRepository;
         private readonly IPlacementRepository _placementRepository;
         private readonly IEmailHandler _emailHandler;
         private readonly PlacementDbContext _dbContext;
 
-        public InterviewService(IInterviewRepository interviewRepository, IEmployeeRepository employeeRepository, IClientRepository clientRepository, IPositionRepository positionRepository, IEmailHandler emailHandler, IPlacementRepository placementRepository, IGradeRepository gradeRepository, PlacementDbContext dbContext)
+        public InterviewService(IInterviewRepository interviewRepository, IEmployeeRepository employeeRepository, IClientRepository clientRepository, IPositionRepository positionRepository, IEmailHandler emailHandler, IPlacementRepository placementRepository, IGradeRepository gradeRepository, PlacementDbContext dbContext, IAccountRepository accountRepository, IAccountRoleRepository accountroleRepository)
         {
             _interviewRepository = interviewRepository;
             _employeeRepository = employeeRepository;
@@ -30,21 +35,55 @@ namespace API.Services
             _placementRepository = placementRepository;
             _gradeRepository = gradeRepository;
             _dbContext = dbContext;
+            _accountRepository = accountRepository;
+            _accountroleRepository = accountroleRepository;
         }
+
         public IEnumerable<GetRemainingEmployee> GetAllInterviewEmployeePlacement()
         {
             var merge = from employee in _employeeRepository.GetAll()
+                        join account in _accountRepository.GetAll() on employee.Guid equals account.Guid
+                        join accountrole in _accountroleRepository.GetEmployeewithEmployeeRole() on account.Guid equals accountrole.AccountGuid
                         join placement in _placementRepository.GetAll() on employee.Guid equals placement.Guid into placementgroup
                         from placement in placementgroup.DefaultIfEmpty()
-                        join interview in _interviewRepository.GetAll() on employee.Guid equals interview.Guid into interviewgroup
-                        from interview in interviewgroup.DefaultIfEmpty()
+                        join interview in _interviewRepository.GetAll() on employee.Guid equals interview.Guid
                         join client in _clientRepository.GetAll() on (interview != null ? interview.ClientGuid : placement.ClientGuid) equals client.Guid into CliGrp
                         from client in CliGrp.DefaultIfEmpty()
+                        join position in _positionRepository.GetAll() on client.Guid equals position.ClientGuid
+                        where interview.PositionGuid == position.Guid 
                         select new GetRemainingEmployee
                         {
                             Guid = employee.Guid,
                             Status = interview != null? interview.Status : null,
                             ClientName = interview != null? client.Name :null,
+                            ClientGuid = interview != null? interview.ClientGuid:null,
+                            PositionGuid = interview != null? interview.PositionGuid:null,
+                            InterviewDate = interview !=null? interview.InterviewDate:null,
+                            FullName = employee.FirstName + " " + employee.LastName,
+                            PlacementGuid = placement != null? placement.Guid : null,
+                            StartDate = placement != null? placement.StartDate:null,
+                            PositionName = position.Name,
+
+                        };
+            if(!merge.Any())
+            {
+                return null;
+            }
+            return merge;
+        }
+        public IEnumerable<GetRemainingEmployee> GetAllEmployee()
+        {
+            var merge = from employee in _employeeRepository.GetAll()
+                        join account in _accountRepository.GetAll() on employee.Guid equals account.Guid
+                        join accountrole in _accountroleRepository.GetEmployeewithEmployeeRole() on account.Guid equals accountrole.AccountGuid
+                        join placement in _placementRepository.GetAll() on employee.Guid equals placement.Guid into placementgroup
+                        from placement in placementgroup.DefaultIfEmpty()
+                        join interview in _interviewRepository.GetAll() on employee.Guid equals interview.Guid into interviewgroup
+                        from interview in interviewgroup.DefaultIfEmpty()
+                        select new GetRemainingEmployee
+                        {
+                            Guid = employee.Guid,
+                            Status = interview != null? interview.Status : null,
                             ClientGuid = interview != null? interview.ClientGuid:null,
                             InterviewDate = interview !=null? interview.InterviewDate:null,
                             FullName = employee.FirstName + " " + employee.LastName,
@@ -58,48 +97,83 @@ namespace API.Services
             }
             return merge;
         }
-        /*public IEnumerable<GetRemainingEmployee> GetAllEmployeeWaitingRespons()
+        public GetCountedInterviewStatus CountInterviewStatus()
         {
-             return GetAllInterviewEmployeePlacement().Where(inter=>inter.Status == Utilities.Enums.InterviewLevel.EmployeeResponWaiting);
+            var interview = _interviewRepository.GetAll();
+            var count0 = 0;
+            var count1 = 0;
+            var count2 = 0;
+            var count3 = 0;
+            var count4 = 0;
+            foreach (var item in interview)
+            {
+                if(item.Status == InterviewLevel.EmployeeResponWaiting)
+                {
+                    count0++;
+                }
+                if(item.Status == InterviewLevel.AcceptedbyEmployee)
+                {
+                    count1++;
+                }
+                if(item.Status == InterviewLevel.RejectedbyEmployee)
+                {
+                    count2++;
+                }
+                if(item.Status == InterviewLevel.AcceptedbyClient)
+                {
+                    count3++;
+                }
+                if(item.Status == InterviewLevel.RejectedbyClient)
+                {
+                    count4++;
+                }
+            }
+
+            return new GetCountedInterviewStatus
+            {
+                CountStatusWaiting = count0,
+                CountStatusAcceptedbyEmployee = count1,
+                CountStatusRejectedbyEmployee = count2,
+                CountStatusAcceptedbyClient = count3,
+                CountStatusRejectedbyClient = count4,
+            };
         }
-        public IEnumerable<GetRemainingEmployee> GetAllEmployeeAcceptedbyEmployee()
-        {
-             return GetAllInterviewEmployeePlacement().Where(inter=>inter.Status == Utilities.Enums.InterviewLevel.AcceptedbyEmployee);
-        }
-        public IEnumerable<GetRemainingEmployee> GetAllEmployeeRejectedbyEmployee()
-        {
-             return GetAllInterviewEmployeePlacement().Where(inter=>inter.Status == Utilities.Enums.InterviewLevel.RejectedbyEmployee);
-        }
-        public IEnumerable<GetRemainingEmployee> GetAllEmployeeAcceptedbyClient()
-        {
-             return GetAllInterviewEmployeePlacement().Where(inter=>inter.Status == Utilities.Enums.InterviewLevel.AcceptedbyClient);
-        }
-        public IEnumerable<GetRemainingEmployee> GetAllEmployeeRejectedbyClient()
-        {
-             return GetAllInterviewEmployeePlacement().Where(inter=>inter.Status == Utilities.Enums.InterviewLevel.RejectedbyClient);
-        }*/
         public IEnumerable<GetRemainingEmployee> GetEmployeeOuterJoinInterview()
         {
-             return GetAllInterviewEmployeePlacement().Where(inter=>inter.InterviewDate == null && inter.PlacementGuid == null);
+             return GetAllEmployee().Where(inter=>inter.InterviewDate == null && inter.PlacementGuid == null);
         }
         public IEnumerable<GetRemainingEmployee> GetEmployeeOuterJoinPlacement()
         {
-             return GetAllInterviewEmployeePlacement().Where(inter=> inter.PlacementGuid == null && inter.Status == Utilities.Enums.InterviewLevel.AcceptedbyClient);
+             return GetAllEmployee().Where(inter=> inter.PlacementGuid == null && inter.Status == Utilities.Enums.InterviewLevel.AcceptedbyClient);
         }
-        public int UpdateFullInterview(InterviewDto interviewDto)
+        public int UpdateFullInterview(UpdateInterviewDto interviewDto)
         {
             var interview = _interviewRepository.GetByGuid(interviewDto.Guid);
             if (interview is null)
             {
                 return -1; // Interview is null or not found;
             }
-
             Interview toUpdate = interviewDto;
+            /*if (interview.Status!= InterviewLevel.AcceptedbyClient) 
+            { 
+            toUpdate.IsAccepted = false;
             toUpdate.CreatedDate = interview.CreatedDate;
+            }
+            else
+            {*/
+                /*toUpdate.IsAccepted = true;*/
+            /*}*/
+            toUpdate.CreatedDate = interview.CreatedDate;
+            toUpdate.InterviewDate = interview.InterviewDate;
+            toUpdate.PositionGuid = interview.PositionGuid;
+            toUpdate.ClientGuid = interview.ClientGuid;
+            toUpdate.Text = interview.Text;
             var result = _interviewRepository.Update(toUpdate);
-
             return result ? 1 // Interview is updated;
-                : 0; // Interview failed to update;
+            : 0; // Interview failed to update;
+
+
+
         }
         public IEnumerable<InformatifInterview> GetUnresultInterviews()
         {
@@ -111,16 +185,21 @@ namespace API.Services
             var merge = from employee in _employeeRepository.GetAll()
                         join interview in _interviewRepository.GetAll() on employee.Guid equals interview.Guid
                         join client in _clientRepository.GetAll() on interview.ClientGuid equals client.Guid
+                        join position in _positionRepository.GetAll() on client.Guid equals position.ClientGuid
+                        where interview.PositionGuid == position.Guid
                         select new InformatifInterview
                         {
                             ClientGuid = interview.ClientGuid,
+                            PositionGuid = interview.PositionGuid,
                             Guid = employee.Guid,
+                            PositionName = position.Name,
                             ClientName = client.Name,
                             FullName = employee.FirstName+ " "+ employee.LastName,
                             InterviewDate = interview.InterviewDate,
                             IsAccepted = interview.IsAccepted,
                             Status = interview.Status,
-                            Text = interview.Text
+                            Text = interview.Text,
+                            Comment = interview.Comment
                         };
             return merge;
         }
@@ -154,9 +233,6 @@ namespace API.Services
 
         public InterviewDto? Create(NewInterviewDto newInterviewDto)
         {
-            using var transaction = _dbContext.Database.BeginTransaction();
-            try
-            {
                 var grade = _gradeRepository.GetByGuid(newInterviewDto.Guid);
                 if (grade == null)
                 {
@@ -169,7 +245,11 @@ namespace API.Services
                     return null;
                 }
                 _placementRepository.Clear();
+            using var transaction = _dbContext.Database.BeginTransaction();
+            try
+            {
                 Interview interviewtoCreate = newInterviewDto;
+                interviewtoCreate.Comment = null;
                 interviewtoCreate.IsAccepted = false;
                 interviewtoCreate.Status = Utilities.Enums.InterviewLevel.EmployeeResponWaiting;
                 var interview = _interviewRepository.Create(interviewtoCreate);
@@ -178,7 +258,9 @@ namespace API.Services
                     return null; // Interview is null or not found;
                 }
                 _interviewRepository.Clear();
-                var position = _positionRepository.GetByClientGuid(newInterviewDto.ClientGuid); //Revisi Menggunakan GetByClient
+                var getposition = _positionRepository.GetByClientGuid(newInterviewDto.ClientGuid);
+                var position = getposition.Where(interview => interview.Guid.Equals(newInterviewDto.PositionGuid)).FirstOrDefault(); //Revisi Menggunakan GetByClient
+                /*var selectedPosition = _positionRepository.GetByGuid*/
                 _positionRepository.Clear();
                 var positionUpdate = _positionRepository.Update(new Position
                 {
@@ -217,7 +299,7 @@ namespace API.Services
                             $"<td>{formattedDate}</td>    " +
                             $"<td>{interview.Text}</td>" +
                         $"</tr>" +
-                    $"</table>"+
+                    $"</table>" +
                     $"<br /> Thank your for the attention hope we will get better at our collaboration");
                 transaction.Commit();
                 return (InterviewDto)interview; // Interview is found;
@@ -227,6 +309,7 @@ namespace API.Services
                 transaction.Rollback();
                 return null;
             }
+
         }
 
         public int Update(NewInterviewDto interviewDto)

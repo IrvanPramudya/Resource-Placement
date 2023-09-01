@@ -2,88 +2,301 @@
     ViewData["Title"] = "Dashboard";
     Layout = "AdminLayout";
 }
-@if (User.IsInRole("Admin") || User.IsInRole("Operasional"))
-{
-    <ul class="insights" id="Adding-Role"></ul>
-
-    <div class="bottom-data">
-        <div class="row" style="height:30%; width:40%">
-            <div class="col-6">
-                <div class="header">
-                    <i class='bx bx-receipt'></i>
-                    <h3>Gender</h3>
-                </div>
-                <div class="chart-container" style="position: relative; height:100%; width:100%">
-                    <canvas id="GenderChart"></canvas>
-                </div>
-            </div>
-            <div class="col-6">
-                <div class="header">
-                    <i class='bx bx-receipt'></i>
-                    <h3>Status</h3>
-                </div>
-                <div class="chart-container" style="position: relative; height:100%; width:100%">
-                    <canvas id="StatusChart"></canvas>
-                </div>
-            </div>
-        </div>
-        <div class="reminders">
-            <div class="header">
-                <i class='bx bx-note'></i>
-                <h3>Placement</h3>
-                <i class='bx bx-filter'></i>
-                <i class='bx bx-plus'></i>
-            </div>
-            <div class="chart">
-                <canvas id="chart-line" class="chart-canvas" height="300"></canvas>
-            </div>
-        </div>
-    </div>
-}
-@if (User.IsInRole("Employee"))
-{
-    <div class="container-fluid py-4">
-        <div class="row mt-4">
-            <div class="col-lg-7 mb-lg-0 mb-4">
-                <div class="card">
+<div class="container-fluid py-4">
+    <p class="text-start h1 fw-bold mb-4 mx-auto mt-0">Dashboard</p>
+    @if (User.IsInRole("Admin"))
+    {
+        <ul class="insights" id="Adding-Role"></ul>
+    }
+    @if (User.IsInRole("Operasional"))
+    {
+        <div class="row justify-content-center">
+            <h3 class="text-center"><span class="badge text-bg-secondary">INTERVIEW</span></h3>
+            <div class="col-xl-auto col-sm-4 mb-xl-0 mb-4">
+                <div class="card cursor-pointer" style="background-color:#EBECF0" onclick="loadWaitingRespon()">
                     <div class="card-body p-3">
                         <div class="row">
-                            <div class="col-lg-6">
-                                <div class="d-flex flex-column h-100">
-                                    <p class="mb-1 pt-2 text-bold">Resource Placement Application</p>
-                                    <h5 class="font-weight-bolder">Welcome Back, Mr @User.FindFirst("Fullname").Value</h5>
-                                    <p class="mb-5">Hope You Enjoy You're Day</p>
+                            <div class="col-12">
+                                <div class="numbers">
+                                    <p class="text-center text-sm mb-0 text-capitalize font-weight-bold">Waiting Employee Respons</p>
+                                    <h5 class="text-center font-weight-bolder mb-0" id="StatusWaiting">
+                                    </h5>
                                 </div>
                             </div>
-                            <div class="col-lg-5 ms-auto text-center mt-5 mt-lg-0">
-                                <div class="bg-gradient-primary border-radius-lg h-100">
-                                    @*<img src="~/soft-ui/assets/img/shapes/waves-white.svg" class="position-absolute h-100 w-50 top-0 d-lg-block d-none" alt="waves">*@
-                                    <div class="position-relative d-flex align-items-center justify-content-center h-100">
-                                        <img class="w-100 position-relative z-index-2 pt-4" src="~/images/metrodata.webp" alt="metrodata">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-2 col-sm-4 mb-xl-0 mb-4">
+                <div class="card cursor-pointer" style="background-color:#00ffff" onclick="loadEmployeeAccepted()">
+                    <div class="card-body p-3">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="numbers">
+                                    <p class="text-center text-sm mb-0 text-capitalize font-weight-bold">Accepted by Employee</p>
+                                    <h5 class="text-center font-weight-bolder mb-0" id="StatusAcceptedbyEmployee">
+                                    </h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-2 col-sm-4 mb-xl-0 mb-4">
+                <div class="card cursor-pointer" style="background-color:#FD5E53" onclick="loadEmployeeRejected()">
+                    <div class="card-body p-3">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="numbers">
+                                    <p class="text-center text-sm mb-0 text-capitalize font-weight-bold">Rejected by Employee</p>
+                                    <h5 class="text-center font-weight-bolder mb-0" id="StatusRejectedbyEmployee">
+                                    </h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-2 col-sm-4 mb-xl-0 mb-4">
+                <div class="card cursor-pointer" style="background-color:#98FB98" onclick="loadClientAccepted()">
+                    <div class="card-body p-3">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="numbers">
+                                    <p class="text-center text-sm mb-0 text-capitalize font-weight-bold">Accepted by Client</p>
+                                    <h5 class="text-center font-weight-bolder mb-0" id="StatusAcceptedbyClient">
+                                    </h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-2 col-sm-4 mb-xl-0 mb-4">
+                <div class="card cursor-pointer" style="background-color:#FFF700" onclick="loadClientRejected()">
+                        <div class="card-body p-3">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="numbers">
+                                        <p class="text-center text-sm mb-0 text-capitalize font-weight-bold">Rejected by Client</p>
+                                        <h5 class="text-center font-weight-bolder mb-0" id="StatusRejectedbyClient">
+                                        </h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                </div>
+            </div>
+        <div class="row mt-3 justify-content-center">
+            <div class="col-4">
+                <div class="row">
+                    <h3 class="text-center"><span class="badge text-bg-info my-2">EMPLOYEE</span></h3>
+                    <div class="col-md-6">
+                        <div class="card cursor-pointer" onclick="loadEmployeeSite()" style="background-color:#EBECF0">
+                            <div class="card-header mx-4 p-3 text-center">
+                                <div class="icon icon-shape icon-lg bg-gradient-primary shadow text-center border-radius-lg">
+                                    <i class="fas fa-landmark opacity-10"></i>
+                                </div>
+                            </div>
+                            <div class="card-body pt-0 p-3 text-center">
+                                <h6 class="text-center mb-0">SITE</h6>
+                                <hr class="horizontal dark my-3">
+                                <h5 class="mb-0" id="countSite"></h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mt-md-0 mt-4">
+                        <div class="card cursor-pointer" onclick="loadEmployeeIdle()" style="background-color:#EBECF0">
+                            <div class="card-header mx-4 p-3 text-center">
+                                <span id="inputedInterview"></span>
+                                <div class="icon icon-shape icon-lg bg-gradient-primary shadow text-center border-radius-lg">
+                                    <i class="fas fa-landmark opacity-10"></i>
+                                </div>
+                            </div>
+                            <div class="card-body pt-0 p-3 text-center">
+                                <h6 class="text-center mb-0">IDLE GRADED</h6>
+                                <hr class="horizontal dark my-3">
+                                <h5 class="mb-0" id="countIdle"></h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="row">
+                    <h3 class="text-center"><span class="badge text-bg-info my-2">TRAINER</span></h3>
+                    <div class="col-md-12">
+                        <div class="card cursor-pointer" onclick="loadTrainer()" style="background-color:#EBECF0">
+                            <div class="card-header mx-4 p-3 text-center">
+                                <div class="icon icon-shape icon-lg bg-gradient-primary shadow text-center border-radius-lg">
+                                    <i class="fas fa-landmark opacity-10"></i>
+                                </div>
+                            </div>
+                            <div class="card-body pt-0 p-3 text-center">
+                                <h6 class="text-center mb-0">AVAILABLE</h6>
+                                <hr class="horizontal dark my-3">
+                                <h5 class="mb-0" id="countTrainer"></h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="row">
+                    <h3 class="text-center"><span class="badge text-bg-info my-2">CLIENT</span></h3>
+                    <div class="col-md-6">
+                        <div class="card cursor-pointer" onclick="loadAvailableClient()" style="background-color:#EBECF0">
+                            <div class="card-header mx-4 p-3 text-center">
+                                <div class="icon icon-shape icon-lg bg-gradient-primary shadow text-center border-radius-lg">
+                                    <i class="fas fa-landmark opacity-10"></i>
+                                </div>
+                            </div>
+                            <div class="card-body pt-0 p-3 text-center">
+                                <h6 class="text-center mb-0">AVAILABLE</h6>
+                                <hr class="horizontal dark my-3">
+                                <h5 class="mb-0" id="countAvailable"></h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card cursor-pointer" onclick="loadUnavailableClient()" style="background-color:#EBECF0">
+                            <div class="card-header mx-4 p-3 text-center">
+                                <div class="icon icon-shape icon-lg bg-gradient-primary shadow text-center border-radius-lg">
+                                    <i class="fas fa-landmark opacity-10"></i>
+                                </div>
+                            </div>
+                            <div class="card-body pt-0 p-3 text-center">
+                                <h6 class="text-center mb-0">UNAVAILABLE</h6>
+                                <hr class="horizontal dark my-3">
+                                <h5 class="mb-0" id="countUnAvailable"></h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    @if (User.IsInRole("Admin")||User.IsInRole("Operasional"))
+    {
+        <div class="bottom-data">
+            <div class="row" style="height:30%; width:40%">
+                <div class="col-6">
+                    <div class="header">
+                        <i class='bx bx-receipt'></i>
+                        <h3>Gender</h3>
+                    </div>
+                    <div class="chart-container" style="position: relative; height:100%; width:100%">
+                        <canvas id="GenderChart"></canvas>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="header">
+                        <i class='bx bx-receipt'></i>
+                        <h3>Status</h3>
+                    </div>
+                    <div class="chart-container" style="position: relative; height:100%; width:100%">
+                        <canvas id="StatusChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="reminders">
+                <div class="header">
+                    <i class='bx bx-note'></i>
+                    <h3>Placement</h3>
+                    <i class='bx bx-filter'></i>
+                    <i class='bx bx-plus'></i>
+                </div>
+                <div class="chart">
+                    <canvas id="chart-line" class="chart-canvas" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    }
+    
+
+    @if (User.IsInRole("Employee"))
+    {
+            <div class="row mt-4">
+                <div class="col-lg-7 mb-lg-0 mb-4">
+                    <div class="card" style="background-color:#EBECF0">
+                        <div class="card-body p-3">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="d-flex flex-column h-100">
+                                        <p class="mb-1 pt-2 text-bold">Resource Placement Application</p>
+                                        <h5 class="font-weight-bolder">Welcome Back, Mr @User.FindFirst("Fullname").Value</h5>
+                                        <p class="mb-5">Hope You Enjoy Your Day</p>
+                                    </div>
+                                </div>
+                                <div class="col-lg-5 ms-auto text-center mt-5 mt-lg-0">
+                                    <div class="border-radius-lg h-100">
+                                        @*<img src="~/soft-ui/assets/img/shapes/waves-white.svg" class="position-absolute h-100 w-50 top-0 d-lg-block d-none" alt="waves">*@
+                                        <div class="position-relative d-flex align-items-center justify-content-center h-100">
+                                            <img class="w-100 position-relative z-index-2 pt-4" src="~/images/metrodata.webp" alt="metrodata">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-5">
-                <div class="card h-100 p-3">
-                    <div class="overflow-hidden position-relative border-radius-lg bg-cover h-100" style="background-image: url('~/soft-ui/assets/img/ivancik.jpg');">
-                        <span class="mask bg-gradient-dark"></span>
-                        <div class="card-body position-relative z-index-1 d-flex flex-column h-100 p-3">
-                            <h5 class="text-white font-weight-bolder mb-4 pt-2">Here is Your Interview Progres</h5>
-                            <div id="progressBar">
+                <div class="col-lg-5">
+                    <div class="card h-100 p-3" style="background-color:#EBECF0">
+                        <div class="overflow-hidden position-relative border-radius-lg bg-cover h-100" style="background-image: url('~/soft-ui/assets/img/ivancik.jpg');">
+                            <span class="mask bg-gradient-dark"></span>
+                            <div class="card-body position-relative z-index-1 d-flex flex-column h-100 p-3">
+                                <h5 class="text-white font-weight-bolder mb-4 pt-2">Here is Your Interview Progres</h5>
+                                <div id="progressBar">
 
+                                </div>
+                                <h3 id="explainStatus"></h3>
                             </div>
-                            <h3 id="explainStatus"></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    }
+    @if(User.IsInRole("Trainer"))
+    {
+        <div class="row mt-3">
+            <div class="col-4">
+                <div class="row">
+                    <h3 class="text-center"><span class="badge text-bg-info my-2">EMPLOYEE</span></h3>
+                    <div class="col-md-6">
+                        <div class="card cursor-pointer" onclick="loadEmployeeGraded()" style="background-color:#EBECF0">
+                            <div class="card-header mx-4 p-3 text-center">
+                                <div class="icon icon-shape icon-lg bg-gradient-primary shadow text-center border-radius-lg">
+                                    <i class="fas fa-landmark opacity-10"></i>
+                                </div>
+                            </div>
+                            <div class="card-body pt-0 p-3 text-center">
+                                <h6 class="text-center mb-0">GRADED</h6>
+                                <hr class="horizontal dark my-3">
+                                <h5 class="mb-0" id="countGraded"></h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mt-md-0 mt-4">
+                        <div class="card cursor-pointer" onclick="loadEmployeeUngraded()" style="background-color:#EBECF0">
+                            <div class="card-header mx-4 p-3 text-center">
+                                <span id="inputedInterview"></span>
+                                <div class="icon icon-shape icon-lg bg-gradient-primary shadow text-center border-radius-lg">
+                                    <i class="fas fa-landmark opacity-10"></i>
+                                </div>
+                            </div>
+                            <div class="card-body pt-0 p-3 text-center">
+                                <h6 class="text-center mb-0">UNGRADED</h6>
+                                <hr class="horizontal dark my-3">
+                                <h5 class="mb-0" id="countUngraded"></h5>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-}
+    }
+</div>
 @section Scripts
 {
     <script src="~/css/progresschart/style.css"></script>
@@ -287,6 +500,74 @@
                                     </div>`)
             $('#explainStatus').html(`${statusName}`)
         })
+        $.ajax({
+            url: "https://localhost:7273/api/interviews/CountEmployeeStatusinInterview"
+        }).done((result)=>{
+            $("#StatusWaiting").html(`${result.data.countStatusWaiting}`)
+            $("#StatusAcceptedbyEmployee").html(`${result.data.countStatusAcceptedbyEmployee}`)
+            $("#StatusRejectedbyEmployee").html(`${result.data.countStatusRejectedbyEmployee}`)
+            $("#StatusAcceptedbyClient").html(`${result.data.countStatusAcceptedbyClient}`)
+            $("#StatusRejectedbyClient").html(`${result.data.countStatusRejectedbyClient}`)
+        })
+        function loadWaitingRespon(){
+            location.href = "/Interview/EmployeeWaiting"
+        }
+        function loadEmployeeAccepted(){
+            location.href = "/Interview/EmployeeAccepted"
+        }
+        function loadEmployeeRejected() {
+            location.href = "/Interview/EmployeeRejected"
+        }
+        function loadClientAccepted() {
+            location.href = "/Interview/ClientAccepted"
+        }
+        function loadClientRejected() {
+            location.href = "/Interview/ClientRejected"
+        }
+        function loadEmployeeSite() {
+            location.href = "/Employee/EmployeeSite"
+        }
+        function loadEmployeeIdle() {
+            location.href = "/Employee/EmployeeIdle"
+        }
+        function loadTrainer() {
+            location.href = "/Employee/GetTrainer"
+        }
+        function loadAvailableClient() {
+            location.href = "/Client/AvailableClient"
+        }
+        function loadUnavailableClient() {
+            location.href = "/Client/UnavailableClient"
+        }
+        function loadEmployeeGraded() {
+            location.href = "/Grade/EmployeeGraded"
+        }
+        function loadEmployeeUngraded() {
+            location.href = "/Grade/EmployeeUngraded"
+        }
+        $.ajax({
+            url: "https://localhost:7273/api/employees/GetCountedStatus"
+        }).done((result)=>{
+            $("#countSite").html(`${result.data.countSite}`)
+            $("#countIdle").html(`${result.data.countIdleUngraded}`)
+        })
+        $.ajax({
+            url: "https://localhost:7273/api/accountroles/GetCountAllRole"
+        }).done((result)=>{
+            $("#countTrainer").html(`${result.data[0].countRole}`)
+        })
+        $.ajax({
+            url: "https://localhost:7273/api/clients/GetCountClient"
+        }).done((result)=>{
+            $("#countAvailable").html(`${result.data.countAvailable}`)
+            $("#countUnAvailable").html(`${result.data.countUnAvailable}`)
+        })
+       $.ajax({
+           url:"https://localhost:7273/api/grades/CountEmployeeinGrade"
+       }).done((result)=>{
+           $("#countGraded").html(`${result.data.countGraded}`)
+           $("#countUngraded").html(`${result.data.countUngraded}`)
+       })
     </script>
 }
 @section CSS{

@@ -5,24 +5,83 @@
     <div class="row mt-4" id="employeeCard">
     </div>
 </div>
+<div class="add-placement">
+    <div class="modal" id="modalAddPlacement" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Placement</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3" id="inputGuid"> </div>
+                        <div class="mb-3" id="inputclientGuid"></div>
+                        <div class="mb-3 date-container">
+                            <label for="startDate" class="form-label">Start Date</label>
+                            <input type="datetime-local" class="form-control" id="startDate" placeholder="StartDate">
+                        </div>
+                        <div class="mb-3">
+                            <label for="endDate" class="form-label">End Date</label>
+                            <input type="datetime-local" class="form-control" id="endDate" placeholder="EndDate">
+                        </div>
+                        @*<div class="mb-3">
+                            <label for="employeeGuid" class="form-label">Employee Guid</label>
+                            <select class="form-select selectNameinPlacement" aria-label="Default select example" id="guid"></select>
+                        </div>*@
+                        @*<div class="mb-3">
+                            <label for="clientGuid" class="form-label">Client Guid</label>
+                            <select class="form-select selectClientinPlacement" aria-label="Default select example" id="clientGuid"></select>
+                        </div>*@
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="addPlacement()" class="btn btn-primary d-inline-block" data-bs-dismiss="modal">Add Placement</button>
+                    <button type="button" class="btn btn-secondary d-inline-block" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts{
     <script>
+        const startDateInput = document.getElementById('startDate');
+        const endDateInput = document.getElementById('endDate');
+
+        startDateInput.addEventListener('input', function () {
+            const startDateValue = new Date(startDateInput.value);
+            const endDateValue = new Date(startDateValue);
+
+            // Tambahkan 1 tahun pada tanggal akhir
+            endDateValue.setFullYear(endDateValue.getFullYear() + 1);
+
+            // Format tanggal akhir ke dalam bentuk yang sesuai untuk input datetime-local
+            const formattedEndDate = endDateValue.toISOString().slice(0, 16);
+
+            // Set nilai tanggal akhir
+            endDateInput.value = formattedEndDate;
+        });
         $.ajax({
             url: 'https://localhost:7273/api/interviews/GetAllEmployeeAcceptedbyClient'
         }).done((result) => {
             let employeeCard = ""
             $.each(result.data, (key, val) => {
                 employeeCard += `<div class="col-lg-4">
-                                            <div class="card h-100 p-3">
+                                                    <div class="card h-100 p-3" data-bs-toggle="modal" data-bs-target="#modalAddPlacement">
                                                 <div class="overflow-hidden position-relative border-radius-lg bg-cover h-100" style="background-image: url('~/soft-ui/assets/img/ivancik.jpg');">
                                                     <span class="mask bg-gradient-dark"></span>
                                                     <div class="card-body position-relative z-index-1 d-flex flex-column h-100 p-3">
                                                                 <h5 class="text-white font-weight-bolder mb-4 pt-2">${val.fullName}</h5>
                                                                                 <div class="row text-light">
-                                                                                    <div class="col-4">Client Name</div>
+                                                                                    <div class="col-4">Client</div>
                                                                                     <div class="col-8">${val.clientName}</div>
                                                                                 </div>
+
+                                                                                                        <div class="row text-light">
+                                                                                                            <div class="col-4">Position</div>
+                                                                                                            <div class="col-8">${val.positionName}</div>
+                                                                                                        </div>
                                                                                 <div class="row text-light">
                                                                             <div class="col-4">Interview Date</div>
                                                                             <div class="col-8">${val.interviewDate != null ? moment(val.interviewDate).format("dddd, D MMMM YYYY, HH:mm") : null}</div>
@@ -31,10 +90,44 @@
                                                 </div>
                                             </div>
                                         </div>`
+                $("#inputGuid").html(`<input type="hidden" value="${val.guid}" id="guidEmployee" />`)
+                $("#inputclientGuid").html(`<input type="hidden" value="${val.clientGuid}" id="clientGuid" />`)
 
             })
             $("#employeeCard").html(employeeCard)
         })
+        function addPlacement() {
+            var placementData = {
+                startDate: $("#startDate").val(),
+                endDate: $("#endDate").val(),
+                guid: $("#guidEmployee").val(),
+                clientGuid: $("#clientGuid").val(),
+            };
+
+            $.ajax({
+                url: "https://localhost:7273/api/placements",
+                type: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: JSON.stringify(placementData),
+            }).done(function (result) {
+                Swal.fire({
+                    title: 'Success',
+                    text: 'Data has been successfully inserted',
+                    icon: 'success'
+                }).then(function () {
+                    location.reload();
+                });
+            }).fail(function (error) {
+                console.log(error)
+                Swal.fire({
+                    title: 'Oops',
+                    text: 'Failed to insert data. Please try again.',
+                    icon: 'error'
+                });
+            });
+        }
     </script>
 
 }

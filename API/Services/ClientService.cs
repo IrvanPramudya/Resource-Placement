@@ -14,23 +14,57 @@ namespace API.Services
             _clientRepository = clientRepository;
             _positionRepository = positionRepository;
         }
-        public IEnumerable<GetAvailableClient> CountAvailableClient()
+        public GetCountClient? CountClient()
         {
             var data = _clientRepository.GetAll();
-            var listclient = new List<GetAvailableClient>();
+            var clientdata = new GetCountClient();
+            foreach (var client in data) 
+            {
+                if(client.IsAvailable == true)
+                {
+                    clientdata.CountAvailable++;
+                }
+                else
+                {
+                    clientdata.CountUnAvailable++;
+                }
+            }
+            return clientdata;
+        }
+        public IEnumerable<GetAvailableClient> GetAllClient()
+        {
+            var data = from client in _clientRepository.GetAll()
+                       join position in _positionRepository.GetAll() on client.Guid equals position.ClientGuid into positionGroup
+                       from position in positionGroup.DefaultIfEmpty()
+                       select new GetAvailableClient
+                       {
+                           Capacity = position!= null? position.Capacity:0,
+                           PositionName = position != null ? position.Name:null,
+                           Email = client.Email,
+                           IsAvailable = client.IsAvailable,
+                           Name = client.Name,
+                       };
+            /*var listclient = new List<GetAvailableClient>();
             foreach (var client in data) 
             {
                 var countclient = new GetAvailableClient()
                 {
+                    PositionName = client.PositionName,
+                    Capacity = client.Capacity,
                     Name = client.Name,
+                    Email = client.Email,
                     IsAvailable = client.IsAvailable,
                 };
                 if(countclient.IsAvailable == true)
                 {
                     listclient.Add(countclient);
                 }
+            }*/
+            if(!data.Any())
+            {
+                return null;
             }
-            return listclient;
+            return data;
         }
         public IEnumerable<ClientDto> GetAll()
         {

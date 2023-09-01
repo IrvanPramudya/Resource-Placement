@@ -29,15 +29,11 @@
                         </div>
                         <div class="mb-3">
                             <label for="endDate" class="form-label">End Date</label>
-                            <input type="datetime-local" class="form-control" id="endDate" placeholder="EndDate">
+                            <input type="datetime-local" class="form-control" id="endDate" placeholder="EndDate" readonly>
                         </div>
                         <div class="mb-3">
                             <label for="employeeGuid" class="form-label">Employee Guid</label>
                             <select class="form-select selectNameinPlacement" aria-label="Default select example" id="guid"></select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="clientGuid" class="form-label">Client Guid</label>
-                            <select class="form-select selectClientinPlacement" aria-label="Default select example" id="clientGuid"></select>
                         </div>
                     </form>
                 </div>
@@ -58,7 +54,8 @@
                 <th>Start Date</th>
                 <th>End Date</th>
                 <th>Employee Name</th>
-                <th>Client Name</th>
+                <th>Client</th>
+                <th>Position</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -89,7 +86,7 @@
                         <input type="datetime-local" class="form-control" id="endDateUpd" placeholder="End Date" readonly>
                     </div>
                     <div class="mb-3">
-                        <label for="clientGuid" class="form-label">Client Guid</label>
+                        <label for="clientGuid" class="form-label">Client Name</label>
                         <select class="form-select selectClientinPlacement" aria-label="Default select example" id="clientGuidUpd"></select>
                     </div>
                 </form>
@@ -178,6 +175,7 @@
                         },
                         { data: "employeeName" },
                         { data: "clientName" },
+                        { data: "positionName" },
                         {
                             data: null,
                             render: function (data, type, row) {
@@ -203,7 +201,6 @@
                     startDate: $("#startDate").val(),
                     endDate: $("#endDate").val(),
                     guid: $("#guid").val(),
-                    clientGuid: $("#clientGuid").val(),
                 };
 
                 $.ajax({

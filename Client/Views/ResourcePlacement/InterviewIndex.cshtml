@@ -12,7 +12,7 @@
     </button>
 </div>
 
-<div class="add-account">
+<div class="add-interview">
     <div class="modal" id="modalAddInterview" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -31,8 +31,13 @@
                             <input type="datetime-local" class="form-control" id="interviewDate" placeholder="Interview Date">
                         </div>
                         <div class="mb-3">
-                            <label for="clientGuid" class="form-label"> Client Guid</label>
-                            <select class="form-select selectClientinInterview" aria-label="Default select example" id="guidClient"></select>
+                            <label for="clientGuid" class="form-label"> Client Name</label>
+                            <select class="form-select selectClientinInterview" aria-label="Default select example" id="guidClient">
+                                <option value="default">Select a client...</option>
+                            </select>
+                        </div>
+                        <div class="mb-3" id="selectPosition">
+                            
                         </div>
                         <div class="mb-3">
                             <label for="text" class="form-label">Notes</label>
@@ -56,10 +61,12 @@
                 <th>No</th>
                 <th>Name</th>
                 <th>Client</th>
+                <th>Position</th>
                 <th>Interview Date</th>
                 <th>Is Accepted</th>
                 <th>Status</th>
                 <th>Text</th>
+                <th>Comment</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -83,8 +90,11 @@
                         <input type="datetime-local" class="form-control" id="interviewDateUpd" placeholder="Interview Date">
                     </div>
                     <div class="mb-3">
-                        <label for="clientGuid" class="form-label"> Client Guid</label>
-                        <select class="form-select selectClientinInterview" aria-label="Default select example" id="clientGuidUpd"></select>
+                        <label for="clientGuid" class="form-label"> Client Name</label>
+                        <select class="form-select selectClientinInterview" aria-label="Default select example" id="clientGuidUpd">
+                        </select>
+                    </div>
+                    <div class="mb-3" id="selectPositionUpd">
                     </div>
                     <div class="mb-3">
                         <label for="text" class="form-label">Notes</label>
@@ -106,7 +116,7 @@
 
         $(document).ready(function () {
             loadInterviewData();
-
+            
             $.ajax({
                 url: "https://localhost:7273/api/interviews/GetRemainingEmployeeinInterview"
             }).done(function (result) {
@@ -118,20 +128,52 @@
                 })
                 $('.selectNameinInterview').html(getName)
             })
-            $.ajax({
-                url: "https://localhost:7273/api/clients"
-            }).done(function (result) {
-                // Assuming the API response contains a property named "totalEmployees"
-                console.log(result)
-                let getClientinInterview = ""
-                $.each(result.data, (key, val) => {
-                    console.log(result)
-                    getClientinInterview += ` <option value="${val.guid}">${val.name}</option>`
-                })
-                $('.selectClientinInterview').html(getClientinInterview)
-            })
         });
+        $.ajax({
+            url: "https://localhost:7273/api/clients"
+        }).done(function (result) {
+                // Assuming the API response contains a property named "totalEmployees"
+            console.log(result)
+            let getClientinInterview = ""
+            $.each(result.data, (key, val) => {
+                console.log(result)
+                getClientinInterview += ` <option value="${val.guid}">${val.name}</option>`
+            })
+            $('.selectClientinInterview').append(getClientinInterview);
+            $('.selectClientinInterview').on('change', function () {
+                const selectedGuid = $(this).val();
+                if (selectedGuid !== 'default') {
+                    loadPositionbyClientGuid(selectedGuid);
+                }
+            });
 
+        })
+
+        function loadPositionbyClientGuid(guidClient) {
+            $.ajax({
+                url: "https://localhost:7273/api/positions/GetPosition/" + guidClient,
+                type: "GET",
+                dataType: "json"
+            }).done((result) => {
+                console.log(result)
+                let getPositioninInterview = ""
+                let selectLabel = `<label for="positionGuid" class="form-label"> Position Name</label>
+                                    <select class="form-select selectPositioninInterview" aria-label="Default select example" id="positionGuid">
+                                        <option value="default">Select a position...</option>
+                                    </select>`
+                let selectLabelUpd = `<label for="positionGuid" class="form-label"> Position Name</label>
+                                    <select class="form-select selectPositioninInterview" aria-label="Default select example" id="positionGuidUpd">
+                                        <option value="default">Select a position...</option>
+                                    </select>`
+                $.each(result.data, (key, val) => {
+                    getPositioninInterview += ` <option value="${val.guid}">${val.positionName}</option>`
+                })
+                $('#selectPosition').html(selectLabel)
+                $('#selectPositionUpd').html(selectLabelUpd)
+                $('.selectPositioninInterview').append(getPositioninInterview)
+            })
+        }
+        
         function loadInterviewData() {
             $('#interviewTable').DataTable({
                 ajax: {
@@ -148,6 +190,7 @@
                     },
                     { data: "fullName" },
                     { data: "clientName"},
+                    { data: "positionName"},
                     {
                         data: 'interviewDate',
                         render: function (data, type, row) {
@@ -187,6 +230,7 @@
                         }
                     },
                     { data: "text" },
+                    { data: "comment" },
                     {
                         data: null,
                         render: function (data, type, row) {
@@ -212,6 +256,7 @@
                 guid: $("#guidEmployee").val(),
                 interviewDate: $("#interviewDate").val(),
                 clientGuid: $("#guidClient").val(),
+                positionGuid: $("#positionGuid").val(),
                 text: $("#text").val()
             };
 
@@ -278,6 +323,7 @@
                 $("#guidEmployeeUpd").val(result.data.guid);
                 $("#interviewDateUpd").val(result.data.interviewDate);
                 $("#clientGuidUpd").val(result.data.clientGuid);
+                $("#positionGuidUpd").val(result.data.positionGuid);
                 $("#textUpd").val(result.data.text);
             }).fail((error) => {
                 alert("Failed to fetch account data. Please try again.");
@@ -293,6 +339,7 @@
                 guid: $("#guidEmployeeUpd").val(),
                 interviewDate: $("#interviewDateUpd").val(),
                 clientGuid: $("#clientGuidUpd").val(),
+                positionGuid: $("#positionGuidUpd").val(),
                 text: $("#textUpd").val()
             };
             $.ajax({

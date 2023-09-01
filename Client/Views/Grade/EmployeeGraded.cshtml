@@ -1,25 +1,26 @@
 ﻿@{
 }
 <div class="col-12 mt-4">
-    <p class="text-center h1 fw-bold mb-4 mx-auto mt-1">Employee in Site</p>
+    <p class="text-center h1 fw-bold mb-4 mx-auto mt-1">Employee Graded</p>
     <div class="card mb-4">
         <div class="card-header pb-0 p-3">
-            @*<h6 class="mb-1">Employee in Site</h6>*@
+            @*<h6 class="mb-1">Employee Idle</h6>*@
         </div>
         <div class="card-body p-3">
-            <div class="row" id="employeeCard">
+            <div class="row" id="gradeCard">
             </div>
         </div>
     </div>
 </div>
-@section Scripts{
+@section Scripts
+{
     <script>
         $.ajax({
-            url: "https://localhost:7273/api/employees/GetAllEmployeeinSite"
+            url: "https://localhost:7273/api/grades/GetGradedEmployee"
         }).done((result) => {
-            let cardEmployee = ""
+            let gradeCard = ""
             $.each(result.data, (key, val) => {
-                cardEmployee += `<div class="col-xl-3 col-md-6 mb-xl-0 mb-4 ms-2">
+                gradeCard += `<div class="col-xl-3 col-md-6 mb-xl-0 mb-4 ms-2">
                                     <div class="card card-blog card-plain">
                                         <div class="position-relative">
                                             <a class="d-block shadow-xl border-radius-xl">
@@ -30,7 +31,7 @@
                                             <p class="text-gradient text-dark mb-2 text-sm">${val.nik}</p>
                                             <a href="javascript:;">
                                                 <h5>
-                                                    ${val.fullName} (${val.phoneNumber})
+                                                    ${val.employeeName} (${val.phoneNumber})
                                                 </h5>
                                                     <div class="row">
                                                          <div class="col-4">Email</div>
@@ -42,10 +43,10 @@
                                                     </div>
                                                     <div class="row">
                                                          <div class="col-4">Grade</div>
-                                                         <div class="col-8">${val.grade}</div>
+                                                         <div class="col-8">${val.gradeName}</div>
                                                     </div>
                                                     <div class="row">
-                                                         <div class="col-4">Salary</div>
+                                                         <div class="col-4">Grade</div>
                                                          <div class="col-8">${val.salary}</div>
                                                     </div>
                                             <div class="d-flex align-items-center justify-content-between">
@@ -54,8 +55,9 @@
                                         </div>
                                     </div>
                                 </div>`
+
             })
-            $("#employeeCard").html(cardEmployee)
+            $("#gradeCard").html(gradeCard)
         })
     </script>
 }

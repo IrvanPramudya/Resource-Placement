@@ -7,7 +7,6 @@ namespace API.DTOs.Placements
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public Guid Guid { get; set; }
-        public Guid ClientGuid { get; set; }
 
         public static implicit operator Placement(NewPlacementDto placement)
         {
@@ -16,7 +15,6 @@ namespace API.DTOs.Placements
                 StartDate = placement.StartDate,
                 EndDate = placement.EndDate,
                 Guid = placement.Guid,
-                ClientGuid = placement.ClientGuid,
                 CreatedDate = DateTime.Now,
                 ModifiedDate = DateTime.Now,
 
@@ -29,7 +27,6 @@ namespace API.DTOs.Placements
                 StartDate = placement.StartDate,
                 EndDate = placement.EndDate,
                 Guid = placement.Guid,
-                ClientGuid = placement.ClientGuid,
 
             };
         }

@@ -18,10 +18,52 @@ namespace API.Controllers
         {
             _clientService = clientService;
         }
-        [HttpGet("GetAvailableClient")]
-        public IActionResult CountAvailableClient()
+        [HttpGet("GetCountClient")]
+        public IActionResult CountClient()
         {
-            var result = _clientService.CountAvailableClient();
+            var result = _clientService.CountClient();
+            if(result == null)
+            {
+                return NotFound(new ResponseHandler<GetCountClient>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data Not Found"
+                });
+            }
+            return Ok(new ResponseHandler<GetCountClient>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success Retrieve Data",
+                Data = result
+            });
+        }
+        [HttpGet("GetUnavailableClient")]
+        public IActionResult GetUnavailableClient()
+        {
+            var result = _clientService.GetAllClient().Where(client=>client.IsAvailable == false);
+            if(!result.Any())
+            {
+                return NotFound(new ResponseHandler<GetAvailableClient>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data Not Found"
+                });
+            }
+            return Ok(new ResponseHandler<IEnumerable<GetAvailableClient>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success Retrieve Data",
+                Data = result
+            });
+        }
+        [HttpGet("GetAvailableClient")]
+        public IActionResult GetAvailableClient()
+        {
+            var result = _clientService.GetAllClient().Where(client=>client.IsAvailable == true);
             if(!result.Any())
             {
                 return NotFound(new ResponseHandler<GetAvailableClient>

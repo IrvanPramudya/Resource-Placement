@@ -20,12 +20,25 @@
                                                                     <div class="card-body position-relative z-index-1 d-flex flex-column h-100 p-3">
                                                                                 <h5 class="text-white font-weight-bolder mb-4 pt-2">${val.fullName}</h5>
                                                                                                 <div class="row text-light">
-                                                                                                    <div class="col-4">Client Name</div>
+                                                                                                    <div class="col-4">Client</div>
                                                                                                     <div class="col-8">${val.clientName}</div>
+                                                                                                </div>
+                                                                                                <div class="row text-light">
+                                                                                                    <div class="col-4">Position</div>
+                                                                                                    <div class="col-8">${val.positionName}</div>
                                                                                                 </div>
                                                                                                 <div class="row text-light">
                                                                                             <div class="col-4">Interview Date</div>
                                                                                             <div class="col-8">${val.interviewDate != null ? moment(val.interviewDate).format("dddd, D MMMM YYYY, HH:mm") : null}</div>
+                                                                                        </div>
+                                                                                                <input type="hidden" value="${val.clientGuid}" id="client"/>
+                                                                                               <input type="hidden" value="${val.interviewDate}" id="interviewDate"/>
+                                                                                               <input type="hidden" value="${val.text}" id="note"/>
+                                                                                                <div class="row mt-2">
+                                                                                            <div class="col">
+                                                                                                    <button onclick="InterviewAcceptedbyClient('${val.guid}')" class="btn btn-outline-info" data-bs-placement="top" title="Accepted Employee"><box-icon name='check' color="white" size="sm"></box-icon></button>
+                                                                                                    <button onclick="InterviewRejectedbyClient('${val.guid}')" class="btn btn-outline-danger ms-2"  data-bs-placement="top" title="Rejected Employee"><box-icon name='x' color="red" size="sm"></box-icon></button>
+                                                                                             </div>
                                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -35,6 +48,64 @@
             })
             $("#employeeCard").html(employeeCard)
         })
+        function InterviewAcceptedbyClient(guidEmployee) {
+            let data = {
+                guid: guidEmployee,
+                comment:null,
+                isAccepted: true,
+                status: 3,
+            }
+            $.ajax({
+                url: "https://localhost:7273/api/interviews/UpdateFullInterview",
+                type: "PUT",
+                contentType: "application/json",
+                data: JSON.stringify(data)
+            }).done((result) => {
+                Swal.fire({
+                    title: 'Success',
+                    text: 'Data Interview has been successfully updated',
+                    icon: 'success'
+                }).then(function () {
+                    location.reload();
+                });
+            }).fail((error) => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Failed to Updated data Interview! Please try again.'
+                })
+                console.log(error)
+            })
+        }
+        function InterviewRejectedbyClient(guidEmployee) {
+            let data = {
+                guid: guidEmployee,
+                comment:null,
+                isAccepted: false,
+                status: 4,
+            }
+            $.ajax({
+                url: "https://localhost:7273/api/interviews/UpdateFullInterview",
+                type: "PUT",
+                contentType: "application/json",
+                data: JSON.stringify(data)
+            }).done((result) => {
+                Swal.fire({
+                    title: 'Success',
+                    text: 'Data Interview has been successfully updated',
+                    icon: 'success'
+                }).then(function () {
+                    location.reload();
+                });
+            }).fail((error) => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Failed to Updated data Interview! Please try again.'
+                })
+                console.log(error)
+            })
+        }
     </script>
 
 }

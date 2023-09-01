@@ -15,8 +15,12 @@ namespace API.Services
         {
             _positionRepository = positionRepository;
             _clientRepository = clientRepository;
+            _clientRepository = clientRepository;
         }
-
+        public IEnumerable<GetClientName> GetPositionwithClientGuid(Guid guid) 
+        { 
+             return GetClientName().Where(Position=>Position.ClientGuid == guid);        
+        }
         public IEnumerable<GetClientName> GetClientName()
         {
             var merge = from client in _clientRepository.GetAll()

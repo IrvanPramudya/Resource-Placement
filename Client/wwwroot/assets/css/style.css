@@ -29,6 +29,7 @@ body{
     border-radius: 1.25rem;
     background: #fff;
     text-align: left;
+    width:fit-content;
 }
 
 .login-card > h2 {
@@ -117,6 +118,7 @@ body{
     }
     .login-card {
         margin: 0;
+        width:700px;
     }
 }
 

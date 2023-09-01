@@ -22,7 +22,7 @@ namespace API.DTOs.Accounts
         public string? ClientInterviewName { get; set; }
         public string? PositionInterviewName { get; set; }
         //Placement
-        public double? Contract { get; set; }
+        public int Contract { get; set; }
         public string? ClientPlacementName { get; set; }
         public string? PositionPlacementName { get; set; }
 

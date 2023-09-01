@@ -1,0 +1,56 @@
+﻿@{
+}
+<!-- End Navbar -->
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-md-7 mt-4">
+            <div class="card">
+                <div class="card-header pb-0 px-3">
+                    <h6 class="mb-0">Trainer Data</h6>
+                </div>
+                <div class="card-body pt-4 p-3">
+                    <ul class="list-group" id="trainerCard">
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        $.ajax({
+            url: "https://localhost:7273/api/accountroles/GetAllTrainer"
+        }).done((result)=>{
+            let trainerCard = ""
+            $.each(result.data,(key,val)=>{
+                trainerCard += `<li class="list-group-item p-4 mb-2 bg-gray-100">
+                                    <div class="row">
+                                        <h6 class="mb-3 text-sm">${val.fullName}</h6>
+                                        <div class="row">
+                                            <div class="col-4"><span class="mb-2 text-xs">NIK</span></div>
+                                            <div class="col-8"><span class="text-dark font-weight-bold ms-sm-2">${val.nik}</span></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4"><span class="mb-2 text-xs">Email</span></div>
+                                            <div class="col-8"><span class="text-dark font-weight-bold ms-sm-2">${val.email}</span></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4"><span class="mb-2 text-xs">Phone Number</span></div>
+                                            <div class="col-8"><span class="text-dark font-weight-bold ms-sm-2">${val.phoneNumber}</span></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4"><span class="mb-2 text-xs">Gender</span></div>
+                                            <div class="col-8"><span class="text-dark font-weight-bold ms-sm-2">${val.gender == 0?"Female":"Male"}</span></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4"><span class="mb-2 text-xs">Skill</span></div>
+                                            <div class="col-8"><span class="text-dark font-weight-bold ms-sm-2">${val.skill}</span></div>
+                                        </div>
+                                    </div>
+                                </li>`
+            })
+            $("#trainerCard").html(trainerCard)
+        })
+    </script>
+}
