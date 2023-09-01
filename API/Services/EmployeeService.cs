@@ -122,7 +122,7 @@ namespace API.Services
                           join interview in _interviewRepository.GetAll() on employee.Guid equals interview.Guid
                           join client in _clientRepository.GetAll() on interview.ClientGuid equals client.Guid
                           join position in _positionRepository.GetAll() on client.Guid equals position.ClientGuid
-                          where employee.Guid == guid && client.IsAvailable == true
+                          where employee.Guid == guid && client.IsAvailable == true && interview.Status == InterviewLevel.EmployeeResponWaiting
                           select new GetEmployeeNotification
                           {
                               ClientGuid = client.Guid,

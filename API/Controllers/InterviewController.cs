@@ -174,7 +174,7 @@ namespace API.Controllers
             });
         }
         [HttpPut("UpdateFullInterview")]
-        public IActionResult UpdateFullInterview(InterviewDto interviewDto)
+        public IActionResult UpdateFullInterview(UpdateInterviewDto interviewDto)
         {
             var result = _interviewService.UpdateFullInterview(interviewDto);
 

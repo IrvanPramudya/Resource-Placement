@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace API.Migrations
 {
-    public partial class newtable : Migration
+    public partial class VeryNewTable : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -133,7 +133,9 @@ namespace API.Migrations
                     guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     interview_date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     text = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    comment = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     client_guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    position_guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     is_accepted = table.Column<bool>(type: "bit", nullable: true),
                     status = table.Column<int>(type: "int", nullable: false),
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -164,6 +166,7 @@ namespace API.Migrations
                     start_date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     end_date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     client_guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    position_guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     modified_date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -216,10 +219,10 @@ namespace API.Migrations
                 columns: new[] { "guid", "created_date", "modified_date", "name" },
                 values: new object[,]
                 {
-                    { new Guid("4ec90656-e89c-4871-d9e5-08db8a7d0f37"), new DateTime(2023, 8, 27, 5, 58, 35, 274, DateTimeKind.Local).AddTicks(5649), new DateTime(2023, 8, 27, 5, 58, 35, 274, DateTimeKind.Local).AddTicks(5650), "Trainer" },
-                    { new Guid("5fb9adc0-7d08-45d4-cd66-08db9c7a678f"), new DateTime(2023, 8, 27, 5, 58, 35, 274, DateTimeKind.Local).AddTicks(5655), new DateTime(2023, 8, 27, 5, 58, 35, 274, DateTimeKind.Local).AddTicks(5655), "Admin" },
-                    { new Guid("ae259a90-e2e8-442f-ce18-08db91a71ab9"), new DateTime(2023, 8, 27, 5, 58, 35, 274, DateTimeKind.Local).AddTicks(5632), new DateTime(2023, 8, 27, 5, 58, 35, 274, DateTimeKind.Local).AddTicks(5644), "Employee" },
-                    { new Guid("c0689b0a-5c87-46f1-ce19-08db91a71ab9"), new DateTime(2023, 8, 27, 5, 58, 35, 274, DateTimeKind.Local).AddTicks(5652), new DateTime(2023, 8, 27, 5, 58, 35, 274, DateTimeKind.Local).AddTicks(5652), "Operasional" }
+                    { new Guid("4ec90656-e89c-4871-d9e5-08db8a7d0f37"), new DateTime(2023, 9, 1, 13, 30, 22, 853, DateTimeKind.Local).AddTicks(165), new DateTime(2023, 9, 1, 13, 30, 22, 853, DateTimeKind.Local).AddTicks(165), "Trainer" },
+                    { new Guid("5fb9adc0-7d08-45d4-cd66-08db9c7a678f"), new DateTime(2023, 9, 1, 13, 30, 22, 853, DateTimeKind.Local).AddTicks(171), new DateTime(2023, 9, 1, 13, 30, 22, 853, DateTimeKind.Local).AddTicks(172), "Admin" },
+                    { new Guid("ae259a90-e2e8-442f-ce18-08db91a71ab9"), new DateTime(2023, 9, 1, 13, 30, 22, 853, DateTimeKind.Local).AddTicks(148), new DateTime(2023, 9, 1, 13, 30, 22, 853, DateTimeKind.Local).AddTicks(160), "Employee" },
+                    { new Guid("c0689b0a-5c87-46f1-ce19-08db91a71ab9"), new DateTime(2023, 9, 1, 13, 30, 22, 853, DateTimeKind.Local).AddTicks(168), new DateTime(2023, 9, 1, 13, 30, 22, 853, DateTimeKind.Local).AddTicks(168), "Operasional" }
                 });
 
             migrationBuilder.CreateIndex(

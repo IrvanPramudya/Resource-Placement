@@ -30,7 +30,11 @@
                         </div>
                         <div class="mb-3">
                             <label for="clientGuid" class="form-label"> Client Guid</label>
-                            <select class="form-select selectClientinInterview" aria-label="Default select example" id="guidClient"></select>
+                            <select class="form-select selectClientinInterview" aria-label="Default select example" id="guidClient">
+                                <option value="default">Select a client...</option>
+                            </select>
+                        </div>
+                        <div class="mb-3" id="selectPosition">
                         </div>
                         <div class="mb-3">
                             <label for="text" class="form-label">Notes</label>
@@ -58,8 +62,33 @@
                 console.log(result)
                 getClientinInterview += ` <option value="${val.guid}">${val.name}</option>`
             })
-            $('.selectClientinInterview').html(getClientinInterview)
+            $('.selectClientinInterview').append(getClientinInterview)
+            $('.selectClientinInterview').on('change', function () {
+                const selectedGuid = $(this).val();
+                if (selectedGuid !== 'default') {
+                    loadPositionbyClientGuid(selectedGuid);
+                }
+            });
         })
+        function loadPositionbyClientGuid(guidClient) {
+            $.ajax({
+                url: "https://localhost:7273/api/positions/GetPosition/" + guidClient,
+                type: "GET",
+                dataType: "json"
+            }).done((result) => {
+                console.log(result)
+                let getPositioninInterview = ""
+                let selectLabel = `<label for="positionGuid" class="form-label"> Position Name</label>
+                                            <select class="form-select selectPositioninInterview" aria-label="Default select example" id="positionGuid">
+                                                <option value="default">Select a position...</option>
+                                            </select>`
+                $.each(result.data, (key, val) => {
+                    getPositioninInterview += ` <option value="${val.guid}">${val.positionName}</option>`
+                })
+                $('#selectPosition').html(selectLabel)
+                $('.selectPositioninInterview').append(getPositioninInterview)
+            })
+        }
         $.ajax({
             url: "https://localhost:7273/api/employees/GetAllEmployeeinIdle"
         }).done((result)=>{
@@ -109,6 +138,7 @@
                 guid: $("#guidEmployee").val(),
                 interviewDate: $("#interviewDate").val(),
                 clientGuid: $("#guidClient").val(),
+                positionGuid: $("#positionGuid").val(),
                 text: $("#text").val()
             };
 

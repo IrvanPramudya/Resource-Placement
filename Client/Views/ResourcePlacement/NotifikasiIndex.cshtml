@@ -10,7 +10,10 @@
     </div>
 </div>*@
 <div class="container-fluid py-4">
-    <div class="row">
+    <div class="page-header align-items-start min-vh-50 pt-5 pb-11 m-3 border-radius-lg" style="background-image: url('~/soft-ui/assets/img/curved-images/curved14.jpg');">
+        <span class="mask bg-gradient-dark opacity-6"></span>
+    
+    <div class="row" id="notification-employee">
         <div class="col-lg-8">
             <div class="row">
                 <div class="col-xl-6 mb-xl-0 mb-4">
@@ -55,7 +58,7 @@
                         <div class="col-md-6 mt-md-0 mt-4">
                             <div class="card" style="background-color:#EBECF0">
                                 <div class="card-header mx-4 p-3 text-center" style="background-color:#EBECF0">
-                                    <span id="inputedInterview"></span>
+                                    @*<span id="inputedInterview"></span>*@
                                     <div class="icon icon-shape icon-lg bg-gradient-primary shadow text-center border-radius-lg">
                                         <i class="fab fa-paypal opacity-10"></i>
                                     </div>
@@ -134,38 +137,99 @@
                 </div>
             </div>
         </div>
+            
+        
+    </div>
+        <div class="row" id="no-notification">
+            <div class="col-1"></div>
+            <div class="col-10 justify-content-center">
+                <div class="card mb-3 border-warning" style="max-width:70%;">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="https://cdn-icons-png.flaticon.com/512/4610/4610214.png" class="img-fluid rounded-start  my-auto" alt="...">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">Hello Mr @User.FindFirst("Fullname").Value</h5>
+                                <p class="card-text">There is no Notification Interview now but please always check this page later</p>
+                                <p class="card-text"><small class="text-body-secondary">You Have see this Page at @DateTime.Now</small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-1"></div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="modalUpdateComment" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Update</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="interviewDate" class="form-label">Comment</label>
+                        <input type="text" class="form-control" id="comment" placeholder="comment">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="interviewRejected('@User.FindFirst("Guid").Value')" class="btn btn-primary d-inline-block" data-bs-dismiss="modal">Update Interview</button>
+                <button type="button" class="btn btn-secondary d-inline-block" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
     </div>
 </div>
 @section Scripts
 {
     <script>
         const Token = '@Context.Session.GetString("JWToken")'
-        $.ajax({
-            url: "https://localhost:7273/api/employees/GetEmployeeNotification/@User.FindFirst("Guid").Value",
-            headers: {
-                'Authorization': 'Bearer ' + Token
-            }
-        }).done((result)=>{
-            console.log(result)
+        $(document).ready(()=>{
+            $.ajax({
+                url: "https://localhost:7273/api/employees/GetEmployeeNotification/@User.FindFirst("Guid").Value",
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                }
+            }).done((result) => {
+                console.log(result.data)
+                if (result.data == null) {
+                    $("#notification-employee").hide();
+                    $("#no-notification").show();
+                }
+                else {
+                    $("#notification-employee").show();
+                    $("#no-notification").hide();
+
+                    console.log(result)
             $('#inputedInterview').html(`<input type="hidden" value="${result.data.clientGuid}" id="clientUpd"/>
                                         <input type="hidden" value="${result.data.interviewDate}" id="interviewDateUpd"/>
                                         <input type="hidden" value="${result.data.note}" id="noteUpd"/>`)
-            createdDate = result.data.createdDate != null ? moment($("#createdDate").val(result.data.createdDate)).format("dddd, D MMMM YYYY, HH:mm") : null;
-            interviewDate = result.data.interviewDate != null ? moment($("#interviewDate").val(result.data.interviewDate)).format("dddd, D MMMM YYYY, HH:mm") : null;
-            $('#createdDate').html(`${result.data.createdDate != null ? moment(result.data.createdDate).format("dddd, D MMMM YYYY, HH:mm") : null}`)
-            $('#clientName').html(`${result.data.clientName}`)
-            $('#positionName').html(`${result.data.positionName}`)
-            $('#note').html(`${result.data.note}`)
-            $('#interviewAccepted').html(`<a onclick="interviewAccepted('@User.FindFirst("Guid").Value')"><box-icon name='check' color="green" size="lg"></box-icon></a>`)
-            $('#interviewRejected').html(`<a onclick="interviewRejected('@User.FindFirst("Guid").Value')"><box-icon name='x' color="red" size="lg"></box-icon></a>`)
-            $('#interviewDate').html(`${result.data.interviewDate != null ? moment(result.data.interviewDate).format("dddd, D MMMM YYYY, HH:mm") : null}`)
+                    createdDate = result.data.createdDate != null ? moment($("#createdDate").val(result.data.createdDate)).format("dddd, D MMMM YYYY, HH:mm") : null;
+                    interviewDate = result.data.interviewDate != null ? moment($("#interviewDate").val(result.data.interviewDate)).format("dddd, D MMMM YYYY, HH:mm") : null;
+                    $('#createdDate').html(`${result.data.createdDate != null ? moment(result.data.createdDate).format("dddd, D MMMM YYYY, HH:mm") : null}`)
+                    $('#clientName').html(`${result.data.clientName}`)
+                    $('#positionName').html(`${result.data.positionName}`)
+                    $('#note').html(`${result.data.note}`)
+                    $('#interviewAccepted').html(`<a onclick="interviewAccepted('@User.FindFirst("Guid").Value')"><box-icon name='check' color="green" size="lg"></box-icon></a>`)
+                    $('#interviewRejected').html(`<a data-bs-toggle="modal" data-bs-target="#modalUpdateComment"><box-icon name='x' color="red" size="lg"></box-icon></a>`)
+                    $('#interviewDate').html(`${result.data.interviewDate != null ? moment(result.data.interviewDate).format("dddd, D MMMM YYYY, HH:mm") : null}`)
+                }
+
+            }).fail((error) => {
+                console.log(error)
+                $("#notification-employee").hide();
+                $("#no-notification").show();
+            })
         })
+        
         function interviewAccepted(guidEmployee){
             let data = {
                 guid : guidEmployee,
-                interviewDate : $("#interviewDateUpd").val(),
-                clientGuid : $("#clientUpd").val(),
-                text : $("#noteUpd").val(),
+                comment : null,
                 isAccepted : false,
                 status : 1,
             }
@@ -198,6 +262,7 @@
                 clientGuid : $("#clientUpd").val(),
                 text : $("#noteUpd").val(),
                 isAccepted : false,
+                comment: $("#comment").val(),
                 status : 2,
             }
             $.ajax({
