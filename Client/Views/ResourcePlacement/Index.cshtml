@@ -187,7 +187,7 @@
                         <h3>Gender</h3>
                     </div>
                     <div class="chart-container" style="position: relative; height:100%; width:100%">
-                        <canvas id="GenderChart"></canvas>
+                        <canvas id="GenderChart" data-bs-chart-no-animation="true"></canvas>
                     </div>
                 </div>
                 <div class="col-6">
@@ -260,6 +260,9 @@
     @if(User.IsInRole("Trainer"))
     {
         <div class="row mt-3">
+            
+        </div>
+        <div class="bottom-data">
             <div class="col-4">
                 <div class="row">
                     <h3 class="text-center"><span class="badge text-bg-info my-2">EMPLOYEE</span></h3>
@@ -294,6 +297,17 @@
                     </div>
                 </div>
             </div>
+            <div class="row" style="height:30%; width:40%">
+                <div class="col-8">
+                    <div class="header">
+                        <i class='bx bx-receipt'></i>
+                        <h3>Grade</h3>
+                    </div>
+                    <div class="chart-container" style="position: relative; height:100%; width:100%">
+                        <canvas id="GradeChart"></canvas>
+                    </div>
+                </div>
+            </div>
         </div>
     }
 </div>
@@ -324,11 +338,36 @@
                             'rgb(255, 99, 132)',
                             'rgb(54, 162, 235)',
                         ],
-                        hoverOffset: 4
+                        hoverOffset: 4,
+                        datalabels: {
+                            color: 'white',
+                            formatter: (value, ctx) => {
+                                let sum = 0;
+                                let dataArr = ctx.chart.data.datasets[0].data;
+                                dataArr.map(data => {
+                                    sum += data;
+                                });
+                                let percentage = (value * 100 / sum).toFixed(2) + "%";
+                                return percentage;
+                            },
+                            anchor: 'end',
+                            align: 'start',
+                            offset: 0,
+                            padding: 0
+                        }
                     }]
                 },
+                options: {
+                    plugins: {
+                        legend: {
+                            display: true,
+                        }
+                    }
+                }
             });
-        })
+        });
+
+
         $.ajax({
             url: "https://localhost:7273/api/employees/GetCountedStatus",
             type: "GET"
@@ -567,6 +606,23 @@
        }).done((result)=>{
            $("#countGraded").html(`${result.data.countGraded}`)
            $("#countUngraded").html(`${result.data.countUngraded}`)
+            const ctx = document.getElementById('GradeChart');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Graded', 'Ungraded'],
+                    datasets: [{
+                        label: 'Grade',
+                        data: [result.data.countGraded, result.data.countUngraded],
+                        borderWidth: 0,
+                        backgroundColor: [
+                            'rgb(255, 99, 132)',
+                            'rgb(54, 162, 235)',
+                        ],
+                        hoverOffset: 4
+                    }]
+                },
+            });
        })
     </script>
 }

@@ -437,7 +437,7 @@ body {
             border-radius: 20px;
             background: var(--light);
             padding: 24px;
-            overflow-x: auto;
+            overflow-x: unset;
         }
 
         .content main .bottom-data .header {

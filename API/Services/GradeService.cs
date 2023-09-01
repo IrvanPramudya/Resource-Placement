@@ -12,11 +12,14 @@ namespace API.Services
         private readonly IAccountRoleRepository _accountRoleRepository;
         private readonly IEmployeeRepository _employeeRepository;
 
-        public GradeService(IGradeRepository gradeRepository, IEmployeeRepository employeeRepository)
+        public GradeService(IGradeRepository gradeRepository, IAccountRepository accountRepository, IAccountRoleRepository accountRoleRepository, IEmployeeRepository employeeRepository)
         {
             _gradeRepository = gradeRepository;
+            _accountRepository = accountRepository;
+            _accountRoleRepository = accountRoleRepository;
             _employeeRepository = employeeRepository;
         }
+
         public CountEmployee CountEmployeeinGrade()
         {
             var grade = GetAllEmployeewithGrade();

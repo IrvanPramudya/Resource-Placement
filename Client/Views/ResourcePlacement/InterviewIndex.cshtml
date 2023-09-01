@@ -108,6 +108,15 @@
         const tooltipTriggerList = document.querySelectorAll('[data-bs-placement="top"]')
         const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
+        // Ambil elemen input datetime-local
+        var interviewDateInput = document.getElementById("interviewDate");
+
+        // Atur atribut min ke tanggal saat ini
+        var now = new Date();
+        var formattedNow = now.toISOString().substring(0, 16); // Format tanggal sesuai tipe datetime-local
+        interviewDateInput.setAttribute("min", formattedNow);
+
+
         $(document).ready(function () {
             loadInterviewData();
 
