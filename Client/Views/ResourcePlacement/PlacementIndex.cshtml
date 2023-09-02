@@ -119,7 +119,21 @@
                 // Set nilai tanggal akhir
                 endDateInput.value = formattedEndDate;
             });
-
+            $("#startDate").flatpickr({
+                enableTime: true,
+                time_24hr: true,
+                altInput: true,
+                minTime: "09:00",
+                maxTime: "18:00",
+                altFormat: "F j, Y H:i",
+                dateFormat: "Y-m-dTH:i",
+                minDate: "today",
+                disable: [
+                    function (date) {
+                        return (date.getDay() === 0 || date.getDay() === 6);
+                    }
+                ]
+            })
             $(document).ready(function () {
                 loadPlacementData();
                 $.ajax({
@@ -132,6 +146,10 @@
                         getName += ` <option value="${val.guid}">${val.fullName}</option>`
                     })
                     $('.selectNameinPlacement').html(getName)
+                    $('#guid').select2({
+                        theme: "bootstrap-5",
+                        dropdownParent: $('#modalAddPlacement')
+                    });
                 })
                 $.ajax({
                     url: "https://localhost:7273/api/clients"
@@ -144,6 +162,10 @@
                         getClientinInterview += ` <option value="${val.guid}">${val.name}</option>`
                     })
                     $('.selectClientinPlacement').html(getClientinInterview)
+                $('#clientGuidUpd').select2({
+                        theme: "bootstrap-5",
+                        dropdownParent: $('#modalUpdatePlacement')
+                    });
                 })
             });
 
@@ -179,7 +201,7 @@
                         {
                             data: null,
                             render: function (data, type, row) {
-                            return `<button onclick="ShowUpdatePlacment('${row.guid}')" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modalUpdatePlacement" data-bs-placement="top" title="Update Data"><i class='bx bx-edit'></i></button>` +
+                            return `<button onclick="ShowUpdatePlacement('${row.guid}')" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modalUpdatePlacement" data-bs-placement="top" title="Update Data"><i class='bx bx-edit'></i></button>` +
                                 `   <button onclick="deletePlacement('${row.guid}')" class="btn btn-danger" data-bs-toggle="modal" data-bs-placement="top" title="Delete Data"><i class='bx bxs-trash-alt'></i></button>`;
                             }
                         }
@@ -286,7 +308,7 @@
                     }
                 });
             }
-            function UpdatePlacement(guid) {
+            function ShowUpdatePlacement(guid) {
                 $.ajax({
                     url: "https://localhost:7273/api/placements/" + guid,
                     type: "GET",

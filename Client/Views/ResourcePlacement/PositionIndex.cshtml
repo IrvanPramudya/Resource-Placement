@@ -25,8 +25,8 @@
                     <form>
                         <div class="mb-3">
                             <label for="clientGuid" class="form-label">Client Name</label>
-                            <select class="form-select clientSelect" aria-label="Default select example" name="client" id="clientGuid">
-                                <option selected>Select Client</option>
+                            <select class="js-example-basic-single clientSelect" aria-label="Default select example" id="clientGuid">
+                                <option value="default">Select a client...</option>
                             </select>
                         </div>
                         <div class="mb-3">
@@ -76,7 +76,8 @@
                     </div>
                     <div class="mb-3">
                         <label for="clientGuid" class="form-label">Client Name</label>
-                        <select class="form-select clientSelect" aria-label="Default select example" id="clientGuidUpd">
+                        <select class="js-example-basic-single clientSelect" aria-label="Default select example" id="clientGuidUpd">
+                            <option value="default">Select a client...</option>
                         </select>
                     </div>
                     <div class="mb-3">
@@ -112,8 +113,18 @@
                         console.log(val)
                         selectClient += ` <option value="${val.guid}">${val.name}</option>`
                     })
-                    $('.clientSelect').html(selectClient);
+                    $(".clientSelect").append(selectClient)
+                    
                 })
+                $('#clientGuid').select2({
+                    theme:"bootstrap-5",
+                    dropdownParent: $('#modalAddPosition')
+                });
+                $('#clientGuidUpd').select2({
+                    theme:"bootstrap-5",
+                    dropdownParent: $('#modalUpdatePosition')
+                });
+                
             });
 
 

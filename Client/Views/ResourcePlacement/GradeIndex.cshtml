@@ -133,6 +133,10 @@
                     getName += ` <option value="${val.guid}">${val.fullName}</option>`
                 })
                 $('.selectNameinGrade').html(getName)
+                $('#guidEmployee').select2({
+                    theme: "bootstrap-5",
+                    dropdownParent: $('#modalAddGrade')
+                });
             })
             });
             function loadGradeData() {
