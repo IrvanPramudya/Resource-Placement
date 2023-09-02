@@ -1,4 +1,5 @@
 ﻿using API.DTOs.Interviews;
+using API.DTOs.Placements;
 using API.Services;
 using API.Utilities.Handlers;
 using Microsoft.AspNetCore.Authorization;
@@ -19,6 +20,27 @@ namespace API.Controllers
             _interviewService = interviewService;
         }
 
+        [HttpGet("CountEmployeeClientInterview")]
+        public IActionResult CountEmployeeinInterview()
+        {
+            var data = _interviewService.GetCountedInterview();
+            if (data == null)
+            {
+                return StatusCode(404, new ResponseHandler<GetCountedClient>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data is not Found",
+                });
+            }
+            return Ok(new ResponseHandler<IEnumerable<GetCountedClient>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Data Success Retrieved",
+                Data = data
+            });
+        }
         [HttpGet("GetAllEmployee")]
         public IActionResult GetAllEmployee()
         {

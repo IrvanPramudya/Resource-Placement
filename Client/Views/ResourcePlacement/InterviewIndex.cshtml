@@ -113,6 +113,21 @@
     <script>
         const tooltipTriggerList = document.querySelectorAll('[data-bs-placement="top"]')
         const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+        $("#interviewDate").flatpickr({
+            enableTime: true,
+            time_24hr: true,
+            altInput: true,
+            minTime: "09:00",
+            maxTime: "18:00",
+            altFormat: "F j, Y H:i",
+            dateFormat: "Y-m-dTH:i",
+            minDate: "today",
+            disable: [
+                function (date) {
+                    return (date.getDay() === 0 || date.getDay() === 6 );
+                }
+            ]
+        })
 
         $(document).ready(function () {
             loadInterviewData();
@@ -127,6 +142,10 @@
                     getName += ` <option value="${val.guid}">${val.fullName}</option>`
                 })
                 $('.selectNameinInterview').html(getName)
+                $('#guidEmployee').select2({
+                    theme: "bootstrap-5",
+                    dropdownParent: $('#modalAddInterview')
+                });
             })
         });
         $.ajax({
@@ -139,7 +158,15 @@
                 console.log(result)
                 getClientinInterview += ` <option value="${val.guid}">${val.name}</option>`
             })
-            $('.selectClientinInterview').append(getClientinInterview);
+            $('.selectClientinInterview').append(getClientinInterview)
+            $('#guidClient').select2({
+                theme: "bootstrap-5",
+                dropdownParent: $('#modalAddInterview')
+            });
+            $('#clientGuidUpd').select2({
+                theme: "bootstrap-5",
+                dropdownParent: $('#modalUpdateInterview')
+            });
             $('.selectClientinInterview').on('change', function () {
                 const selectedGuid = $(this).val();
                 if (selectedGuid !== 'default') {
@@ -171,6 +198,14 @@
                 $('#selectPosition').html(selectLabel)
                 $('#selectPositionUpd').html(selectLabelUpd)
                 $('.selectPositioninInterview').append(getPositioninInterview)
+                $('#positionGuid').select2({
+                    theme: "bootstrap-5",
+                    dropdownParent: $('#modalAddInterview')
+                });
+                $('#positionGuidUpd').select2({
+                    theme: "bootstrap-5",
+                    dropdownParent: $('#modalUpdateInterview')
+                });
             })
         }
         

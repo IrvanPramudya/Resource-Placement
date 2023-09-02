@@ -69,6 +69,25 @@
                     loadPositionbyClientGuid(selectedGuid);
                 }
             });
+            $('#guidClient').select2({
+                theme: "bootstrap-5",
+                dropdownParent: $('#modalAddInterview')
+            });
+        })
+        $("#interviewDate").flatpickr({
+            enableTime: true,
+            time_24hr: true,
+            altInput: true,
+            minTime: "09:00",
+            maxTime: "18:00",
+            altFormat: "F j, Y H:i",
+            dateFormat: "Y-m-dTH:i",
+            minDate: "today",
+            disable: [
+                function (date) {
+                    return (date.getDay() === 0 || date.getDay() === 6);
+                }
+            ]
         })
         function loadPositionbyClientGuid(guidClient) {
             $.ajax({
@@ -87,6 +106,11 @@
                 })
                 $('#selectPosition').html(selectLabel)
                 $('.selectPositioninInterview').append(getPositioninInterview)
+
+                $('#positionGuid').select2({
+                    theme: "bootstrap-5",
+                    dropdownParent: $('#modalAddInterview')
+                });
             })
         }
         $.ajax({
