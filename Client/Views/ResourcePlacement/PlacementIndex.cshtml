@@ -32,7 +32,7 @@
                             <input type="datetime-local" class="form-control" id="endDate" placeholder="EndDate" readonly>
                         </div>
                         <div class="mb-3">
-                            <label for="employeeGuid" class="form-label">Employee Guid</label>
+                            <label for="employeeGuid" class="form-label">Employee Name</label>
                             <select class="form-select selectNameinPlacement" aria-label="Default select example" id="guid"></select>
                         </div>
                     </form>
@@ -189,7 +189,37 @@
                     "<'row'<'col-sm-12'tr>>" + // Tabel
                     "<'row'<'col-md-5'i><'col-md-3 mt-2 mx-auto'l><'col-md-4'p>>",
                 "buttons": [
-                    'copy', 'csv', 'excel', 'pdf', 'print', 'colvis'
+                    {
+                        extend: 'copy',
+                        text: '<i class="bx bxs-copy"></i>',
+                        className: 'btn btn-custom',
+                        title: 'Copy'
+                    },
+                    {
+                        extend: 'csv',
+                        text: '<i class="bx bxs-file-export"></i>',
+                        className: 'btn btn-custom'
+                    },
+                    {
+                        extend: 'excel',
+                        text: '<i class="bx bx-file-blank"></i>',
+                        className: 'btn btn-custom'
+                    },
+                    {
+                        extend: 'pdf',
+                        text: '<i class="bx bxs-file-pdf"></i>',
+                        className: 'btn btn-custom'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="bx bx-printer"></i>',
+                        className: 'btn btn-custom'
+                    },
+                    {
+                        extend: 'colvis',
+                        text: '<i class="bx bx-show-alt"></i>', // Ganti teks dengan ikon Boxicons
+                        className: 'btn btn-custom-column-vis'
+                    }
                 ],
                 "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                 "pageLength": 25

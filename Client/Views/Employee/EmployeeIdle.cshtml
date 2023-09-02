@@ -52,6 +52,14 @@
 </div>
 @section Scripts{
     <script>
+        // Ambil elemen input datetime-local
+        var interviewDateInput = document.getElementById("interviewDate");
+
+        // Atur atribut min ke tanggal saat ini
+        var now = new Date();
+        var formattedNow = now.toISOString().substring(0, 16); // Format tanggal sesuai tipe datetime-local
+        interviewDateInput.setAttribute("min", formattedNow);
+
         $.ajax({
             url: "https://localhost:7273/api/clients"
         }).done(function (result) {
