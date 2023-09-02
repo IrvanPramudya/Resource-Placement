@@ -17,13 +17,14 @@
                     <form>
                         <div class="mb-3" id="inputGuid"> </div>
                         <div class="mb-3" id="inputclientGuid"></div>
+                        <div class="mb-3" id="interviewDate"></div>
                         <div class="mb-3 date-container">
                             <label for="startDate" class="form-label">Start Date</label>
                             <input type="datetime-local" class="form-control" id="startDate" placeholder="StartDate">
                         </div>
                         <div class="mb-3">
                             <label for="endDate" class="form-label">End Date</label>
-                            <input type="datetime-local" class="form-control" id="endDate" placeholder="EndDate">
+                            <input type="datetime-local" class="form-control" id="endDate" placeholder="EndDate" readonly>
                         </div>
                         @*<div class="mb-3">
                             <label for="employeeGuid" class="form-label">Employee Guid</label>
@@ -62,13 +63,15 @@
             // Set nilai tanggal akhir
             endDateInput.value = formattedEndDate;
         });
+        
+        
         $.ajax({
             url: 'https://localhost:7273/api/interviews/GetAllEmployeeAcceptedbyClient'
         }).done((result) => {
             let employeeCard = ""
             $.each(result.data, (key, val) => {
                 employeeCard += `<div class="col-lg-4">
-                                                    <div class="card h-100 p-3" data-bs-toggle="modal" data-bs-target="#modalAddPlacement">
+                                                <div class="card h-100 p-3" data-bs-toggle="modal" data-bs-target="#modalAddPlacement" onclick="getinterviewDate()">
                                                 <div class="overflow-hidden position-relative border-radius-lg bg-cover h-100" style="background-image: url('~/soft-ui/assets/img/ivancik.jpg');">
                                                     <span class="mask bg-gradient-dark"></span>
                                                     <div class="card-body position-relative z-index-1 d-flex flex-column h-100 p-3">
@@ -92,10 +95,35 @@
                                         </div>`
                 $("#inputGuid").html(`<input type="hidden" value="${val.guid}" id="guidEmployee" />`)
                 $("#inputclientGuid").html(`<input type="hidden" value="${val.clientGuid}" id="clientGuid" />`)
+                $("#interviewDate").html(`<input type="hidden" value="${val.interviewDate}" id="interviewDateEmployee" />`)
 
             })
             $("#employeeCard").html(employeeCard)
         })
+        function getinterviewDate()
+        {
+            var interviewGuid = $("#interviewDateEmployee").val()
+            console.log(interviewGuid)
+            $("#startDate").flatpickr({
+                enableTime: true,
+                time_24hr: true,
+                altInput: true,
+                minTime: "09:00",
+                maxTime: "18:00",
+                altFormat: "F j, Y H:i",
+                dateFormat: "Y-m-dTH:i",
+                disable: [
+                    function (date) {
+                        return (date.getDay() === 0 || date.getDay() === 6);
+                    },
+                    function (date) {
+                        var interviewDate = new Date(interviewGuid);
+
+                        return date < interviewDate;
+                    },
+                ],
+            })
+        }
         function addPlacement() {
             var placementData = {
                 startDate: $("#startDate").val(),
