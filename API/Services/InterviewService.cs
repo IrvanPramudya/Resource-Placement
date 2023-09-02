@@ -3,6 +3,7 @@ using API.Data;
 using API.DTOs.AccountRoles;
 using API.DTOs.Accounts;
 using API.DTOs.Interviews;
+using API.DTOs.Placements;
 using API.Models;
 using API.Repositories;
 using API.Utilities.Enums;
@@ -38,7 +39,29 @@ namespace API.Services
             _accountRepository = accountRepository;
             _accountroleRepository = accountroleRepository;
         }
-
+        public IEnumerable<GetCountedClient> GetCountedInterview()
+        {
+            var interview = _interviewRepository.GetAll();
+            var client = _clientRepository.GetAll();
+            var listclient = new List<GetCountedClient>();
+            foreach (var item in client)
+            {
+                var newclient = new GetCountedClient
+                {
+                    ClientName = item.Name,
+                    CountEmployee = 0
+                };
+                foreach (var item2 in interview)
+                {
+                    if (item.Guid == item2.ClientGuid)
+                    {
+                        newclient.CountEmployee++;
+                    }
+                }
+                listclient.Add(newclient);
+            }
+            return listclient;
+        }
         public IEnumerable<GetRemainingEmployee> GetAllInterviewEmployeePlacement()
         {
             var merge = from employee in _employeeRepository.GetAll()

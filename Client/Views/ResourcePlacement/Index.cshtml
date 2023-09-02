@@ -371,7 +371,7 @@
             $("#Adding-Role").html(role)
         })
         $.ajax({
-            url: "https://localhost:7273/api/placements/CountClient",
+            url: "https://localhost:7273/api/interviews/CountEmployeeClientInterview",
             type:"GET"
         }).done((result)=>{
             const clientName = result.data.map(entry => entry.clientName)
