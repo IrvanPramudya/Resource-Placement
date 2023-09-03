@@ -3,6 +3,7 @@ using API.DTOs.Placements;
 using API.Services;
 using API.Utilities.Handlers;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -10,7 +11,8 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/interviews")]
-    /*[Authorize]*/
+    [Authorize(Roles = "Admin,Operasional")]
+    [EnableCors]
     public class InterviewController : ControllerBase
     {
         private readonly InterviewService _interviewService;

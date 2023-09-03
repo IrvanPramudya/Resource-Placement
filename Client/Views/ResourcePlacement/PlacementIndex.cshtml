@@ -1,4 +1,5 @@
-﻿@{
+﻿@using System.Net.Http
+@{
     ViewData["Title"] = "Placement";
     Layout = "AdminLayout";
 }
@@ -100,6 +101,7 @@
 </div>
 @section Scripts{
         <script>
+        const Token = '@Context.Session.GetString("JWToken")'
             const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="modal"]')
             const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
@@ -137,7 +139,10 @@
             $(document).ready(function () {
                 loadPlacementData();
                 $.ajax({
-                url: "https://localhost:7273/api/interviews/GetRemainingEmployeeinPlacement"
+                url: "https://localhost:7273/api/interviews/GetRemainingEmployeeinPlacement",
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                }
                 }).done(function (result) {
                     console.log(result)
                     let getName = ""
@@ -152,7 +157,10 @@
                     });
                 })
                 $.ajax({
-                    url: "https://localhost:7273/api/clients"
+                    url: "https://localhost:7273/api/clients",
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                }
                 }).done(function (result) {
                     // Assuming the API response contains a property named "totalEmployees"
                     console.log(result)
@@ -174,7 +182,10 @@
                     ajax: {
                         url: "https://localhost:7273/api/placements/GetEmployeeClientName",
                         dataType: "JSON",
-                        dataSrc: "data"
+                        dataSrc: "data",
+                    headers: {
+                        'Authorization': 'Bearer ' + Token
+                    }
                     },
                     columns: [
                         {
@@ -229,6 +240,7 @@
                     url: "https://localhost:7273/api/placements",
                     type: "POST",
                     headers: {
+                        'Authorization': 'Bearer ' + Token,
                         'Content-Type': 'application/json'
                     },
                     data: JSON.stringify(placementData),
@@ -264,6 +276,9 @@
                         $.ajax({
                             url: "https://localhost:7273/api/placements?guid=" + guid,
                             type: "DELETE",
+                        headers: {
+                            'Authorization': 'Bearer ' + Token
+                        }
                         }).done(function (result) {
                             Swal.fire({
                                 title: 'Deleted',
@@ -282,7 +297,10 @@
                 $.ajax({
                     url: "https://localhost:7273/api/placements/" + guid,
                     type: "GET",
-                    dataType: "json"
+                    dataType: "json",
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                }
                 }).done((result) => {
                     console.log(result)
                     $("#guidUpd").val(result.data.guid);
@@ -308,7 +326,10 @@
                     url: "https://localhost:7273/api/placements",
                     type: "PUT",
                     contentType: "application/json",
-                    data: JSON.stringify(data)
+                    data: JSON.stringify(data),
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                }
                 }).done((result) => {
                     Swal.fire({
                         title: 'Success',

@@ -1,4 +1,5 @@
-﻿@{
+﻿@using System.Net.Http
+@{
     ViewData["Title"] = "Grade";
     Layout = "AdminLayout";
 }
@@ -101,6 +102,7 @@
 @section Scripts{
     <script src="~/js/Grade.js" asp-append-version="true"></script>
         <script>
+        const Token = '@Context.Session.GetString("JWToken")'
             const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="modal"]')
             const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
@@ -124,7 +126,10 @@
             $(document).ready(function () {
                 loadGradeData();
             $.ajax({
-                url: "https://localhost:7273/api/employees/GetEmployeeOuterJoin"
+                url: "https://localhost:7273/api/employees/GetEmployeeOuterJoin",
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                }
             }).done(function (result) {
                 console.log(result)
                 let getName = ""
@@ -144,7 +149,10 @@
                     ajax: {
                         url: "https://localhost:7273/api/grades/GetEmployeeName",
                         dataType: "JSON",
-                        dataSrc: "data"
+                        dataSrc: "data",
+                    headers: {
+                        'Authorization': 'Bearer ' + Token
+                    }
                     },
                     columns: [
                         {
@@ -236,7 +244,8 @@
                     url: "https://localhost:7273/api/grades",
                     type: "POST",
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + Token
                     },
                     data: JSON.stringify(gradeData),
                 }).done(function (result) {
@@ -271,6 +280,9 @@
                         $.ajax({
                             url: "https://localhost:7273/api/grades?guid=" + guid,
                             type: "DELETE",
+                            headers: {
+                                'Authorization': 'Bearer ' + Token
+                            }
                         }).done(function (result) {
                             Swal.fire({
                                 title: 'Deleted',
@@ -289,7 +301,10 @@
                 $.ajax({
                     url: "https://localhost:7273/api/grades/" + guid,
                     type: "GET",
-                    dataType: "json"
+                    dataType: "json",
+                    headers: {
+                        'Authorization': 'Bearer ' + Token
+                    }
                 }).done((result) => {
                     console.log(result)
                     $("#guidUpd").val(result.data.guid);
@@ -315,7 +330,10 @@
                     url: "https://localhost:7273/api/grades",
                     type: "PUT",
                     contentType: "application/json",
-                    data: JSON.stringify(data)
+                    data: JSON.stringify(data),
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                }
                 }).done((result) => {
                     Swal.fire({
                         title: 'Success',

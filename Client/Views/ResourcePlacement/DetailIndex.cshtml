@@ -1,5 +1,5 @@
-﻿@{
-    
+﻿@using System.Net.Http
+@{ 
 }
 <div class="container-fluid">
     <div class="page-header min-height-300 border-radius-xl mt-4" style="background-image: url('~/soft-ui/assets/img/curved-images/curved0.jpg'); background-position-y: 50%;">
@@ -207,8 +207,12 @@
 
 @section Scripts{
     <script>
+        const Token = '@Context.Session.GetString("JWToken")'
         $.ajax({
             url: "https://localhost:7273/api/accounts/GetDetailAccount/@User.FindFirst("Guid").Value",
+            headers: {
+                'Authorization': 'Bearer ' + Token
+            }
         }).done((result)=>{
             interviewDate = result.data.interviewDate != null?moment($("#interviewDate").val(result.data.interviewDate)).format("dddd, D MMMM YYYY, HH:mm"):null;
             $("#fullNameDetail").html(`${result.data.fullName}`)

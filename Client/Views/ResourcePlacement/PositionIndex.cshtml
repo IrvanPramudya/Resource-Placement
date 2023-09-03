@@ -1,4 +1,5 @@
-﻿@{
+﻿@using System.Net.Http
+@{
     ViewData["Title"] = "Position";
     Layout = "AdminLayout";
 }
@@ -100,13 +101,17 @@
 @section Scripts{
     <script src="~/js/Position.js" asp-append-version="true"></script>
         <script>
+        const Token = '@Context.Session.GetString("JWToken")'
             const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="modal"]')
             const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
             $(document).ready(function () {
                 loadPositionData();
                 $.ajax({
-                    url: "https://localhost:7273/api/clients"
+                    url: "https://localhost:7273/api/clients",
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                }
                 }).done((result) => {
                     let selectClient = ""
                     $.each(result.data, (key, val) => {
@@ -134,7 +139,10 @@
                     ajax: {
                         url: "https://localhost:7273/api/positions/GetClientName",
                         dataType: "JSON",
-                        dataSrc: "data"
+                        dataSrc: "data",
+                    headers: {
+                        'Authorization': 'Bearer ' + Token
+                    }
                     },
                     columns: [
                         {
@@ -207,6 +215,7 @@
                     url: "https://localhost:7273/api/positions",
                     type: "POST",
                     headers: {
+                    'Authorization': 'Bearer ' + Token,
                         'Content-Type': 'application/json'
                     },
                     data: JSON.stringify(positionData),
@@ -242,6 +251,9 @@
                         $.ajax({
                             url: "https://localhost:7273/api/positions?guid=" + guid,
                             type: "DELETE",
+                        headers: {
+                            'Authorization': 'Bearer ' + Token
+                        }
                         }).done(function (result) {
                             Swal.fire({
                                 title: 'Deleted',

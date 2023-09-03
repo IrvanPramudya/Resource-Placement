@@ -1,4 +1,5 @@
-﻿@{
+﻿@using System.Net.Http
+@{
     ViewData["Title"] = "Client";
     Layout = "AdminLayout";
 }
@@ -90,13 +91,17 @@
 @section Scripts
 {
     <script>
+        const Token = '@Context.Session.GetString("JWToken")'
         const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="modal"]')
         const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
         $(document).ready(function () {
             loadClientData();
             $.ajax({
-                url: "https://localhost:7273/api/clients/GetAvailableClient"
+                url: "https://localhost:7273/api/clients/GetAvailableClient",
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                }
             }).done(function (result) {
                 // Assuming the API response contains a property named "totalEmployees"
                 console.log(result)
@@ -108,7 +113,10 @@
                 $('.selectName').html(getName)
             })
             $.ajax({
-                url: "https://localhost:7273/api/clients"
+                url: "https://localhost:7273/api/clients",
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                }
             }).done(function (result) {
                 // Assuming the API response contains a property named "totalEmployees"
                 console.log(result)
@@ -126,7 +134,10 @@
                 ajax: {
                     url: "https://localhost:7273/api/clients/",
                     dataType: "JSON",
-                    dataSrc: "data"
+                    dataSrc: "data",
+                    headers: {
+                        'Authorization': 'Bearer ' + Token
+                    }
                 },
                 columns: [
                     {
@@ -202,7 +213,8 @@
                 url: "https://localhost:7273/api/clients",
                 type: "POST",
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + Token
                 },
                 data: JSON.stringify(clientData),
             }).done(function (result) {
@@ -237,6 +249,9 @@
                     $.ajax({
                         url: "https://localhost:7273/api/clients?guid=" + guid,
                         type: "DELETE",
+                        headers: {
+                            'Authorization': 'Bearer ' + Token
+                        }
                     }).done(function (result) {
                         Swal.fire({
                             title: 'Deleted',

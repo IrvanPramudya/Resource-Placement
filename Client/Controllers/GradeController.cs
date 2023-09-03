@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Client.Controllers
 {
+    [Authorize(Roles = "Admin,Trainer,Operasional")]
     public class GradeController : Controller
     {
         public IActionResult EmployeeGraded() => View();

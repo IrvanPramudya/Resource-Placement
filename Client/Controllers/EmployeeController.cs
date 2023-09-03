@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Client.Controllers
 {
+    [Authorize]
     public class EmployeeController : Controller
     {
         public IActionResult EmployeeSite() => View();

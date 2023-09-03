@@ -1,4 +1,5 @@
-﻿@{
+﻿@using System.Net.Http
+@{
     ViewData["Title"] = "Dashboard";
     Layout = "AdminLayout";
 }
@@ -306,10 +307,13 @@
         toastr.success('@TempData["Success"]');
     </script>
     <script>
-
+        const Token = '@Context.Session.GetString("JWToken")'
         $.ajax({
             url: "https://localhost:7273/api/employees/GetCountedGender",
-            type: "GET"
+            type: "GET",
+            headers: {
+                'Authorization': 'Bearer ' + Token
+            }
         }).done((result) => {
             const ctx = document.getElementById('GenderChart');
             new Chart(ctx, {
@@ -331,7 +335,10 @@
         })
         $.ajax({
             url: "https://localhost:7273/api/employees/GetCountedStatus",
-            type: "GET"
+            type: "GET",
+            headers: {
+                'Authorization': 'Bearer ' + Token
+            }
         }).done((result) => {
             const ctx = document.getElementById('StatusChart');
             new Chart(ctx, {
@@ -353,7 +360,10 @@
         })
         $.ajax({
             url: "https://localhost:7273/api/accountroles/GetCountAllRole",
-            type: "GET"
+            type: "GET",
+            headers: {
+                'Authorization': 'Bearer ' + Token
+            }
         }).done((result) => {
             console.log(result.data)
             let role = ""
@@ -372,7 +382,10 @@
         })
         $.ajax({
             url: "https://localhost:7273/api/interviews/CountEmployeeClientInterview",
-            type:"GET"
+            type:"GET",
+            headers: {
+                'Authorization': 'Bearer ' + Token
+            }
         }).done((result)=>{
             const clientName = result.data.map(entry => entry.clientName)
             const countEmployee = result.data.map(entry => entry.countEmployee)
@@ -466,7 +479,10 @@
             });
         })
         $.ajax({
-            url: "https://localhost:7273/api/interviews/@User.FindFirst("Guid").Value"
+            url: "https://localhost:7273/api/interviews/@User.FindFirst("Guid").Value",
+            headers: {
+                'Authorization': 'Bearer ' + Token
+            }
         }).done((result)=>{
             let progressBar = 0
             let statusName = ""
@@ -501,7 +517,10 @@
             $('#explainStatus').html(`${statusName}`)
         })
         $.ajax({
-            url: "https://localhost:7273/api/interviews/CountEmployeeStatusinInterview"
+            url: "https://localhost:7273/api/interviews/CountEmployeeStatusinInterview",
+            headers: {
+                'Authorization': 'Bearer ' + Token
+            }
         }).done((result)=>{
             $("#StatusWaiting").html(`${result.data.countStatusWaiting}`)
             $("#StatusAcceptedbyEmployee").html(`${result.data.countStatusAcceptedbyEmployee}`)
@@ -546,24 +565,36 @@
             location.href = "/Grade/EmployeeUngraded"
         }
         $.ajax({
-            url: "https://localhost:7273/api/employees/GetCountedStatus"
+            url: "https://localhost:7273/api/employees/GetCountedStatus",
+            headers: {
+                'Authorization': 'Bearer ' + Token
+            }
         }).done((result)=>{
             $("#countSite").html(`${result.data.countSite}`)
             $("#countIdle").html(`${result.data.countIdleUngraded}`)
         })
         $.ajax({
-            url: "https://localhost:7273/api/accountroles/GetCountAllRole"
+            url: "https://localhost:7273/api/accountroles/GetCountAllRole",
+            headers: {
+                'Authorization': 'Bearer ' + Token
+            }
         }).done((result)=>{
             $("#countTrainer").html(`${result.data[0].countRole}`)
         })
         $.ajax({
-            url: "https://localhost:7273/api/clients/GetCountClient"
+            url: "https://localhost:7273/api/clients/GetCountClient",
+            headers: {
+                'Authorization': 'Bearer ' + Token
+            }
         }).done((result)=>{
             $("#countAvailable").html(`${result.data.countAvailable}`)
             $("#countUnAvailable").html(`${result.data.countUnAvailable}`)
         })
        $.ajax({
-           url:"https://localhost:7273/api/grades/CountEmployeeinGrade"
+           url:"https://localhost:7273/api/grades/CountEmployeeinGrade",
+            headers: {
+                'Authorization': 'Bearer ' + Token
+            }
        }).done((result)=>{
            $("#countGraded").html(`${result.data.countGraded}`)
            $("#countUngraded").html(`${result.data.countUngraded}`)

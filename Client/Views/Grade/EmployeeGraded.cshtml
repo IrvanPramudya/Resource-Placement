@@ -1,4 +1,5 @@
-﻿@{
+﻿@using System.Net.Http
+@{
 }
 <div class="col-12 mt-4">
     <p class="text-center h1 fw-bold mb-4 mx-auto mt-1">Employee Graded</p>
@@ -15,8 +16,12 @@
 @section Scripts
 {
     <script>
+        const Token = '@Context.Session.GetString("JWToken")'
         $.ajax({
-            url: "https://localhost:7273/api/grades/GetGradedEmployee"
+            url: "https://localhost:7273/api/grades/GetGradedEmployee",
+            headers: {
+                'Authorization': 'Bearer ' + Token
+            }
         }).done((result) => {
             let gradeCard = ""
             $.each(result.data, (key, val) => {

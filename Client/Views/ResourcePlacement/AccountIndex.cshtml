@@ -1,4 +1,5 @@
-﻿@{
+﻿@using System.Net.Http
+@{
     ViewData["Title"] = "Account";
     Layout = "AdminLayout";
 }
@@ -63,12 +64,16 @@
         <script>
             const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="modal"]')
             const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+        const Token = '@Context.Session.GetString("JWToken")'
         </script>
         <script>
             $(document).ready(function () {
                 loadAccountData();
             $.ajax({
-                url: "https://localhost:7273/api/accounts/GetAccountwithNameOuterJoin"
+                url: "https://localhost:7273/api/accounts/GetAccountwithNameOuterJoin",
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                }
             }).done(function (result) {
                 console.log(result)
                 let getName = ""
@@ -85,7 +90,10 @@
                     ajax: {
                     url: "https://localhost:7273/api/accounts/GetAccountwithName",
                         dataType: "JSON",
-                        dataSrc: "data"
+                        dataSrc: "data",
+                    headers: {
+                        'Authorization': 'Bearer ' + Token
+                    }
                     },
                     columns: [
                         {
@@ -156,7 +164,8 @@
                     url: "https://localhost:7273/api/accounts",
                     type: "POST",
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + Token
                     },
                     data: JSON.stringify(accountData),
                 }).done(function (result) {
@@ -191,6 +200,9 @@
                         $.ajax({
                             url: "https://localhost:7273/api/accounts?guid=" + guid,
                             type: "DELETE",
+                        headers: {
+                            'Authorization': 'Bearer ' + Token
+                        }
                         }).done(function (result) {
                             Swal.fire({
                                 title: 'Deleted',
