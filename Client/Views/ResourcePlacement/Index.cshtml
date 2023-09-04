@@ -188,7 +188,7 @@
                         <h3>Gender</h3>
                     </div>
                     <div class="chart-container" style="position: relative; height:100%; width:100%">
-                        <canvas id="GenderChart"></canvas>
+                        <canvas id="GenderChart" data-bs-chart-no-animation="true"></canvas>
                     </div>
                 </div>
                 <div class="col-6">
@@ -212,6 +212,18 @@
                     <canvas id="chart-bar" class="chart-canvas" height="200"></canvas>
                 </div>
             </div>
+            <div class="reminders">
+                <div class="header">
+                    <i class='bx bx-note'></i>
+                    <h3>Interview</h3>
+                    <i class='bx bx-filter'></i>
+                    <i class='bx bx-plus'></i>
+                </div>
+                <div class="chart">
+                    <canvas id="chart-line" class="chart-canvas" height="200"></canvas>
+                </div>
+            </div>
+
         </div>
     }
     
@@ -296,15 +308,13 @@
                     </div>
                 </div>
             </div>
-            <div class="row" style="height:30%; width:40%">
-                <div class="col-8">
-                    <div class="header">
-                        <i class='bx bx-receipt'></i>
-                        <h3>Grade</h3>
-                    </div>
-                    <div class="chart-container" style="position: relative; height:100%; width:100%">
-                        <canvas id="GradeChart"></canvas>
-                    </div>
+            <div class="col-4">
+                <div class="header">
+                    <i class='bx bx-receipt'></i>
+                    <h3>Grade</h3>
+                </div>
+                <div class="chart-container" style="position: relative; height:100%; width:100%">
+                    <canvas id="GradeChart"></canvas>
                 </div>
             </div>
         </div>
@@ -439,6 +449,7 @@
             })
             $("#Adding-Role").html(role)
         })
+
         $.ajax({
             url: "https://localhost:7273/api/interviews/CountEmployeeClientInterview",
             type:"GET"
@@ -449,93 +460,93 @@
 
             var gradientStroke1 = ctx2.createLinearGradient(0, 230, 0, 50);
 
-        //    var gradientStroke1 = ctx2.createLinearGradient(0, 230, 0, 50);
+            gradientStroke1.addColorStop(1, 'rgba(203,12,159,0.2)');
+            gradientStroke1.addColorStop(0.2, 'rgba(72,72,176,0.0)');
+            gradientStroke1.addColorStop(0, 'rgba(203,12,159,0)'); //purple colors
 
-        //    gradientStroke1.addColorStop(1, 'rgba(203,12,159,0.2)');
-        //    gradientStroke1.addColorStop(0.2, 'rgba(72,72,176,0.0)');
-        //    gradientStroke1.addColorStop(0, 'rgba(203,12,159,0)'); //purple colors
+            var gradientStroke2 = ctx2.createLinearGradient(0, 230, 0, 50);
 
-        //    var gradientStroke2 = ctx2.createLinearGradient(0, 230, 0, 50);
+            gradientStroke2.addColorStop(1, 'rgba(20,23,39,0.2)');
+            gradientStroke2.addColorStop(0.2, 'rgba(72,72,176,0.0)');
+            gradientStroke2.addColorStop(0, 'rgba(20,23,39,0)'); //purple colors
 
-        //    gradientStroke2.addColorStop(1, 'rgba(20,23,39,0.2)');
-        //    gradientStroke2.addColorStop(0.2, 'rgba(72,72,176,0.0)');
-        //    gradientStroke2.addColorStop(0, 'rgba(20,23,39,0)'); //purple colors
+            new Chart(ctx2, {
+                type: "line",
+                data: {
+                    labels: clientName,
+                    datasets: [{
+                        label: "Employee",
+                        tension: 0.4,
+                        borderWidth: 0,
+                        pointRadius: 0,
+                        borderColor: "#cb0c9f",
+                        borderWidth: 3,
+                        backgroundColor: gradientStroke1,
+                        fill: true,
+                        data: countEmployee,
+                        maxBarThickness: 6
 
-        //    new Chart(ctx2, {
-        //        type: "line",
-        //        data: {
-        //            labels: clientName,
-        //            datasets: [{
-        //                label: "Employee",
-        //                tension: 0.4,
-        //                borderWidth: 0,
-        //                pointRadius: 0,
-        //                borderColor: "#cb0c9f",
-        //                borderWidth: 3,
-        //                backgroundColor: gradientStroke1,
-        //                fill: true,
-        //                data: countEmployee,
-        //                maxBarThickness: 6
-
-        //            }],
-        //        },
-        //        options: {
-        //            responsive: true,
-        //            maintainAspectRatio: false,
-        //            plugins: {
-        //                legend: {
-        //                    display: false,
-        //                }
-        //            },
-        //            interaction: {
-        //                intersect: false,
-        //                mode: 'index',
-        //            },
-        //            scales: {
-        //                y: {
-        //                    grid: {
-        //                        drawBorder: false,
-        //                        display: true,
-        //                        drawOnChartArea: true,
-        //                        drawTicks: false,
-        //                        borderDash: [5, 5]
-        //                    },
-        //                    ticks: {
-        //                        display: true,
-        //                        padding: 10,
-        //                        color: '#b2b9bf',
-        //                        font: {
-        //                            size: 11,
-        //                            family: "Open Sans",
-        //                            style: 'normal',
-        //                            lineHeight: 2
-        //                        },
-        //                    }
-        //                },
-        //                x: {
-        //                    grid: {
-        //                        drawBorder: false,
-        //                        display: false,
-        //                        drawOnChartArea: false,
-        //                        drawTicks: false,
-        //                        borderDash: [5, 5]
-        //                    },
-        //                    ticks: {
-        //                        display: true,
-        //                        color: '#b2b9bf',
-        //                        padding: 20,
-        //                        font: {
-        //                            size: 11,
-        //                            family: "Open Sans",
-        //                            style: 'normal',
-        //                            lineHeight: 2
-        //                        },
-        //                    }
-        //                },
-        //            },
-        //        },
-        //    });
-        //})
+                    }],
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true
+                        }
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'index',
+                    },
+                    scales: {
+                        y: {
+                            grid: {
+                                drawBorder: false,
+                                display: true,
+                                drawOnChartArea: true,
+                                drawTicks: false,
+                                borderDash: [5, 5]
+                            },
+                            beginAtZero: true,
+                            ticks: {
+                                display: true,
+                                stepSize: 1,
+                                padding: 10,
+                                color: '#b2b9bf',
+                                font: {
+                                    size: 11,
+                                    family: "Open Sans",
+                                    style: 'normal',
+                                    lineHeight: 2
+                                },
+                            }
+                        },
+                        x: {
+                            grid: {
+                                drawBorder: false,
+                                display: false,
+                                drawOnChartArea: false,
+                                drawTicks: false,
+                                borderDash: [5, 5]
+                            },
+                            ticks: {
+                                display: true,
+                                color: '#b2b9bf',
+                                padding: 20,
+                                font: {
+                                    size: 11,
+                                    family: "Open Sans",
+                                    style: 'normal',
+                                    lineHeight: 2
+                                },
+                            }
+                        },
+                    },
+                },
+            });
+        })
 
         $.ajax({
             url: "https://localhost:7273/api/placements/CountClient",
@@ -567,7 +578,7 @@
                     maintainAspectRatio: false,
                     plugins: {
                         legend: {
-                            display: true,
+                            display: true
                         },
                     },
                     scales: {
@@ -698,8 +709,8 @@
                         data: [result.data.countGraded, result.data.countUngraded],
                         borderWidth: 0,
                         backgroundColor: [
-                            'rgb(255, 99, 132)',
                             'rgb(54, 162, 235)',
+                            'rgb(255, 99, 132)',
                         ],
                         hoverOffset: 4
                     }]
