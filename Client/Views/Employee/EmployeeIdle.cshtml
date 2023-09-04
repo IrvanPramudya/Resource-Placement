@@ -57,7 +57,8 @@
         $.ajax({
             url: "https://localhost:7273/api/clients",
             headers: {
-                'Authorization': 'Bearer ' + Token
+                'Authorization': 'Bearer ' + Token,
+                'Content-Type': 'application/json'
             }
         }).done(function (result) {
             // Assuming the API response contains a property named "totalEmployees"
@@ -127,6 +128,9 @@
                 'Authorization': 'Bearer ' + Token
             }
         }).done((result)=>{
+            headers: {
+                'Content-Type': 'application/json'
+            },
             let cardEmployee =""
             $.each(result.data,(key,val)=>{
                 cardEmployee += `<div class="col-xl-3 col-md-6 mb-xl-0 mb-4 ms-2">
