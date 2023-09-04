@@ -108,7 +108,7 @@
                         </div>
                     </div>
                     <div class="col-md-6 mt-md-0 mt-4">
-                        <div class="card cursor-pointer" onclick="loadEmployeeIdle()" style="background-color:#EBECF0">
+                        <div class="card cursor-pointer" onclick="loadEmployeeGraded()" style="background-color:#EBECF0">
                             <div class="card-header mx-4 p-3 text-center">
                                 <span id="inputedInterview"></span>
                                 <div class="icon icon-shape icon-lg bg-gradient-primary shadow text-center border-radius-lg">
@@ -571,7 +571,7 @@
             }
         }).done((result)=>{
             $("#countSite").html(`${result.data.countSite}`)
-            $("#countIdle").html(`${result.data.countIdleUngraded}`)
+            $("#countIdle").html(`${result.data.countIdleGraded}`)
         })
         $.ajax({
             url: "https://localhost:7273/api/accountroles/GetCountAllRole",

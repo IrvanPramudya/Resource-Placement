@@ -4,6 +4,7 @@ using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(PlacementDbContext))]
-    partial class PlacementDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230904031034_NewTableAddingHistory")]
+    partial class NewTableAddingHistory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -237,7 +239,7 @@ namespace API.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("interview_date");
 
-                    b.Property<bool?>("IsAccepted")
+                    b.Property<bool>("IsAccepted")
                         .HasColumnType("bit")
                         .HasColumnName("is_accepted");
 
@@ -409,29 +411,29 @@ namespace API.Migrations
                         new
                         {
                             Guid = new Guid("ae259a90-e2e8-442f-ce18-08db91a71ab9"),
-                            CreatedDate = new DateTime(2023, 9, 4, 10, 38, 26, 849, DateTimeKind.Local).AddTicks(9627),
-                            ModifiedDate = new DateTime(2023, 9, 4, 10, 38, 26, 849, DateTimeKind.Local).AddTicks(9638),
+                            CreatedDate = new DateTime(2023, 9, 4, 10, 10, 34, 262, DateTimeKind.Local).AddTicks(9954),
+                            ModifiedDate = new DateTime(2023, 9, 4, 10, 10, 34, 262, DateTimeKind.Local).AddTicks(9971),
                             Name = "Employee"
                         },
                         new
                         {
                             Guid = new Guid("4ec90656-e89c-4871-d9e5-08db8a7d0f37"),
-                            CreatedDate = new DateTime(2023, 9, 4, 10, 38, 26, 849, DateTimeKind.Local).AddTicks(9647),
-                            ModifiedDate = new DateTime(2023, 9, 4, 10, 38, 26, 849, DateTimeKind.Local).AddTicks(9647),
+                            CreatedDate = new DateTime(2023, 9, 4, 10, 10, 34, 262, DateTimeKind.Local).AddTicks(9977),
+                            ModifiedDate = new DateTime(2023, 9, 4, 10, 10, 34, 262, DateTimeKind.Local).AddTicks(9977),
                             Name = "Trainer"
                         },
                         new
                         {
                             Guid = new Guid("c0689b0a-5c87-46f1-ce19-08db91a71ab9"),
-                            CreatedDate = new DateTime(2023, 9, 4, 10, 38, 26, 849, DateTimeKind.Local).AddTicks(9650),
-                            ModifiedDate = new DateTime(2023, 9, 4, 10, 38, 26, 849, DateTimeKind.Local).AddTicks(9651),
+                            CreatedDate = new DateTime(2023, 9, 4, 10, 10, 34, 262, DateTimeKind.Local).AddTicks(9980),
+                            ModifiedDate = new DateTime(2023, 9, 4, 10, 10, 34, 262, DateTimeKind.Local).AddTicks(9980),
                             Name = "Operasional"
                         },
                         new
                         {
                             Guid = new Guid("5fb9adc0-7d08-45d4-cd66-08db9c7a678f"),
-                            CreatedDate = new DateTime(2023, 9, 4, 10, 38, 26, 849, DateTimeKind.Local).AddTicks(9653),
-                            ModifiedDate = new DateTime(2023, 9, 4, 10, 38, 26, 849, DateTimeKind.Local).AddTicks(9654),
+                            CreatedDate = new DateTime(2023, 9, 4, 10, 10, 34, 262, DateTimeKind.Local).AddTicks(9983),
+                            ModifiedDate = new DateTime(2023, 9, 4, 10, 10, 34, 262, DateTimeKind.Local).AddTicks(9983),
                             Name = "Admin"
                         });
                 });

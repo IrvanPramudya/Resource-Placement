@@ -2,7 +2,9 @@
 using API.Data;
 using API.DTOs.AccountRoles;
 using API.DTOs.Accounts;
+using API.DTOs.Histories;
 using API.DTOs.Interviews;
+using API.DTOs.NewHistoryDto;
 using API.DTOs.Placements;
 using API.Models;
 using API.Repositories;
@@ -23,10 +25,11 @@ namespace API.Services
         private readonly IClientRepository _clientRepository;
         private readonly IPositionRepository _positionRepository;
         private readonly IPlacementRepository _placementRepository;
+        private readonly IHistoryRepository _historyRepository;
         private readonly IEmailHandler _emailHandler;
         private readonly PlacementDbContext _dbContext;
 
-        public InterviewService(IInterviewRepository interviewRepository, IEmployeeRepository employeeRepository, IClientRepository clientRepository, IPositionRepository positionRepository, IEmailHandler emailHandler, IPlacementRepository placementRepository, IGradeRepository gradeRepository, PlacementDbContext dbContext, IAccountRepository accountRepository, IAccountRoleRepository accountroleRepository)
+        public InterviewService(IInterviewRepository interviewRepository, IEmployeeRepository employeeRepository, IClientRepository clientRepository, IPositionRepository positionRepository, IEmailHandler emailHandler, IPlacementRepository placementRepository, IGradeRepository gradeRepository, PlacementDbContext dbContext, IAccountRepository accountRepository, IAccountRoleRepository accountroleRepository, IHistoryRepository historyRepository)
         {
             _interviewRepository = interviewRepository;
             _employeeRepository = employeeRepository;
@@ -38,6 +41,7 @@ namespace API.Services
             _dbContext = dbContext;
             _accountRepository = accountRepository;
             _accountroleRepository = accountroleRepository;
+            _historyRepository = historyRepository;
         }
         public IEnumerable<GetCountedClient> GetCountedInterview()
         {
@@ -172,26 +176,30 @@ namespace API.Services
         public int UpdateFullInterview(UpdateInterviewDto interviewDto)
         {
             var interview = _interviewRepository.GetByGuid(interviewDto.Guid);
-            if (interview is null)
+            var history = _historyRepository.GetHistoryByEmployeeGuid(interviewDto.Guid);
+            var historyByGuid = history.Where(his => his.InterviewDate.Equals(interview.InterviewDate)).FirstOrDefault();
+            _historyRepository.Clear();
+            if (interview is null && history is null)
             {
                 return -1; // Interview is null or not found;
             }
             Interview toUpdate = interviewDto;
-            /*if (interview.Status!= InterviewLevel.AcceptedbyClient) 
-            { 
-            toUpdate.IsAccepted = false;
-            toUpdate.CreatedDate = interview.CreatedDate;
-            }
-            else
-            {*/
-                /*toUpdate.IsAccepted = true;*/
-            /*}*/
             toUpdate.CreatedDate = interview.CreatedDate;
             toUpdate.InterviewDate = interview.InterviewDate;
             toUpdate.PositionGuid = interview.PositionGuid;
             toUpdate.ClientGuid = interview.ClientGuid;
             toUpdate.Text = interview.Text;
             var result = _interviewRepository.Update(toUpdate);
+            var historyUpdate = _historyRepository.Update(new HistoryDto
+            {
+                Guid = historyByGuid.Guid,
+                ClientGuid = historyByGuid.ClientGuid,
+                EmployeeGuid = historyByGuid.EmployeeGuid,
+                PositionGuid = historyByGuid.PositionGuid,
+                InterviewDate = historyByGuid.InterviewDate,
+                IsAccepted = toUpdate.IsAccepted,
+                Status = toUpdate.Status
+            });
             return result ? 1 // Interview is updated;
             : 0; // Interview failed to update;
 
@@ -296,6 +304,15 @@ namespace API.Services
 
                 });
                 _positionRepository.Clear();
+                var history = _historyRepository.Create(new NewHistoryDto
+                {
+                    EmployeeGuid = newInterviewDto.Guid,
+                    ClientGuid= newInterviewDto.ClientGuid,
+                    PositionGuid = newInterviewDto.PositionGuid,
+                    InterviewDate = newInterviewDto.InterviewDate,
+                    IsAccepted = false,
+                    Status = InterviewLevel.EmployeeResponWaiting,
+                });
                 var employee = _employeeRepository.GetByGuid(interview.Guid);
                 var client = _clientRepository.GetByGuid(interview.ClientGuid);
                 var formattedDate = interview.InterviewDate.ToString("dddd, dd/MM/yy HH:mm");

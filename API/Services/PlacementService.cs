@@ -1,9 +1,11 @@
 ﻿using API.Contracts;
 using API.Data;
 using API.DTOs.Employees;
+using API.DTOs.Histories;
 using API.DTOs.Placements;
 using API.Models;
 using API.Repositories;
+using API.Utilities.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Services
@@ -15,9 +17,10 @@ namespace API.Services
         private readonly IPlacementRepository _placementRepository;
         private readonly IInterviewRepository _interviewRepository;
         private readonly IPositionRepository _positionRepository;
+        private readonly IHistoryRepository _historyRepository;
         private readonly PlacementDbContext _dbContext;
 
-        public PlacementService(IPlacementRepository placementRepository, IClientRepository clientRepository, IEmployeeRepository employeeRepository, IInterviewRepository interviewRepository, PlacementDbContext dbContext, IPositionRepository positionRepository)
+        public PlacementService(IPlacementRepository placementRepository, IClientRepository clientRepository, IEmployeeRepository employeeRepository, IInterviewRepository interviewRepository, PlacementDbContext dbContext, IPositionRepository positionRepository, IHistoryRepository historyRepository)
         {
             _placementRepository = placementRepository;
             _clientRepository = clientRepository;
@@ -25,6 +28,7 @@ namespace API.Services
             _interviewRepository = interviewRepository;
             _dbContext = dbContext;
             _positionRepository = positionRepository;
+            _historyRepository = historyRepository;
         }
         public IEnumerable<GetEmployeeClientName>? GetEmployeeClientName()
         {
@@ -110,6 +114,7 @@ namespace API.Services
             {
                 return null; // Placement is null or not found;
             }
+            var history =  _historyRepository.GetHistoryByEmployeeGuid(newPlacementDto.Guid).Where(his=>his.InterviewDate.Equals(his.InterviewDate)).FirstOrDefault();
             using var transaction = _dbContext.Database.BeginTransaction();
             try
             {
@@ -142,6 +147,16 @@ namespace API.Services
                 employeeToUpdate.NIK = employee.NIK;
                 employeeToUpdate.CreatedDate = employee.CreatedDate;
                 var UpdatedEmployee = _employeeRepository.Update(employeeToUpdate);
+                var HistoryUpdate = _historyRepository.Update(new HistoryDto
+                {
+                    Guid = history.Guid,
+                    ClientGuid = history.ClientGuid,
+                    EmployeeGuid = history.EmployeeGuid,
+                    PositionGuid = history.PositionGuid,
+                    IsAccepted = true,
+                    InterviewDate = history.InterviewDate,
+                    Status = InterviewLevel.AcceptedbyClient
+                });
                 transaction.Commit();
                 return (PlacementDto)placement; // Placement is found;
             }

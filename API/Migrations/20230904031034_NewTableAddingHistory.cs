@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace API.Migrations
 {
-    public partial class VeryNewTable : Migration
+    public partial class NewTableAddingHistory : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -214,15 +214,40 @@ namespace API.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "tb_tr_histories",
+                columns: table => new
+                {
+                    guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    employee_guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    client_guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    position_guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    interview_date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    status = table.Column<int>(type: "int", nullable: false),
+                    is_accepted = table.Column<bool>(type: "bit", nullable: false),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    modified_date = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_tb_tr_histories", x => x.guid);
+                    table.ForeignKey(
+                        name: "FK_tb_tr_histories_tb_tr_interview_employee_guid",
+                        column: x => x.employee_guid,
+                        principalTable: "tb_tr_interview",
+                        principalColumn: "guid",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "tb_m_roles",
                 columns: new[] { "guid", "created_date", "modified_date", "name" },
                 values: new object[,]
                 {
-                    { new Guid("4ec90656-e89c-4871-d9e5-08db8a7d0f37"), new DateTime(2023, 9, 1, 13, 30, 22, 853, DateTimeKind.Local).AddTicks(165), new DateTime(2023, 9, 1, 13, 30, 22, 853, DateTimeKind.Local).AddTicks(165), "Trainer" },
-                    { new Guid("5fb9adc0-7d08-45d4-cd66-08db9c7a678f"), new DateTime(2023, 9, 1, 13, 30, 22, 853, DateTimeKind.Local).AddTicks(171), new DateTime(2023, 9, 1, 13, 30, 22, 853, DateTimeKind.Local).AddTicks(172), "Admin" },
-                    { new Guid("ae259a90-e2e8-442f-ce18-08db91a71ab9"), new DateTime(2023, 9, 1, 13, 30, 22, 853, DateTimeKind.Local).AddTicks(148), new DateTime(2023, 9, 1, 13, 30, 22, 853, DateTimeKind.Local).AddTicks(160), "Employee" },
-                    { new Guid("c0689b0a-5c87-46f1-ce19-08db91a71ab9"), new DateTime(2023, 9, 1, 13, 30, 22, 853, DateTimeKind.Local).AddTicks(168), new DateTime(2023, 9, 1, 13, 30, 22, 853, DateTimeKind.Local).AddTicks(168), "Operasional" }
+                    { new Guid("4ec90656-e89c-4871-d9e5-08db8a7d0f37"), new DateTime(2023, 9, 4, 10, 10, 34, 262, DateTimeKind.Local).AddTicks(9977), new DateTime(2023, 9, 4, 10, 10, 34, 262, DateTimeKind.Local).AddTicks(9977), "Trainer" },
+                    { new Guid("5fb9adc0-7d08-45d4-cd66-08db9c7a678f"), new DateTime(2023, 9, 4, 10, 10, 34, 262, DateTimeKind.Local).AddTicks(9983), new DateTime(2023, 9, 4, 10, 10, 34, 262, DateTimeKind.Local).AddTicks(9983), "Admin" },
+                    { new Guid("ae259a90-e2e8-442f-ce18-08db91a71ab9"), new DateTime(2023, 9, 4, 10, 10, 34, 262, DateTimeKind.Local).AddTicks(9954), new DateTime(2023, 9, 4, 10, 10, 34, 262, DateTimeKind.Local).AddTicks(9971), "Employee" },
+                    { new Guid("c0689b0a-5c87-46f1-ce19-08db91a71ab9"), new DateTime(2023, 9, 4, 10, 10, 34, 262, DateTimeKind.Local).AddTicks(9980), new DateTime(2023, 9, 4, 10, 10, 34, 262, DateTimeKind.Local).AddTicks(9980), "Operasional" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -253,6 +278,11 @@ namespace API.Migrations
                 column: "role_guid");
 
             migrationBuilder.CreateIndex(
+                name: "IX_tb_tr_histories_employee_guid",
+                table: "tb_tr_histories",
+                column: "employee_guid");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_tb_tr_interview_client_guid",
                 table: "tb_tr_interview",
                 column: "client_guid");
@@ -275,7 +305,7 @@ namespace API.Migrations
                 name: "tb_tr_account_roles");
 
             migrationBuilder.DropTable(
-                name: "tb_tr_interview");
+                name: "tb_tr_histories");
 
             migrationBuilder.DropTable(
                 name: "tb_tr_placement");
@@ -285,6 +315,9 @@ namespace API.Migrations
 
             migrationBuilder.DropTable(
                 name: "tb_m_roles");
+
+            migrationBuilder.DropTable(
+                name: "tb_tr_interview");
 
             migrationBuilder.DropTable(
                 name: "tb_m_clients");

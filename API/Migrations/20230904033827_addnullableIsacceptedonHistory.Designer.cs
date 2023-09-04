@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(PlacementDbContext))]
-    [Migration("20230901063023_VeryNewTable")]
-    partial class VeryNewTable
+    [Migration("20230904033827_addnullableIsacceptedonHistory")]
+    partial class addnullableIsacceptedonHistory
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -216,6 +216,52 @@ namespace API.Migrations
                     b.ToTable("tb_m_grades");
                 });
 
+            modelBuilder.Entity("API.Models.History", b =>
+                {
+                    b.Property<Guid>("Guid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("guid");
+
+                    b.Property<Guid>("ClientGuid")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("client_guid");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("created_date");
+
+                    b.Property<Guid>("EmployeeGuid")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("employee_guid");
+
+                    b.Property<DateTime>("InterviewDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("interview_date");
+
+                    b.Property<bool?>("IsAccepted")
+                        .HasColumnType("bit")
+                        .HasColumnName("is_accepted");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("modified_date");
+
+                    b.Property<Guid>("PositionGuid")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("position_guid");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int")
+                        .HasColumnName("status");
+
+                    b.HasKey("Guid");
+
+                    b.HasIndex("EmployeeGuid");
+
+                    b.ToTable("tb_tr_histories");
+                });
+
             modelBuilder.Entity("API.Models.Interview", b =>
                 {
                     b.Property<Guid>("Guid")
@@ -365,29 +411,29 @@ namespace API.Migrations
                         new
                         {
                             Guid = new Guid("ae259a90-e2e8-442f-ce18-08db91a71ab9"),
-                            CreatedDate = new DateTime(2023, 9, 1, 13, 30, 22, 853, DateTimeKind.Local).AddTicks(148),
-                            ModifiedDate = new DateTime(2023, 9, 1, 13, 30, 22, 853, DateTimeKind.Local).AddTicks(160),
+                            CreatedDate = new DateTime(2023, 9, 4, 10, 38, 26, 849, DateTimeKind.Local).AddTicks(9627),
+                            ModifiedDate = new DateTime(2023, 9, 4, 10, 38, 26, 849, DateTimeKind.Local).AddTicks(9638),
                             Name = "Employee"
                         },
                         new
                         {
                             Guid = new Guid("4ec90656-e89c-4871-d9e5-08db8a7d0f37"),
-                            CreatedDate = new DateTime(2023, 9, 1, 13, 30, 22, 853, DateTimeKind.Local).AddTicks(165),
-                            ModifiedDate = new DateTime(2023, 9, 1, 13, 30, 22, 853, DateTimeKind.Local).AddTicks(165),
+                            CreatedDate = new DateTime(2023, 9, 4, 10, 38, 26, 849, DateTimeKind.Local).AddTicks(9647),
+                            ModifiedDate = new DateTime(2023, 9, 4, 10, 38, 26, 849, DateTimeKind.Local).AddTicks(9647),
                             Name = "Trainer"
                         },
                         new
                         {
                             Guid = new Guid("c0689b0a-5c87-46f1-ce19-08db91a71ab9"),
-                            CreatedDate = new DateTime(2023, 9, 1, 13, 30, 22, 853, DateTimeKind.Local).AddTicks(168),
-                            ModifiedDate = new DateTime(2023, 9, 1, 13, 30, 22, 853, DateTimeKind.Local).AddTicks(168),
+                            CreatedDate = new DateTime(2023, 9, 4, 10, 38, 26, 849, DateTimeKind.Local).AddTicks(9650),
+                            ModifiedDate = new DateTime(2023, 9, 4, 10, 38, 26, 849, DateTimeKind.Local).AddTicks(9651),
                             Name = "Operasional"
                         },
                         new
                         {
                             Guid = new Guid("5fb9adc0-7d08-45d4-cd66-08db9c7a678f"),
-                            CreatedDate = new DateTime(2023, 9, 1, 13, 30, 22, 853, DateTimeKind.Local).AddTicks(171),
-                            ModifiedDate = new DateTime(2023, 9, 1, 13, 30, 22, 853, DateTimeKind.Local).AddTicks(172),
+                            CreatedDate = new DateTime(2023, 9, 4, 10, 38, 26, 849, DateTimeKind.Local).AddTicks(9653),
+                            ModifiedDate = new DateTime(2023, 9, 4, 10, 38, 26, 849, DateTimeKind.Local).AddTicks(9654),
                             Name = "Admin"
                         });
                 });
@@ -431,6 +477,17 @@ namespace API.Migrations
                         .IsRequired();
 
                     b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("API.Models.History", b =>
+                {
+                    b.HasOne("API.Models.Interview", "Interview")
+                        .WithMany("Histories")
+                        .HasForeignKey("EmployeeGuid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Interview");
                 });
 
             modelBuilder.Entity("API.Models.Interview", b =>
@@ -505,6 +562,11 @@ namespace API.Migrations
                     b.Navigation("Interview");
 
                     b.Navigation("Placement");
+                });
+
+            modelBuilder.Entity("API.Models.Interview", b =>
+                {
+                    b.Navigation("Histories");
                 });
 
             modelBuilder.Entity("API.Models.Role", b =>

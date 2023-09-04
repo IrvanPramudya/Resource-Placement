@@ -267,7 +267,10 @@
             $.ajax({
                 url: "https://localhost:7273/api/accountroles/" + guid,
                 type: "GET",
-                dataType: "json"
+                dataType: "json",
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                }
             }).done((result) => {
                 console.log(result)
                 $("#guidUpd").val(result.data.guid);

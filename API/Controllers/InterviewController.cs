@@ -198,6 +198,7 @@ namespace API.Controllers
             });
         }
         [HttpPut("UpdateFullInterview")]
+        [AllowAnonymous]
         public IActionResult UpdateFullInterview(UpdateInterviewDto interviewDto)
         {
             var result = _interviewService.UpdateFullInterview(interviewDto);
@@ -341,6 +342,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{guid}")]
+        [AllowAnonymous]
         public IActionResult GetByGuid(Guid guid)
         {
             var result = _interviewService.GetByGuid(guid);

@@ -45,6 +45,7 @@ namespace API.Controllers
             });
         }
         [HttpGet("GetAllTrainer")]
+        [AllowAnonymous]
         public IActionResult GetAllTrainer()
         {
             var result = _accountRoleService.GetAllTrainer();
@@ -89,6 +90,7 @@ namespace API.Controllers
             });
         }
         [HttpGet("GetCountAllRole")]
+        [AllowAnonymous]
         public IActionResult GetCountAllRole()
         {
             var result = _accountRoleService.CountAllRole();

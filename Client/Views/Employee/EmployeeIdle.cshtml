@@ -55,7 +55,10 @@
     <script>
         const Token = '@Context.Session.GetString("JWToken")'
         $.ajax({
-            url: "https://localhost:7273/api/clients"
+            url: "https://localhost:7273/api/clients",
+            headers: {
+                'Authorization': 'Bearer ' + Token
+            }
         }).done(function (result) {
             // Assuming the API response contains a property named "totalEmployees"
             console.log(result)
@@ -95,7 +98,10 @@
             $.ajax({
                 url: "https://localhost:7273/api/positions/GetPosition/" + guidClient,
                 type: "GET",
-                dataType: "json"
+                dataType: "json",
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                }
             }).done((result) => {
                 console.log(result)
                 let getPositioninInterview = ""
@@ -116,7 +122,10 @@
             })
         }
         $.ajax({
-            url: "https://localhost:7273/api/employees/GetAllEmployeeinIdle"
+            url: "https://localhost:7273/api/employees/GetAllEmployeeinIdle",
+            headers: {
+                'Authorization': 'Bearer ' + Token
+            }
         }).done((result)=>{
             let cardEmployee =""
             $.each(result.data,(key,val)=>{
@@ -172,6 +181,7 @@
                 url: "https://localhost:7273/api/interviews",
                 type: "POST",
                 headers: {
+                    'Authorization': 'Bearer ' + Token,
                     'Content-Type': 'application/json'
                 },
                 data: JSON.stringify(interviewData),
