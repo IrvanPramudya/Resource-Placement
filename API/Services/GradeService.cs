@@ -19,6 +19,7 @@ namespace API.Services
             _accountRepository = accountRepository;
             _accountRoleRepository = accountRoleRepository;
         }
+
         public CountEmployee CountEmployeeinGrade()
         {
             var grade = GetAllEmployeewithGrade();
