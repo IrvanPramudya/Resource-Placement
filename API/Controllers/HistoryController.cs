@@ -22,6 +22,28 @@ namespace API.Controllers
             _historyService = historyService;
         }
 
+        [HttpGet("GetAllHistorieswithName")]
+        public IActionResult GetAllHistorieswithName()
+        {
+            var result = _historyService.GetAllHistoriesWithName();
+            if (!result.Any())
+            {
+                return NotFound(new ResponseHandler<HistoryDto>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data Not Found"
+                });
+            }
+
+            return Ok(new ResponseHandler<IEnumerable<HistoryDto>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success Retrieve Data",
+                Data = result
+            });
+        }
         [HttpGet]
         public IActionResult GetAll()
         {

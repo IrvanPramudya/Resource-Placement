@@ -114,7 +114,6 @@ namespace API.Services
             {
                 return null; // Placement is null or not found;
             }
-            var history =  _historyRepository.GetHistoryByEmployeeGuid(newPlacementDto.Guid).Where(his=>his.InterviewDate.Equals(his.InterviewDate)).FirstOrDefault();
             using var transaction = _dbContext.Database.BeginTransaction();
             try
             {
@@ -147,16 +146,6 @@ namespace API.Services
                 employeeToUpdate.NIK = employee.NIK;
                 employeeToUpdate.CreatedDate = employee.CreatedDate;
                 var UpdatedEmployee = _employeeRepository.Update(employeeToUpdate);
-                var HistoryUpdate = _historyRepository.Update(new HistoryDto
-                {
-                    Guid = history.Guid,
-                    ClientGuid = history.ClientGuid,
-                    EmployeeGuid = history.EmployeeGuid,
-                    PositionGuid = history.PositionGuid,
-                    IsAccepted = true,
-                    InterviewDate = history.InterviewDate,
-                    Status = InterviewLevel.AcceptedbyClient
-                });
                 transaction.Commit();
                 return (PlacementDto)placement; // Placement is found;
             }

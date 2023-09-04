@@ -74,6 +74,7 @@ namespace Client.Controllers
         public IActionResult DetailIndex() => View();
         [Authorize(Roles = "Admin,Operasional")]
         public IActionResult ResultIndex() => View();
+        public IActionResult HistoryIndex() => View();
         [AllowAnonymous]
         public IActionResult ChangePassword() => View();
     }

@@ -48,6 +48,7 @@
 @section Scripts
 {
     <script>
+        const Token = '@Context.Session.GetString("JWToken")'
         $(document).ready(()=>{
             loadResultData()
         })

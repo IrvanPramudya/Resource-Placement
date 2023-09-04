@@ -190,16 +190,11 @@ namespace API.Services
             toUpdate.ClientGuid = interview.ClientGuid;
             toUpdate.Text = interview.Text;
             var result = _interviewRepository.Update(toUpdate);
-            var historyUpdate = _historyRepository.Update(new HistoryDto
-            {
-                Guid = historyByGuid.Guid,
-                ClientGuid = historyByGuid.ClientGuid,
-                EmployeeGuid = historyByGuid.EmployeeGuid,
-                PositionGuid = historyByGuid.PositionGuid,
-                InterviewDate = historyByGuid.InterviewDate,
-                IsAccepted = toUpdate.IsAccepted,
-                Status = toUpdate.Status
-            });
+            History historyUpdate = historyByGuid;
+            historyUpdate.IsAccepted = toUpdate.IsAccepted;
+            historyUpdate.Status = toUpdate.Status;
+            historyUpdate.CreatedDate = historyByGuid.CreatedDate;
+            var UpdateHistory = _historyRepository.Update(historyUpdate);
             return result ? 1 // Interview is updated;
             : 0; // Interview failed to update;
 

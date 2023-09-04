@@ -8,11 +8,47 @@ namespace API.Services
     public class HistoryService
     {
         private readonly IHistoryRepository _historyRepository;
-        public HistoryService(IHistoryRepository historyRepository)
+        private readonly IEmployeeRepository _employeeRepository;
+        private readonly IAccountRoleRepository _accountroleRepository;
+        private readonly IAccountRepository _accountRepository;
+        private readonly IInterviewRepository _interviewRepository;
+        private readonly IClientRepository _clientRepository;
+        private readonly IPositionRepository _positionRepository;
+        public HistoryService(IHistoryRepository historyRepository, IEmployeeRepository employeeRepository, IAccountRepository accountRepository, IAccountRoleRepository accountroleRepository, IInterviewRepository interviewRepository, IClientRepository clientRepository, IPositionRepository positionRepository)
         {
             _historyRepository = historyRepository;
+            _employeeRepository = employeeRepository;
+            _accountRepository = accountRepository;
+            _accountroleRepository = accountroleRepository;
+            _interviewRepository = interviewRepository;
+            _clientRepository = clientRepository;
+            _positionRepository = positionRepository;
         }
-        
+
+        public IEnumerable<HistoryDto> GetAllHistoriesWithName()
+        {
+            var histories = from employee in _employeeRepository.GetAll()
+                            join account in _accountRepository.GetAll() on employee.Guid equals account.Guid
+                            join accountrole in _accountroleRepository.GetEmployeewithEmployeeRole() on account.Guid equals accountrole.AccountGuid
+                            join history in _historyRepository.GetAll() on employee.Guid equals history.EmployeeGuid
+                            join client in _clientRepository.GetAll() on history.ClientGuid equals client.Guid
+                            join position in _positionRepository.GetAll() on history.PositionGuid equals position.Guid
+                            select new HistoryDto
+                            {
+                                Guid = history.Guid,
+                                PositionGuid = history.PositionGuid,
+                                ClientGuid = history.ClientGuid,
+                                EmployeeGuid = history.Guid,
+                                FullName = employee.FirstName +" " + employee.LastName,
+                                ClientName = client.Name,
+                                PositionName = position.Name,
+                                InterviewDate = history.InterviewDate,
+                                IsAccepted = history.IsAccepted,
+                                Status = history.Status
+                                
+                            };
+            return histories;
+        }
         public IEnumerable<HistoryDto> GetAll()
         {
             var histories = _historyRepository.GetAll();
