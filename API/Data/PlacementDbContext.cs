@@ -98,7 +98,8 @@ namespace API.Data
             modelBuilder.Entity<History>()
                         .HasOne(History=>History.Interview)
                         .WithMany(Interview=>Interview.Histories)
-                        .HasForeignKey(History => History.EmployeeGuid);
+                        .HasForeignKey(History => History.EmployeeGuid)
+                        .OnDelete(DeleteBehavior.NoAction);
             //Position
             /*modelBuilder.Entity<Position>()
                         .HasOne(Position => Position.Interview)
