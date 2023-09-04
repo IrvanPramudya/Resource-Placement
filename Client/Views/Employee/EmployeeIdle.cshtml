@@ -128,9 +128,6 @@
                 'Authorization': 'Bearer ' + Token
             }
         }).done((result)=>{
-            headers: {
-                'Content-Type': 'application/json'
-            },
             let cardEmployee =""
             $.each(result.data,(key,val)=>{
                 cardEmployee += `<div class="col-xl-3 col-md-6 mb-xl-0 mb-4 ms-2">

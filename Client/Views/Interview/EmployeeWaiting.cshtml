@@ -10,6 +10,7 @@
 
 @section Scripts{
     <script>
+        const Token = '@Context.Session.GetString("JWToken")'
         $.ajax({
             url: 'https://localhost:7273/api/interviews/GetAllEmployeeWaiting',
             headers: {

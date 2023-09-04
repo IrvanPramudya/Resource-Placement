@@ -198,7 +198,7 @@ namespace API.Services
                     {
                         countemployee.CountIdleUngraded++;
                     }
-                    if(item.Salary != 0)
+                    if(item.Salary != 0 && item.InterviewDate == null)
                     {
                         countemployee.CountIdleGraded++;
                     }

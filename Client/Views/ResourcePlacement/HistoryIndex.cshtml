@@ -2,7 +2,7 @@
 @{
 }
 <div class="recent-orders table-responsive">
-    <table class="table table-striped table-hover" id="interviewTable">
+    <table class="table table-striped table-hover" id="historyTable">
         <thead class="table-dark">
             <tr>
                 <th>No</th>
@@ -26,7 +26,7 @@
             loadInterviewData();
         });
         function loadInterviewData() {
-            $('#interviewTable').DataTable({
+            $('#historyTable').DataTable({
                 ajax: {
                     url: "https://localhost:7273/api/histories/GetAllHistorieswithName",
                     dataType: "JSON",
@@ -81,8 +81,7 @@
                     {
                         data: null,
                         render: function (data, type, row) {
-                            return `<button onclick="ShowUpdateInterview('${row.guid}')" data-bs-toggle="modal" data-bs-target="#modalUpdateInterview" class="btn btn-info" data-bs-placement="top" title="Update Data"><i class='bx bx-edit'></i></button>` +
-                                `   <button onclick="deleteInterview('${row.guid}')" class="btn btn-danger" data-bs-toggle="modal" data-bs-placement="top" title="Delete Data"><i class='bx bxs-trash-alt'></i></button>`;
+                            return `<button onclick="deleteInterview('${row.guid}')" class="btn btn-danger" data-bs-toggle="modal" data-bs-placement="top" title="Delete Data"><i class='bx bxs-trash-alt'></i></button>`;
                         }
                     }
                 ],
@@ -125,6 +124,38 @@
                 ],
                 "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                 "pageLength": 25
+            });
+        }
+        function deleteInterview(guid) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'Changes cannot be reverted!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Delete Data'
+            }).then(function (result) {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "https://localhost:7273/api/histories?guid=" + guid,
+                        type: "DELETE",
+                        headers: {
+                            'Authorization': 'Bearer ' + Token
+                        }
+                    }).done(function (result) {
+                        Swal.fire({
+                            title: 'Deleted',
+                            text: 'Data has been successfully deleted',
+                            icon: 'success'
+                        }).then(function () {
+                            location.reload();
+                        });
+                    }).fail(function (error) {
+                        alert("Failed to delete data. Please try again!");
+                        console.log(error)
+                    });
+                }
             });
         }
     </script>
