@@ -245,7 +245,7 @@
                     type: "POST",
                     headers: {
                         'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + Token
+                        'Authorization': 'Bearer ' + Token
                     },
                     data: JSON.stringify(gradeData),
                 }).done(function (result) {
@@ -331,9 +331,9 @@
                     type: "PUT",
                     contentType: "application/json",
                     data: JSON.stringify(data),
-                headers: {
-                    'Authorization': 'Bearer ' + Token
-                }
+                    headers: {
+                        'Authorization': 'Bearer ' + Token
+                    }
                 }).done((result) => {
                     Swal.fire({
                         title: 'Success',

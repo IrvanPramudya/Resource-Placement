@@ -367,7 +367,7 @@
                                 let sum = dataset.data.reduce((a, b) => a + b, 0);
                                 let percentage = ((value / sum) * 100).toFixed(2) + "%";
 
-                                if (value > 1) {
+                                if (value > 0) {
                                     return value + " (" + percentage + ")";
                                 } else {
                                     return '';
@@ -383,7 +383,6 @@
                 }
             });
         });
-
 
         $.ajax({
             url: "https://localhost:7273/api/employees/GetCountedStatus",
@@ -421,7 +420,7 @@
                                 let sum = dataset.data.reduce((a, b) => a + b, 0);
                                 let percentage = ((value / sum) * 100).toFixed(2) + "%";
 
-                                if (value > 1) {
+                                if (value > 0) {
                                     return value + " (" + percentage + ")";
                                 } else {
                                     return '';
@@ -432,6 +431,7 @@
                             offset: 10,
                             padding: 0
                         }
+
                     }
                 }
             });
@@ -563,7 +563,10 @@
 
         $.ajax({
             url: "https://localhost:7273/api/placements/CountClient",
-            type: "GET"
+            type: "GET",
+            headers: {
+                'Authorization': 'Bearer ' + Token
+            }
         }).done((result) => {
             const clientName = result.data.map((entry) => entry.clientName);
             const countEmployee = result.data.map((entry) => entry.countEmployee);
@@ -759,7 +762,7 @@
                                 let sum = dataset.data.reduce((a, b) => a + b, 0);
                                 let percentage = ((value / sum) * 100).toFixed(2) + "%";
 
-                                if (value > 1) {
+                                if (value > 0) {
                                     return value + " (" + percentage + ")";
                                 } else {
                                     return '';

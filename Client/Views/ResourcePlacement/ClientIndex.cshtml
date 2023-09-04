@@ -269,6 +269,9 @@
         function ShowUpdateClient(guid) {
             $.ajax({
                 url: "https://localhost:7273/api/clients/" + guid,
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                },
                 type: "GET",
                 dataType: "json"
             }).done((result) => {
@@ -298,7 +301,10 @@
                 url: "https://localhost:7273/api/clients",
                 type: "PUT",
                 contentType: "application/json",
-                data: JSON.stringify(data)
+                data: JSON.stringify(data),
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                }
             }).done((result) => {
                 Swal.fire({
                     title: 'Success',

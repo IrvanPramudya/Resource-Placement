@@ -269,6 +269,9 @@
             }
             $.ajax({
                 url : "https://localhost:7273/api/interviews/UpdateFullInterview",
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                },
                 type: "PUT",
                 contentType: "application/json",
                 data: JSON.stringify(data)
