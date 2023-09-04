@@ -20,6 +20,6 @@ namespace API.Models
         public bool? IsAccepted { get; set; }
 
         //Cardinality
-        public Interview? Interview { get; set; }
+        public Employee? Employee { get; set; }
     }
 }
