@@ -21,6 +21,28 @@ namespace API.Controllers
             _gradeService = gradeService;
         }
 
+        [HttpGet("CountResultEmployee")]
+        public IActionResult CountResultEmployee()
+        {
+            var result = _gradeService.CountGradeResult();
+            if (result == null)
+            {
+                return NotFound(new ResponseHandler<CountGradeResult>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data Not Found"
+                });
+            }
+
+            return Ok(new ResponseHandler<CountGradeResult>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success Retrieve Data",
+                Data = result
+            });
+        }
         [HttpGet("CountEmployeeinGrade")]
         public IActionResult CountEmployeeinGrade()
         {

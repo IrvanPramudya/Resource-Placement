@@ -49,6 +49,14 @@
 @section Scripts{
     <script>
         const Token = '@Context.Session.GetString("JWToken")'
+        $( document ).ajaxComplete(function() {
+            $('[data-bs-placement="top"]').tooltip({
+                "html": true,
+                "delay": {"show": 200, "hide": 0},
+            });
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-placement="top"]')
+            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+        });
         const startDateInput = document.getElementById('startDate');
         const endDateInput = document.getElementById('endDate');
 
@@ -75,7 +83,7 @@
         }).done((result) => {
             let employeeCard = ""
             $.each(result.data, (key, val) => {
-                employeeCard += `<div class="col-lg-4">
+                employeeCard += `<div class="col-lg-4" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Take ${val.fullName} to Placement">
                                                 <div class="card h-100 p-3" data-bs-toggle="modal" data-bs-target="#modalAddPlacement" onclick="getinterviewDate()">
                                                 <div class="overflow-hidden position-relative border-radius-lg bg-cover h-100" style="background-image: url('~/soft-ui/assets/img/ivancik.jpg');">
                                                     <span class="mask bg-gradient-dark"></span>

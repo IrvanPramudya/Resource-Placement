@@ -10,6 +10,14 @@
 @section Scripts{
     <script>
         const Token = '@Context.Session.GetString("JWToken")'
+        $( document ).ajaxComplete(function() {
+            $('[data-bs-placement="top"]').tooltip({
+                "html": true,
+                "delay": {"show": 200, "hide": 0},
+            });
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-placement="top"]')
+            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+        });
         $.ajax({
             url: 'https://localhost:7273/api/interviews/GetAllEmployeeAcceptedbyEmployee',
             headers: {
@@ -19,7 +27,7 @@
             let employeeCard = ""
             $.each(result.data, (key, val) => {
                 employeeCard += `<div class="col-lg-4">
-                                                            <div class="card h-100 p-3">
+                                                            <div class="card h-100 p-3" >
                                                                 <div class="overflow-hidden position-relative border-radius-lg bg-cover h-100" style="background-image: url('~/soft-ui/assets/img/ivancik.jpg');">
                                                                     <span class="mask bg-gradient-dark"></span>
                                                                     <div class="card-body position-relative z-index-1 d-flex flex-column h-100 p-3">
@@ -41,8 +49,8 @@
                                                                                                <input type="hidden" value="${val.text}" id="note"/>
                                                                                                 <div class="row mt-2">
                                                                                             <div class="col">
-                                                                                                    <button onclick="InterviewAcceptedbyClient('${val.guid}')" class="btn btn-info" data-bs-placement="top" title="Accepted Employee"><box-icon name='check' color="white" size="md"></box-icon></button>
-                                                                                                    <button onclick="InterviewRejectedbyClient('${val.guid}')" class="btn btn-danger ms-2"  data-bs-placement="top" title="Rejected Employee"><box-icon name='x' color="white" size="md"></box-icon></button>
+                                                                                                    <button onclick="InterviewAcceptedbyClient('${val.guid}')" class="btn btn-info" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Client Accept"><box-icon name='check' color="white" size="md"></box-icon></button>
+                                                                                                    <button onclick="InterviewRejectedbyClient('${val.guid}')" class="btn btn-danger ms-2"  data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Client Reject"><box-icon name='x' color="white" size="md"></box-icon></button>
                                                                                              </div>
                                                                                         </div>
                                                                     </div>

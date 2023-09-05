@@ -42,7 +42,7 @@ namespace API.Services
         }
         public IEnumerable<GetReportEmployee>? GetAllEmployeeinIdle()
         {
-            return GetAllReportedEmployee().Where(employee => employee.Status == Utilities.Enums.StatusLevel.Idle && employee.InterviewDate==null);
+            return GetAllReportedEmployee().Where(employee => employee.Status == Utilities.Enums.StatusLevel.Idle && employee.InterviewDate==null && employee.Grade != null);
         }
         public IEnumerable<GetEmployeeinGrade>? GetEmployeeinGrade()
         {
@@ -188,7 +188,7 @@ namespace API.Services
                            InterviewDate = interview!=null?interview.InterviewDate:null,
                            ClientGuid = interview!=null?interview.ClientGuid:null,
                        };
-
+            
             var countemployee = new GetCountedStatus();
             foreach (var item in data)
             {

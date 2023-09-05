@@ -24,7 +24,93 @@ namespace API.Services
             _clientRepository = clientRepository;
             _positionRepository = positionRepository;
         }
-
+        public CountStatusHistories? CountStatusHistoies()
+        {
+            var histories = GetAllHistoriesWithName();
+            var countstatus = new CountStatusHistories();
+            foreach(var item in histories)
+            {
+                if(item.Status == Utilities.Enums.InterviewLevel.EmployeeResponWaiting)
+                {
+                    countstatus.CountWaiting++;
+                }
+                if(item.Status == Utilities.Enums.InterviewLevel.AcceptedbyEmployee)
+                {
+                    countstatus.CountAcceptedEmployee++;
+                }
+                if(item.Status == Utilities.Enums.InterviewLevel.AcceptedbyClient)
+                {
+                    countstatus.CountAcceptedClient++;
+                }
+                if(item.Status == Utilities.Enums.InterviewLevel.RejectedbyEmployee)
+                {
+                    countstatus.CountRejectedEmployee++;
+                }
+                if(item.Status == Utilities.Enums.InterviewLevel.RejectedbyClient)
+                {
+                    countstatus.CountRejectedClient++;
+                }
+            }
+            return countstatus;
+        }
+        public HistoryDto? GetLastHistory(Guid guid)
+        {
+            var histories = GetAllHistoriesWithName().Where(history=>history.EmployeeGuid == guid).LastOrDefault();
+            var history = new HistoryDto
+            {
+                EmployeeGuid = histories.EmployeeGuid,
+                Guid = histories.Guid,
+                ClientGuid = histories.ClientGuid,
+                PositionGuid = histories.PositionGuid,
+                FullName = histories.FullName,
+                ClientName = histories.ClientName,
+                PositionName = histories.PositionName,
+                InterviewDate = histories.InterviewDate,
+                IsAccepted = histories.IsAccepted,
+                Status = histories.Status,
+                Email = histories.Email
+            };
+            return history;
+        }
+        public IEnumerable<HistoryDto>? GetHistoryByEmployeeGuid(Guid guid)
+        {
+            var histories = GetAllHistoriesWithName().Where(history=>history.EmployeeGuid == guid);
+            var listhistories = new List<HistoryDto>();
+            foreach(var item in histories)
+            {
+                var history = new HistoryDto
+                {
+                    EmployeeGuid = item.EmployeeGuid,
+                    Guid = item.Guid,
+                    ClientGuid = item.ClientGuid,
+                    PositionGuid = item.PositionGuid,
+                    FullName = item.FullName,
+                    ClientName = item.ClientName,
+                    PositionName = item.PositionName,
+                    InterviewDate = item.InterviewDate,
+                    IsAccepted = item.IsAccepted,
+                    Status = item.Status,
+                    Email = item.Email
+                };
+                listhistories.Add(history);
+            }
+            return listhistories;
+        }
+        public CountAllHistories? CountHistoriesbyEmployeeGuid(Guid guid)
+        {
+            var histories = GetAllHistoriesWithName().Where(history=>history.EmployeeGuid == guid).Count();
+            return new CountAllHistories
+            {
+                TotalHistories = histories
+            };
+        }
+        public CountAllHistories? CountAllHistories()
+        {
+            return new CountAllHistories
+            {
+                TotalHistories = GetAllHistoriesWithName().Count()
+            };
+        }
         public IEnumerable<HistoryDto> GetAllHistoriesWithName()
         {
             var histories = from employee in _employeeRepository.GetAll()
@@ -38,13 +124,14 @@ namespace API.Services
                                 Guid = history.Guid,
                                 PositionGuid = history.PositionGuid,
                                 ClientGuid = history.ClientGuid,
-                                EmployeeGuid = history.Guid,
+                                EmployeeGuid = history.EmployeeGuid,
                                 FullName = employee.FirstName +" " + employee.LastName,
                                 ClientName = client.Name,
                                 PositionName = position.Name,
                                 InterviewDate = history.InterviewDate,
                                 IsAccepted = history.IsAccepted,
-                                Status = history.Status
+                                Status = history.Status,
+                                Email = employee.Email
                                 
                             };
             return histories;

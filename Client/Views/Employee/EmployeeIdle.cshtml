@@ -54,6 +54,14 @@
 @section Scripts{
     <script>
         const Token = '@Context.Session.GetString("JWToken")'
+        $( document ).ajaxComplete(function() {
+            $('[data-bs-placement="top"]').tooltip({
+                "html": true,
+                "delay": {"show": 200, "hide": 0},
+            });
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-placement="top"]')
+            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+        });
         $.ajax({
             url: "https://localhost:7273/api/clients",
             headers: {
@@ -111,7 +119,7 @@
                                                 <option value="default">Select a position...</option>
                                             </select>`
                 $.each(result.data, (key, val) => {
-                    getPositioninInterview += ` <option value="${val.guid}">${val.positionName}</option>`
+                    getPositioninInterview += ` <option value="${val.guid}">${val.positionName} (${val.capacity})</option>`
                 })
                 $('#selectPosition').html(selectLabel)
                 $('.selectPositioninInterview').append(getPositioninInterview)
@@ -130,7 +138,7 @@
         }).done((result)=>{
             let cardEmployee =""
             $.each(result.data,(key,val)=>{
-                cardEmployee += `<div class="col-xl-3 col-md-6 mb-xl-0 mb-4 ms-2">
+                cardEmployee += `<div class="col-xl-3 col-md-6 mb-xl-0 mb-4 ms-2 cursor-pointer" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Make an Interview for ${val.fullName}">
                                     <div class="card card-blog card-plain" data-bs-toggle="modal" data-bs-target="#modalAddInterview">
                                 <div class="position-relative">
                                     <a class="d-block shadow-xl border-radius-xl">

@@ -22,6 +22,116 @@ namespace API.Controllers
             _historyService = historyService;
         }
 
+        [HttpGet("CountStatusHistories")]
+        public IActionResult CountStatusHistories()
+        {
+            var result = _historyService.CountStatusHistoies();
+            if (result == null)
+            {
+                return NotFound(new ResponseHandler<CountStatusHistories>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data Not Found"
+                });
+            }
+
+            return Ok(new ResponseHandler<CountStatusHistories>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success Retrieve Data",
+                Data = result
+            });
+        }
+        [HttpGet("GetLastHistory/{guid}")]
+        public IActionResult GetLastHistory(Guid guid)
+        {
+            var result = _historyService.GetLastHistory(guid);
+            if (result == null)
+            {
+                return NotFound(new ResponseHandler<HistoryDto>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data Not Found"
+                });
+            }
+
+            return Ok(new ResponseHandler<HistoryDto>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success Retrieve Data",
+                Data = result
+            });
+        }
+        [HttpGet("GetHistoryByEmployeeGuid/{guid}")]
+        public IActionResult GetHistoryByEmployeeGuid(Guid guid)
+        {
+            var result = _historyService.GetHistoryByEmployeeGuid(guid);
+            if (result == null)
+            {
+                return NotFound(new ResponseHandler<HistoryDto>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data Not Found"
+                });
+            }
+
+            return Ok(new ResponseHandler<IEnumerable<HistoryDto>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success Retrieve Data",
+                Data = result
+            });
+        }
+        [HttpGet("CountHistoriesbyEmployeeGuid/{guid}")]
+        public IActionResult CountHistoriesbyEmployeeGuid(Guid guid)
+        {
+            var result = _historyService.CountHistoriesbyEmployeeGuid(guid);
+            if (result == null)
+            {
+                return NotFound(new ResponseHandler<CountAllHistories>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data Not Found"
+                });
+            }
+
+            return Ok(new ResponseHandler<CountAllHistories>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success Retrieve Data",
+                Data = result
+            });
+        }
+        [HttpGet("CountAllHistories")]
+        public IActionResult CountAllHistories()
+        {
+            var result = _historyService.CountAllHistories();
+            if (result == null)
+            {
+                return NotFound(new ResponseHandler<CountAllHistories>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data Not Found"
+                });
+            }
+
+            return Ok(new ResponseHandler<CountAllHistories>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success Retrieve Data",
+                Data = result
+            });
+        }
         [HttpGet("GetAllHistorieswithName")]
         public IActionResult GetAllHistorieswithName()
         {

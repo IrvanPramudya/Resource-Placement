@@ -20,6 +20,23 @@ namespace API.Services
             _accountRoleRepository = accountRoleRepository;
         }
 
+        public CountGradeResult? CountGradeResult()
+        {
+            var grade = GetAllEmployeewithGrade();
+            var newgrade = new CountGradeResult();
+            foreach (var item in grade)
+            {
+                if (item.GradeName == "A")
+                {
+                    newgrade.CountGradeA++;
+                }
+                else
+                {
+                    newgrade.CountGradeB++;
+                }
+            }
+            return newgrade;
+        }
         public CountEmployee CountEmployeeinGrade()
         {
             var grade = GetAllEmployeewithGrade();

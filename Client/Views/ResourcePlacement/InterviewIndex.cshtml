@@ -114,8 +114,6 @@
     <script>
         const Token = '@Context.Session.GetString("JWToken")'
         $.fn.dataTable.ext.errMode = 'throw';
-        const tooltipTriggerList = document.querySelectorAll('[data-bs-placement="top"]')
-        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
         $("#interviewDate").flatpickr({
             enableTime: true,
             time_24hr: true,
@@ -139,10 +137,23 @@
         var now = new Date();
         var formattedNow = now.toISOString().substring(0, 16); // Format tanggal sesuai tipe datetime-local
         interviewDateInput.setAttribute("min", formattedNow);
+    </script>
 
+    <script>
 
+        $( document ).ajaxComplete(function() {
+            $('[data-bs-placement="top"]').tooltip({
+                "html": true,
+                "delay": {"show": 200, "hide": 0},
+            });
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-placement="top"]')
+            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+        });
         $(document).ready(function () {
             loadInterviewData();
+            var dataTableButtons = $('.dt-button');
+
+            dataTableButtons.removeClass('dt-button');
             
             $.ajax({
                 url: "https://localhost:7273/api/interviews/GetRemainingEmployeeinInterview",
@@ -214,7 +225,7 @@
                                         <option value="default">Select a position...</option>
                                     </select>`
                 $.each(result.data, (key, val) => {
-                    getPositioninInterview += ` <option value="${val.guid}">${val.positionName}</option>`
+                    getPositioninInterview += ` <option value="${val.guid}">${val.positionName} (${val.capacity})</option>`
                 })
                 $('#selectPosition').html(selectLabel)
                 $('#selectPositionUpd').html(selectLabelUpd)
@@ -305,41 +316,46 @@
                     }
                 ],
                 "dom":
-                    "<'row'<'col-md-8'B><'col-md-4'f>>" + 
+                    "<'row'<'col-md-8' B><'col-md-4'f>>" + 
                     "<'row'<'col-sm-12'tr>>" + // Tabel
                     "<'row'<'col-md-5'i><'col-md-3 mt-2 mx-auto'l><'col-md-4'p>>", 
                 "buttons": [
                     {
                         extend: 'copy',
                         text: '<i class="bx bxs-copy"></i>',
-                        className: 'btn btn-custom',
-                        title: 'Copy'
+                        className: 'btn btn-primary',
+                        titleAttr: 'Copy Table'
                     },
                     {
                         extend: 'csv',
                         text: '<i class="bx bxs-file-export"></i>',
-                        className: 'btn btn-custom'
+                        className: 'btn btn-success',
+                        titleAttr: 'Import to CSV'
                     },
                     {
                         extend: 'excel',
                         text: '<i class="bx bx-file-blank"></i>',
-                        className: 'btn btn-custom'
+                        className: 'btn btn-warning',
+                        titleAttr: 'Import to Excel'
                     },
                     {
                         extend: 'pdf',
                         text: '<i class="bx bxs-file-pdf"></i>',
-                        className: 'btn btn-custom'
+                        className: 'btn btn-dark',
+                        titleAttr: 'Import to PDF'
                     },
                     {
                         extend: 'print',
                         text: '<i class="bx bx-printer"></i>',
-                        className: 'btn btn-custom'
+                        className: 'btn btn-secondary',
+                        titleAttr: 'Print Table'
                     },
                     {
                         extend: 'colvis',
                         text: '<i class="bx bx-show-alt"></i>', // Ganti teks dengan ikon Boxicons
-                        className: 'btn btn-custom-column-vis'
-                    }
+                        className: 'btn btn-custom-column-vis btn-outline-info',
+                        titleAttr: 'Column Visibility'
+                    },
                 ],
                 "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                 "pageLength": 25

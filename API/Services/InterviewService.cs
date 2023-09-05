@@ -189,6 +189,7 @@ namespace API.Services
             toUpdate.PositionGuid = interview.PositionGuid;
             toUpdate.ClientGuid = interview.ClientGuid;
             toUpdate.Text = interview.Text;
+            toUpdate.Comment = interviewDto.Comment;
             var result = _interviewRepository.Update(toUpdate);
             History historyUpdate = historyByGuid;
             historyUpdate.IsAccepted = toUpdate.IsAccepted;
@@ -313,29 +314,46 @@ namespace API.Services
                 var formattedDate = interview.InterviewDate.ToString("dddd, dd/MM/yy HH:mm");
                 var gender = employee.Gender == 0 ? "Female" : "Male";
 
-                _emailHandler.SendEmail(employee.Email, $"Interview Schedule with {client.Name}",
-                    $"Congratulations you've been given chance to get interview with {client.Name} on {formattedDate} " +
-                    $"and this is the remarks that our company give : {interview.Text}.<br /> Please be Prepared and Keep up the Spirit");
-                _emailHandler.SendEmail(client.Email, $"Interview Schedule with {employee.FirstName} {employee.LastName}",
-                    $"For the honours of our Company we want you to check Interview Schedule that arranged earlier this is " +
-                    $"few data of the schedule<br /> " +
-                    $"<table style='border:1px'>" +
-                        $"<tr>" +
-                            $"<th>Employee Name</th>    " +
-                            $"<th>Gender</th>    " +
-                            $"<th>Skill</th>    " +
-                            $"<th>Interview Date</th>    " +
-                            $"<th>Note</th>" +
-                        $"</tr>" +
-                        $"<tr>    " +
-                            $"<td>{employee.FirstName} {employee.LastName}</td>    " +
-                            $"<td>{gender}</td>    " +
-                            $"<td>{employee.Skill}</td>    " +
-                            $"<td>{formattedDate}</td>    " +
-                            $"<td>{interview.Text}</td>" +
-                        $"</tr>" +
-                    $"</table>" +
-                    $"<br /> Thank your for the attention hope we will get better at our collaboration");
+                _emailHandler.SendEmail(employee.Email, 
+                    $"Interview Schedule with {client.Name}",
+                    $"<div class='card' style='width: 100%;'>" +
+                        $"<div class='card-body'>" +
+                            $"<h5 class='card-title'>Congratulations you've been given chance to get interview</h5>" +
+                                $"<table class='table table-bordered table-dark'>" +
+                                    $"<thead><tr><th>Client Name</th><th>Schedule</th><th>Note</th></tr></thead>" +
+                                    $"<tbody><tr><td>{client.Name}</td><td>{formattedDate}</td><td>{interview.Text}</td></tr></tbody>" +
+                                $"</table>" +
+                            $"<p class='card-text'>Please be Prepared and Keep up the Spirit</p>" +
+                        $"</div>" +
+                    $"</div>");
+                _emailHandler.SendEmail(client.Email, 
+                    $"Interview Schedule with {employee.FirstName} {employee.LastName}",
+                    $"<div class='card' style='width: 100%;'> " +
+                        $"<div class='card-body'> " +
+                            $"<h5 class='card-title'>For the honours of our Company we want you to check Interview Schedule that arranged earlier this is few data of the schedule</h5>" +
+                            $"<table class='table table-bordered table-dark'>" +
+                                $"<thead>" +
+                                    $"<tr>" +
+                                        $"<th>Employee Name</th>" +
+                                        $"<th>Gender</th>" +
+                                        $"<th>Skill</th>" +
+                                        $"<th>Interview Date</th>" +
+                                        $"<th>Note</th>" +
+                                    $"</tr>" +
+                                $"</thead>" +
+                                $"<tbody>" +
+                                    $"<tr>" +
+                                        $"<td>{employee.FirstName} {employee.LastName}</td>" +
+                                        $"<td>{gender}</td>" +
+                                        $"<td>{employee.Skill}</td>" +
+                                        $"<td>{formattedDate}</td>" +
+                                        $"<td>{interview.Text}</td>" +
+                                    $"</tr>" +
+                                $"</tbody>" +
+                            $"</table>" +
+                            $"<p class='card-text'>Thank your for the attention hope we will get better at our collaboration</p>" +
+                        $"</div>"+
+                    $"</div>");
                 transaction.Commit();
                 return (InterviewDto)interview; // Interview is found;
             }
