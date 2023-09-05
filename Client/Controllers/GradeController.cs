@@ -10,6 +10,5 @@ namespace Client.Controllers
     {
         public IActionResult EmployeeGraded() => View();
         public IActionResult EmployeeUngraded() => View();
-        public IActionResult Create() => View();
     }
 }

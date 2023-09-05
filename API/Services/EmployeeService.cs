@@ -188,7 +188,7 @@ namespace API.Services
                            InterviewDate = interview!=null?interview.InterviewDate:null,
                            ClientGuid = interview!=null?interview.ClientGuid:null,
                        };
-
+            
             var countemployee = new GetCountedStatus();
             foreach (var item in data)
             {

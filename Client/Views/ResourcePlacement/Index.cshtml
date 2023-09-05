@@ -146,7 +146,7 @@
             </div>
             <div class="col-4">
                 <div class="row">
-                    <h3 class="text-center"><span class="badge text-bg-info my-2">CLIENT</span></h3>
+                    <h3 class="text-center cursor-pointer" data-bs-toggle="modal" data-bs-target="#modalAddClient"><span class="badge text-bg-info my-2">CLIENT</span></h3>
                     <div class="col-md-6">
                         <div class="card cursor-pointer" onclick="loadAvailableClient()" style="background-color:#EBECF0">
                             <div class="card-header mx-4 p-3 text-center">
@@ -239,7 +239,7 @@
                                 <div class="col-lg-6">
                                     <div class="d-flex flex-column h-100">
                                         <p class="mb-1 pt-2 text-bold">Resource Placement Application</p>
-                                        <h5 class="font-weight-bolder">Welcome Back, Mr @User.FindFirst("Fullname").Value</h5>
+                                        <h5 class="font-weight-bolder">Welcome Back, @User.FindFirst("Fullname").Value</h5>
                                         <p class="mb-5">Hope You Enjoy Your Day</p>
                                     </div>
                                 </div>
@@ -264,13 +264,25 @@
                                 <div id="progressBar">
 
                                 </div>
-                                <h3 id="explainStatus"></h3>
+                                <h3 class="text-light-empasis" id="explainStatus"></h3>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            
     }
+    <div class="row mt-2">
+        <div class="col-3">
+            <div class="card border-light mb-3 text-center" onclick="loadhistory()" style="max-width: 18rem;">
+                <div class="card-header">Total Histories Interview</div>
+                <div class="card-body">
+                    <h3 class="card-text" id="totalHistoryEmployee"></h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-9" id="lastInterview"></div>
+    </div>
     @if(User.IsInRole("Trainer"))
     {
 
@@ -320,6 +332,34 @@
             </div>
         </div>
     }
+</div>
+<div class="add-account">
+    <div class="modal" id="modalAddClient" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Client</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="name" class="form-label"> Name</label>
+                            <input type="text" class="form-control" id="name" placeholder="Name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="Email" class="form-label"> Email</label>
+                            <input type="email" class="form-control" id="email" placeholder="email">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="addClient()" class="btn btn-primary d-inline-block" data-bs-dismiss="modal">Add Client</button>
+                    <button type="button" class="btn btn-secondary d-inline-block" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 @section Scripts
 {
@@ -697,6 +737,9 @@
         function loadEmployeeUngraded() {
             location.href = "/Grade/EmployeeUngraded"
         }
+        function loadhistory(){
+            location.href = "/history/employeehistory"
+        }
 
         $.ajax({
             url: "https://localhost:7273/api/employees/GetCountedStatus",
@@ -777,6 +820,95 @@
                 }
             });
        })
+        function addClient() {
+            var clientData = {
+                name: $("#name").val(),
+                email: $("#email").val(),
+            };
+
+            $.ajax({
+                url: "https://localhost:7273/api/clients",
+                type: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + Token
+                },
+                data: JSON.stringify(clientData),
+            }).done(function (result) {
+                Swal.fire({
+                    title: 'Success',
+                    text: 'Data has been successfully inserted',
+                    icon: 'success'
+                }).then(function () {
+                    location.reload();
+                });
+            }).fail(function (error) {
+                Swal.fire({
+                    title: 'Oops',
+                    text: 'Failed to insert data. Please try again.',
+                    icon: 'error'
+                });
+                console.log(error)
+            });
+        }
+        $.ajax({
+            url: 'https://localhost:7273/api/histories/CountHistoriesbyEmployeeGuid/@User.FindFirst("Guid").Value',
+            headers: {
+                'Authorization': 'Bearer ' + Token
+            },
+        }).done((result)=>{
+            $("#totalHistoryEmployee").append(`${result.data.totalHistories}`)
+        })
+        $.ajax({
+            url: 'https://localhost:7273/api/histories/GetLastHistory/@User.FindFirst("Guid").Value',
+            headers: {
+                'Authorization': 'Bearer ' + Token
+            },
+        }).done((result)=>{
+                $("#lastInterview").append(`
+                  <div class="card mb-4">
+                    <div class="card-header pb-0">
+                      <h6>Last Interview Result</h6>
+                    </div>
+                    <div class="card-body px-0 pt-0 pb-2">
+                      <div class="table-responsive p-0">
+                        <table class="table align-items-center mb-0">
+                          <thead>
+                            <tr>
+                              <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Client</th>
+                              <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Interview Date</th>
+                              <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
+                              <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">IsAccepted</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>
+                                <div class="d-flex px-2 py-1">
+                                  <div class="d-flex flex-column justify-content-center">
+                                    <h6 class="mb-0 text-sm">${result.data.clientName}</h6>
+                                    <p class="text-xs text-secondary mb-0">${result.data.positionName}</p>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <p class="text-xs font-weight-bold mb-0"> ${moment(result.data.interviewDate).format("dddd")}</p>
+                                <p class="text-xs text-secondary mb-0"> ${moment(result.data.interviewDate).format("D MMMM YYYY, HH:mm")}</p>
+                              </td>
+                              <td class="align-middle text-center text-sm">
+                                <span class="badge badge-sm bg-gradient-success">${result.data.status}</span>
+                              </td>
+                              <td class="align-middle text-center">
+                                <span class="text-secondary text-xs font-weight-bold">${result.data.isAccepted}</span>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+            `)
+        })
     </script>
 }
 @section CSS{

@@ -38,6 +38,7 @@ namespace API.Services
                        from position in positionGroup.DefaultIfEmpty()
                        select new GetAvailableClient
                        {
+                           ClientGuid = client.Guid,
                            Capacity = position!= null? position.Capacity:0,
                            PositionName = position != null ? position.Name:null,
                            Email = client.Email,

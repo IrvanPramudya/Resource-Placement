@@ -13,13 +13,41 @@
             </div>
         </div>
         <div class="container">
-            <div class="row mt-lg-n10 mt-md-n11 mt-n10">
-                <div class="col-xl-4 col-lg-5 col-md-7 mx-auto" id="clientCard">
-                    
-                </div>
+            <div class="row mt-lg-n10 mt-md-n11 mt-n10" id="clientCard">
+                
             </div>
         </div>
     </section>
+<div class="add-position">
+    <div class="modal" id="modalAddPosition" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Position</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3" id="inputclientGuid">
+                        </div>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Position</label>
+                            <input type="text" class="form-control" id="name" placeholder="Position Name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Capacity</label>
+                            <input type="number" class="form-control" id="capacity" placeholder="Position Capacity">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="addPosition()" class="btn btn-primary d-inline-block" data-bs-dismiss="modal">Add Position</button>
+                    <button type="button" class="btn btn-secondary d-inline-block" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
     
  @section Scripts
  {
@@ -33,27 +61,64 @@
          }).done((result)=>{
              let clientCard = ""
              $.each(result.data,(key,val)=>{
-                 clientCard += `<div class="card z-index-0">
-                                    <div class="card-header text-center pt-4">
-                                         <h5><span class="badge rounded-pill text-bg-danger">${val.name}</span></h5>
+                clientCard += `<div class="col-xl-4 col-lg-5 col-md-7 mx-auto" data-bs-toggle="modal" data-bs-target="#modalAddPosition">
+                                    <div class="card z-index-0">
+                                        <div class="card-header text-center pt-4">
+                                             <h5><span class="badge rounded-pill text-bg-danger">${val.name}</span></h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-6">Email</div>
+                                                <div class="col-6">${val.email}</div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-6">Position</div>
+                                                <div class="col-6">${val.positionName}</div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-6">Capacity</div>
+                                                <div class="col-6">${val.capacity}</div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-6">Email</div>
-                                            <div class="col-6">${val.email}</div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-6">Position</div>
-                                            <div class="col-6">${val.positionName}</div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-6">Capacity</div>
-                                            <div class="col-6">${val.capacity}</div>
-                                        </div>
-                                    </div>
-                                </div>`
+                               </div>
+                              `
+                $("#inputclientGuid").html(`<input type="hidden" value="${val.clientGuid}" id="clientGuid" />`)
              })
              $("#clientCard").html(clientCard)
+             
          })
+        function addPosition() {
+            var positionData = {
+                clientGuid: $("#clientGuid").val(),
+                name: $("#name").val(),
+                capacity: $("#capacity").val(),
+            };
+
+            $.ajax({
+                url: "https://localhost:7273/api/positions",
+                type: "POST",
+                headers: {
+                    'Authorization': 'Bearer ' + Token,
+                    'Content-Type': 'application/json'
+                },
+                data: JSON.stringify(positionData),
+            }).done(function (result) {
+                Swal.fire({
+                    title: 'Success',
+                    text: 'Data has been successfully inserted',
+                    icon: 'success'
+                }).then(function () {
+                    location.reload();
+                });
+            }).fail(function (error) {
+                Swal.fire({
+                    title: 'Oops',
+                    text: 'Failed to insert data. Please try again.',
+                    icon: 'error'
+                });
+                console.log(error)
+            });
+        }
      </script>
  }
