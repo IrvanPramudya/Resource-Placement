@@ -101,7 +101,7 @@
 </div>
 @section Scripts{
     <script src="~/js/Grade.js" asp-append-version="true"></script>
-        <script>
+    <script>
         const Token = '@Context.Session.GetString("JWToken")'
             const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="modal"]')
             const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
@@ -115,6 +115,9 @@
 
                 salaryInput.value = selectedSalary;
             });
+    </script>
+
+    <script>
 
             $(document).ready(function () {
                 $('#nameUpd').change(function () {
@@ -125,6 +128,9 @@
 
             $(document).ready(function () {
                 loadGradeData();
+            var dataTableButtons = $('.dt-button');
+
+            dataTableButtons.removeClass('dt-button');
             $.ajax({
                 url: "https://localhost:7273/api/employees/GetEmployeeOuterJoin",
                 headers: {
@@ -200,33 +206,33 @@
                     {
                         extend: 'copy',
                         text: '<i class="bx bxs-copy"></i>',
-                        className: 'btn btn-custom'
+                        className: 'btn btn-primary'
                     },
                     {
                         extend: 'csv',
                         text: '<i class="bx bxs-file-export"></i>',
-                        className: 'btn btn-custom'
+                        className: 'btn btn-success'
                     },
                     {
                         extend: 'excel',
                         text: '<i class="bx bx-file-blank"></i>',
-                        className: 'btn btn-custom'
+                        className: 'btn btn-warning'
                     },
                     {
                         extend: 'pdf',
                         text: '<i class="bx bxs-file-pdf"></i>',
-                        className: 'btn btn-custom'
+                        className: 'btn btn-dark'
                     },
                     {
                         extend: 'print',
                         text: '<i class="bx bx-printer"></i>',
-                        className: 'btn btn-custom'
+                        className: 'btn btn-secondary'
                     },
                     {
                         extend: 'colvis',
                         text: '<i class="bx bx-show-alt"></i>', // Ganti teks dengan ikon Boxicons
-                        className: 'btn btn-custom-column-vis'
-                    }
+                        className: 'btn btn-custom-column-vis btn-outline-info'
+                    },
                 ],
                 "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                 "pageLength": 25
