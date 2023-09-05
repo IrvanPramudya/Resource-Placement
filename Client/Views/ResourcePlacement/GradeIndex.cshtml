@@ -103,8 +103,15 @@
     <script src="~/js/Grade.js" asp-append-version="true"></script>
     <script>
         const Token = '@Context.Session.GetString("JWToken")'
-            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="modal"]')
+            $( document ).ajaxComplete(function() {
+            $('[data-bs-placement="top"]').tooltip({
+                "html": true,
+                "delay": {"show": 200, "hide": 0},
+            });
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-placement="top"]')
             const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+        });
+
 
             const gradeSelect = document.getElementById('name');
             const salaryInput = document.getElementById('salary');
@@ -206,32 +213,38 @@
                     {
                         extend: 'copy',
                         text: '<i class="bx bxs-copy"></i>',
-                        className: 'btn btn-primary'
+                        className: 'btn btn-primary',
+                        titleAttr: 'Copy Table'
                     },
                     {
                         extend: 'csv',
                         text: '<i class="bx bxs-file-export"></i>',
-                        className: 'btn btn-success'
+                        className: 'btn btn-success',
+                        titleAttr: 'Import to CSV'
                     },
                     {
                         extend: 'excel',
                         text: '<i class="bx bx-file-blank"></i>',
-                        className: 'btn btn-warning'
+                        className: 'btn btn-warning',
+                        titleAttr: 'Import to Excel'
                     },
                     {
                         extend: 'pdf',
                         text: '<i class="bx bxs-file-pdf"></i>',
-                        className: 'btn btn-dark'
+                        className: 'btn btn-dark',
+                        titleAttr: 'Import to PDF'
                     },
                     {
                         extend: 'print',
                         text: '<i class="bx bx-printer"></i>',
-                        className: 'btn btn-secondary'
+                        className: 'btn btn-secondary',
+                        titleAttr: 'Print Table'
                     },
                     {
                         extend: 'colvis',
                         text: '<i class="bx bx-show-alt"></i>', // Ganti teks dengan ikon Boxicons
-                        className: 'btn btn-custom-column-vis btn-outline-info'
+                        className: 'btn btn-custom-column-vis btn-outline-info',
+                        titleAttr: 'Column Visibility'
                     },
                 ],
                 "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],

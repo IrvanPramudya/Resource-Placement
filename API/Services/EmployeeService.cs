@@ -42,7 +42,7 @@ namespace API.Services
         }
         public IEnumerable<GetReportEmployee>? GetAllEmployeeinIdle()
         {
-            return GetAllReportedEmployee().Where(employee => employee.Status == Utilities.Enums.StatusLevel.Idle && employee.InterviewDate==null);
+            return GetAllReportedEmployee().Where(employee => employee.Status == Utilities.Enums.StatusLevel.Idle && employee.InterviewDate==null && employee.Grade != null);
         }
         public IEnumerable<GetEmployeeinGrade>? GetEmployeeinGrade()
         {
