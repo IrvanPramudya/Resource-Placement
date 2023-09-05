@@ -29,11 +29,11 @@
                         </div>
                         <div class="mb-3">
                             <label for="interviewDate" class="form-label"> Interview Date</label>
-                            <input type="datetime-local" class="form-control" id="interviewDate" placeholder="Interview Date">
+                            <input type="datetime-local" class="form-control" id="interviewDate" placeholder="Interview Date" required>
                         </div>
                         <div class="mb-3">
                             <label for="clientGuid" class="form-label"> Client Name</label>
-                            <select class="form-select selectClientinInterview" aria-label="Default select example" id="guidClient">
+                            <select class="form-select selectClientinInterview" aria-label="Default select example" id="guidClient" required>
                                 <option value="default">Select a client...</option>
                             </select>
                         </div>
@@ -42,7 +42,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="text" class="form-label">Notes</label>
-                            <input type="text" class="form-control" id="text" placeholder="Text">
+                            <input type="text" class="form-control" id="text" placeholder="Text" required>
                         </div>
                     </form>
                 </div>
@@ -140,7 +140,7 @@
     </script>
 
     <script>
-
+        
         $( document ).ajaxComplete(function() {
             $('[data-bs-placement="top"]').tooltip({
                 "html": true,
@@ -151,6 +151,7 @@
         });
         $(document).ready(function () {
             loadInterviewData();
+            
             var dataTableButtons = $('.dt-button');
 
             dataTableButtons.removeClass('dt-button');
@@ -480,5 +481,6 @@
                 console.log(error)
             })
         }
+
     </script>
 }
