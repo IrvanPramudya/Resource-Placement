@@ -109,23 +109,20 @@
                 "delay": {"show": 200, "hide": 0},
             });
             const tooltipTriggerList = document.querySelectorAll('[data-bs-placement="top"]')
-        <script>
-            const Token = '@Context.Session.GetString("JWToken")'
-            $.fn.dataTable.ext.errMode = 'throw';
-            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="modal"]')
             const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
         });
 
+        const gradeSelect = document.getElementById('name');
+        const salaryInput = document.getElementById('salary');
 
-            const gradeSelect = document.getElementById('name');
-            const salaryInput = document.getElementById('salary');
+        gradeSelect.addEventListener('change', function () {
+            const selectedOption = gradeSelect.options[gradeSelect.selectedIndex];
+            const selectedSalary = selectedOption.getAttribute('data-salary');
 
-            gradeSelect.addEventListener('change', function () {
-                const selectedOption = gradeSelect.options[gradeSelect.selectedIndex];
-                const selectedSalary = selectedOption.getAttribute('data-salary');
-
-                salaryInput.value = selectedSalary;
-            });
+            salaryInput.value = selectedSalary;
+        });
+        $.fn.dataTable.ext.errMode = 'throw';
+            
     </script>
 
     <script>

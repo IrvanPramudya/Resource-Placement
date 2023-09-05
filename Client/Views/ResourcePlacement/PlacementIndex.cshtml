@@ -100,16 +100,16 @@
     </div>
 </div>
 @section Scripts{
-        <script>
-        const Token = '@Context.Session.GetString("JWToken")'
-            $( document ).ajaxComplete(function() {
-            $('[data-bs-placement="top"]').tooltip({
-                "html": true,
-                "delay": {"show": 200, "hide": 0},
+    <script>
+            const Token = '@Context.Session.GetString("JWToken")'
+                $( document ).ajaxComplete(function() {
+                $('[data-bs-placement="top"]').tooltip({
+                    "html": true,
+                    "delay": {"show": 200, "hide": 0},
+                });
+                const tooltipTriggerList = document.querySelectorAll('[data-bs-placement="top"]')
+                const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
             });
-            const tooltipTriggerList = document.querySelectorAll('[data-bs-placement="top"]')
-            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-        });
             $.fn.dataTable.ext.errMode = 'throw';
 
             const startDateInput = document.getElementById('startDate');
