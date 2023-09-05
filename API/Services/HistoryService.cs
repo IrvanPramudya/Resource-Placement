@@ -24,6 +24,35 @@ namespace API.Services
             _clientRepository = clientRepository;
             _positionRepository = positionRepository;
         }
+        public CountStatusHistories? CountStatusHistoies()
+        {
+            var histories = GetAllHistoriesWithName();
+            var countstatus = new CountStatusHistories();
+            foreach(var item in histories)
+            {
+                if(item.Status == Utilities.Enums.InterviewLevel.EmployeeResponWaiting)
+                {
+                    countstatus.CountWaiting++;
+                }
+                if(item.Status == Utilities.Enums.InterviewLevel.AcceptedbyEmployee)
+                {
+                    countstatus.CountAcceptedEmployee++;
+                }
+                if(item.Status == Utilities.Enums.InterviewLevel.AcceptedbyClient)
+                {
+                    countstatus.CountAcceptedClient++;
+                }
+                if(item.Status == Utilities.Enums.InterviewLevel.RejectedbyEmployee)
+                {
+                    countstatus.CountRejectedEmployee++;
+                }
+                if(item.Status == Utilities.Enums.InterviewLevel.RejectedbyClient)
+                {
+                    countstatus.CountRejectedClient++;
+                }
+            }
+            return countstatus;
+        }
         public HistoryDto? GetLastHistory(Guid guid)
         {
             var histories = GetAllHistoriesWithName().Where(history=>history.EmployeeGuid == guid).LastOrDefault();

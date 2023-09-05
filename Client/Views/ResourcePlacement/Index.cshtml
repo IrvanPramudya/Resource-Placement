@@ -182,26 +182,6 @@
     @if (User.IsInRole("Admin")||User.IsInRole("Operasional"))
     {
         <div class="bottom-data">
-            <div class="row" style="height:30%; width:40%">
-                <div class="col-6">
-                    <div class="header">
-                        <i class='bx bx-receipt'></i>
-                        <h3>Gender</h3>
-                    </div>
-                    <div class="chart-container" style="position: relative; height:100%; width:100%">
-                        <canvas id="GenderChart" data-bs-chart-no-animation="true"></canvas>
-                    </div>
-                </div>
-                <div class="col-6">
-                    <div class="header">
-                        <i class='bx bx-receipt'></i>
-                        <h3>Status</h3>
-                    </div>
-                    <div class="chart-container" style="position: relative; height:100%; width:100%">
-                        <canvas id="StatusChart"></canvas>
-                    </div>
-                </div>
-            </div>
             <div class="reminders">
                 <div class="header">
                     <i class='bx bx-note'></i>
@@ -224,11 +204,41 @@
                     <canvas id="chart-line" class="chart-canvas" height="200"></canvas>
                 </div>
             </div>
-
         </div>
-    }
-    
+        <div class="bottom-data">
+        <div class="row" style="height:100%; width:100%">
+             <div class="col-4">
+                    <div class="header">
+                        <i class='bx bx-receipt'></i>
+                        <h3>Gender</h3>
+                    </div>
+                    <div class="chart-container" style="position: relative; height:100%; width:100%">
+                        <canvas id="GenderChart" data-bs-chart-no-animation="true"></canvas>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="header">
+                        <i class='bx bx-receipt'></i>
+                        <h3>Status</h3>
+                    </div>
+                    <div class="chart-container" style="position: relative; height:100%; width:100%">
+                        <canvas id="StatusChart"></canvas>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="header">
+                        <i class='bx bx-receipt'></i>
+                        <h3>Histories Status</h3>
+                    </div>
+                    <div class="chart-container" style="position: relative; height:100%; width:100%">
+                        <canvas id="StatusHistoriesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+    }
+   
     @if (User.IsInRole("Employee"))
     {
             <div class="row mt-4">
@@ -270,19 +280,19 @@
                     </div>
                 </div>
             </div>
-            
-    }
-    <div class="row mt-2">
-        <div class="col-3">
-            <div class="card border-light mb-3 text-center" onclick="loadhistory()" style="max-width: 18rem;">
-                <div class="card-header">Total Histories Interview</div>
-                <div class="card-body">
-                    <h3 class="card-text" id="totalHistoryEmployee"></h3>
+            <div class="row mt-2">
+                <div class="col-3">
+                    <div class="card border-light mb-3 text-center" onclick="loadhistory()" style="max-width: 18rem;">
+                        <div class="card-header">Total Histories Interview</div>
+                        <div class="card-body">
+                            <h3 class="card-text" id="totalHistoryEmployee"></h3>
+                        </div>
+                    </div>
                 </div>
+                <div class="col-9" id="lastInterview"></div>
             </div>
-        </div>
-        <div class="col-9" id="lastInterview"></div>
-    </div>
+    }
+    
     @if(User.IsInRole("Trainer"))
     {
 
@@ -330,6 +340,15 @@
                     <canvas id="GradeChart"></canvas>
                 </div>
             </div>
+            <div class="col-3">
+                <div class="header">
+                    <i class='bx bx-receipt'></i>
+                    <h3>Result</h3>
+                </div>
+                <div class="chart-container" style="position: relative; height:100%; width:100%">
+                    <canvas id="resultChart"></canvas>
+                </div>
+            </div>
         </div>
     }
 </div>
@@ -363,8 +382,6 @@
 </div>
 @section Scripts
 {
-    <script src="~/css/progresschart/style.css"></script>
-    <script src="~/css/progresschart/stylechart.css"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script type="text/javascript">
         toastr.success('@TempData["Success"]');
@@ -909,6 +926,72 @@
                   </div>
             `)
         })
+    $.ajax({
+    url: "https://localhost:7273/api/histories/CountStatusHistories",
+    headers: {
+        "Authorization": "Bearer " + Token
+    },
+    }).done((result) => {
+        const ctx = document.getElementById('StatusHistoriesChart');
+        new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: [
+                    'Employee Waiting',
+                    'Employee Accepted',
+                    'Employee Rejected',
+                    'Client Accepted',
+                    'Client Rejected',
+                ],
+                datasets: [{
+                    label: 'Status in Histories',
+                    data: [result.data.countWaiting, result.data.countAcceptedEmployee, result.data.countRejectedEmployee, result.data.countAcceptedClient, result.data.countRejectedClient],
+                    fill: true,
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgb(255, 99, 132)',
+                    pointBackgroundColor: 'rgb(255, 99, 132)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgb(255, 99, 132)'
+                }]
+            },
+            options: {
+                elements: {
+                    line: {
+                        borderWidth: 3
+                    }
+                }
+            }
+        });
+    });
+    $.ajax({
+        url:"https://localhost:7273/api/grades/CountResultEmployee",
+        headers: {
+            "Authorization": "Bearer " + Token
+        },
+    }).done((result)=>{
+        const ctx = document.getElementById('resultChart');
+        new Chart(ctx,{
+            type: 'polarArea',
+            data: {
+                labels: [
+                'Grade A',
+                'Grade B'
+              ],
+              datasets: [{
+                label: 'Result',
+                data: [result.data.countGradeA,result.data.countGradeB],
+                backgroundColor: [
+                  'rgb(255, 99, 132)',
+                  'rgb(75, 192, 192)',
+                  'rgb(255, 205, 86)',
+                  'rgb(201, 203, 207)',
+                  'rgb(54, 162, 235)'
+                ]
+              }]
+            }
+        })
+    })
     </script>
 }
 @section CSS{

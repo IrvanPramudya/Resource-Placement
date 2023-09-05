@@ -189,6 +189,7 @@ namespace API.Services
             toUpdate.PositionGuid = interview.PositionGuid;
             toUpdate.ClientGuid = interview.ClientGuid;
             toUpdate.Text = interview.Text;
+            toUpdate.Comment = interviewDto.Comment;
             var result = _interviewRepository.Update(toUpdate);
             History historyUpdate = historyByGuid;
             historyUpdate.IsAccepted = toUpdate.IsAccepted;

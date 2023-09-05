@@ -171,8 +171,8 @@
             <div class="modal-body">
                 <form>
                     <div class="mb-3">
-                        <label for="interviewDate" class="form-label">Comment</label>
-                        <input type="text" class="form-control" id="comment" placeholder="comment">
+                        <label for="comment" class="form-label">Comment</label>
+                        <input type="text" class="form-control" id="commentUpd" placeholder="comment">
                     </div>
                 </form>
             </div>
@@ -260,11 +260,8 @@
         function interviewRejected(guidEmployee){
             let data = {
                 guid : guidEmployee,
-                interviewDate : $("#interviewDateUpd").val(),
-                clientGuid : $("#clientUpd").val(),
-                text : $("#noteUpd").val(),
                 isAccepted : false,
-                comment: $("#comment").val(),
+                comment: $("#commentUpd").val(),
                 status : 2,
             }
             $.ajax({
