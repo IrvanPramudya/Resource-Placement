@@ -137,48 +137,63 @@
                             Placement
                         </a>
                     </li>
-                    <li>
-                        <a asp-controller="Interview" asp-action="EmployeeAccepted">
-                            <i class='bx bx-user-check'></i>
-                            Employee Accept
-                        </a>
-                    </li>
-                    <li>
-                        <a asp-controller="Interview" asp-action="EmployeeRejected">
-                            <i class='bx bx-user-x'></i>
-                            Employee Reject
-                        </a>
-                    </li>
-                    <li>
-                        <a asp-controller="Interview" asp-action="EmployeeWaiting">
-                        <i class='bx bx-time-five'></i>
-                            Employee Waiting
-                        </a>
-                    </li>
-                    <li>
-                        <a asp-controller="Interview" asp-action="ClientAccepted">
-                        <i class='bx bx-message-square-check'></i>
-                            Client Accept
-                        </a>
-                    </li>
-                    <li>
-                        <a asp-controller="Interview" asp-action="ClientRejected">
-                        <i class='bx bx-message-square-x'></i>
-                            Client Reject
-                        </a>
-                    </li>
-                    <li>
-                        <a asp-controller="Employee" asp-action="EmployeeSite">
-                        <i class='bx bx-user-pin'></i>
-                            Employee in Site
-                        </a>
-                    </li>
-                    <li>
-                        <a asp-controller="Employee" asp-action="EmployeeIdle">
-                        <i class='bx bx-user-circle'></i>
-                            Employee Idle
-                        </a>
-                    </li>
+                <div class="dropdown">
+                    &nbsp;&nbsp;&nbsp;&nbsp;<i class='bx bx-task'></i><button class="dropbtn">Interview Menu</button>
+                    <div class="dropdown-content">
+                        <ul>
+                            <li>
+                                <a asp-controller="Interview" asp-action="EmployeeAccepted">
+                                    <i class='bx bx-user-check'></i>
+                                    Employee Accept
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-controller="Interview" asp-action="EmployeeRejected">
+                                    <i class='bx bx-user-x'></i>
+                                    Employee Reject
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-controller="Interview" asp-action="EmployeeWaiting">
+                                    <i class='bx bx-time-five'></i>
+                                    Employee Waiting
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-controller="Interview" asp-action="ClientAccepted">
+                                    <i class='bx bx-message-square-check'></i>
+                                    Client Accept
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-controller="Interview" asp-action="ClientRejected">
+                                    <i class='bx bx-message-square-x'></i>
+                                    Client Reject
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="dropdown">
+                    &nbsp;&nbsp;&nbsp;&nbsp;<i class='bx bx-user'></i><button class="dropbtn">Employee Menu</button>
+                    <div class="dropdown-content">
+                        <ul>
+                            <li>
+                                <a asp-controller="Employee" asp-action="EmployeeSite">
+                                    <i class='bx bx-user-pin'></i>
+                                    Employee in Site
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-controller="Employee" asp-action="EmployeeIdle">
+                                    <i class='bx bx-user-circle'></i>
+                                    Employee Idle
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
                 }
                 @if(User.IsInRole("Admin")||User.IsInRole("Employee"))
                 {
@@ -300,7 +315,7 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
-    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         var win = navigator.platform.indexOf('Win') > -1;
         if (win && document.querySelector('#sidenav-scrollbar')) {
@@ -309,6 +324,11 @@
             }
             Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
         }
+        $(document).ready(function () {
+            $(".dropbtn").click(function () {
+                $(this).next(".dropdown-content").slideToggle();
+            });
+        });
     </script>
     <!-- Github buttons -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
