@@ -49,11 +49,12 @@
 {
     <script>
         const Token = '@Context.Session.GetString("JWToken")'
+        $.fn.dataTable.ext.errMode = 'throw';
         $(document).ready(()=>{
             loadResultData()
         })
         function loadResultData() {
-            $('#resultTable').DataTable({
+            $('#resultTable').DataTable({  
                 ajax: {
                     url: "https://localhost:7273/api/interviews/InterviewBeforeAcceptedbyClient",
                     dataType: "JSON",
@@ -61,6 +62,12 @@
                     headers: {
                         'Authorization': 'Bearer ' + Token
                     }
+                },
+                "language": {
+                    "zeroRecords": "No Data Available",
+                    "info": "Showing page _PAGE_ of _PAGES_",
+                    "infoEmpty": "No records available",
+                    "infoFiltered": "(filtered from _MAX_ total records)"
                 },
                 columns: [
                     {

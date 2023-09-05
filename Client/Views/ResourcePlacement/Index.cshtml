@@ -182,26 +182,6 @@
     @if (User.IsInRole("Admin")||User.IsInRole("Operasional"))
     {
         <div class="bottom-data">
-            <div class="row" style="height:30%; width:40%">
-                <div class="col-6">
-                    <div class="header">
-                        <i class='bx bx-receipt'></i>
-                        <h3>Gender</h3>
-                    </div>
-                    <div class="chart-container" style="position: relative; height:100%; width:100%">
-                        <canvas id="GenderChart" data-bs-chart-no-animation="true"></canvas>
-                    </div>
-                </div>
-                <div class="col-6">
-                    <div class="header">
-                        <i class='bx bx-receipt'></i>
-                        <h3>Status</h3>
-                    </div>
-                    <div class="chart-container" style="position: relative; height:100%; width:100%">
-                        <canvas id="StatusChart"></canvas>
-                    </div>
-                </div>
-            </div>
             <div class="reminders">
                 <div class="header">
                     <i class='bx bx-note'></i>
@@ -224,7 +204,26 @@
                     <canvas id="chart-line" class="chart-canvas" height="200"></canvas>
                 </div>
             </div>
-
+            <div class="row" style="height:30%; width:40%">
+                <div class="col-6">
+                    <div class="header">
+                        <i class='bx bx-receipt'></i>
+                        <h3>Gender</h3>
+                    </div>
+                    <div class="chart-container" style="position: relative; height:100%; width:100%">
+                        <canvas id="GenderChart" data-bs-chart-no-animation="true"></canvas>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="header">
+                        <i class='bx bx-receipt'></i>
+                        <h3>Status</h3>
+                    </div>
+                    <div class="chart-container" style="position: relative; height:100%; width:100%">
+                        <canvas id="StatusChart"></canvas>
+                    </div>
+                </div>
+            </div>
         </div>
     }
     

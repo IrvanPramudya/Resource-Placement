@@ -101,7 +101,8 @@
 </div>
 @section Scripts{
         <script>
-        const Token = '@Context.Session.GetString("JWToken")'
+            const Token = '@Context.Session.GetString("JWToken")'
+            $.fn.dataTable.ext.errMode = 'throw';
             const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="modal"]')
             const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
@@ -186,6 +187,12 @@
                         headers: {
                             'Authorization': 'Bearer ' + Token
                         }
+                    },
+                    "language": {
+                        "zeroRecords": "No Data Available",
+                        "info": "Showing page _PAGE_ of _PAGES_",
+                        "infoEmpty": "No records available",
+                        "infoFiltered": "(filtered from _MAX_ total records)"
                     },
                     columns: [
                         {

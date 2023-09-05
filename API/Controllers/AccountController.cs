@@ -23,7 +23,8 @@ namespace API.Controllers
 
 
         [HttpGet("GetDetailAccount/{guid}")]
-        [Authorize]
+        //[Authorize]
+        [AllowAnonymous]
         public IActionResult GetDetailAccount(Guid guid)
         {
             var result = _accountService.DetailAccount(guid);
