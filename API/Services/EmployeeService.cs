@@ -176,17 +176,19 @@ namespace API.Services
         public GetCountedStatus? CountStatus()
         {
             var data = from employee in _employeeRepository.GetAll()
+                       join grade in _gradeRepository.GetAll() on employee.Guid equals grade.Guid
                        join account in _accountRepository.GetAll() on employee.Guid equals account.Guid
                        join accountrole in _accountRoleRepository.GetEmployeewithEmployeeRole() on account.Guid equals accountrole.AccountGuid
                        join interview in _interviewRepository.GetAll() on employee.Guid equals interview.Guid into interviewGroup
                        from interview in interviewGroup.DefaultIfEmpty()
                        select new GetReportEmployee
                        {
+                           Salary = grade.Salary,
                            Status = employee.Status,
                            InterviewDate = interview!=null?interview.InterviewDate:null,
                            ClientGuid = interview!=null?interview.ClientGuid:null,
                        };
-
+            
             var countemployee = new GetCountedStatus();
             foreach (var item in data)
             {
@@ -195,6 +197,10 @@ namespace API.Services
                     if(item.InterviewDate == null)
                     {
                         countemployee.CountIdleUngraded++;
+                    }
+                    if(item.Salary != 0 && item.InterviewDate == null)
+                    {
+                        countemployee.CountIdleGraded++;
                     }
                     countemployee.CountIdle++;
                 }

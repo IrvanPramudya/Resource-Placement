@@ -5,5 +5,6 @@
         public int CountIdle { get; set; }
         public int CountSite { get; set; }
         public int CountIdleUngraded { get; set; }
+        public int CountIdleGraded { get; set; }
     }
 }

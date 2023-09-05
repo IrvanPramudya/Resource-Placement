@@ -214,6 +214,52 @@ namespace API.Migrations
                     b.ToTable("tb_m_grades");
                 });
 
+            modelBuilder.Entity("API.Models.History", b =>
+                {
+                    b.Property<Guid>("Guid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("guid");
+
+                    b.Property<Guid>("ClientGuid")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("client_guid");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("created_date");
+
+                    b.Property<Guid>("EmployeeGuid")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("employee_guid");
+
+                    b.Property<DateTime>("InterviewDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("interview_date");
+
+                    b.Property<bool?>("IsAccepted")
+                        .HasColumnType("bit")
+                        .HasColumnName("is_accepted");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("modified_date");
+
+                    b.Property<Guid>("PositionGuid")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("position_guid");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int")
+                        .HasColumnName("status");
+
+                    b.HasKey("Guid");
+
+                    b.HasIndex("EmployeeGuid");
+
+                    b.ToTable("tb_tr_histories");
+                });
+
             modelBuilder.Entity("API.Models.Interview", b =>
                 {
                     b.Property<Guid>("Guid")
@@ -363,29 +409,29 @@ namespace API.Migrations
                         new
                         {
                             Guid = new Guid("ae259a90-e2e8-442f-ce18-08db91a71ab9"),
-                            CreatedDate = new DateTime(2023, 9, 1, 13, 30, 22, 853, DateTimeKind.Local).AddTicks(148),
-                            ModifiedDate = new DateTime(2023, 9, 1, 13, 30, 22, 853, DateTimeKind.Local).AddTicks(160),
+                            CreatedDate = new DateTime(2023, 9, 4, 13, 22, 38, 355, DateTimeKind.Local).AddTicks(756),
+                            ModifiedDate = new DateTime(2023, 9, 4, 13, 22, 38, 355, DateTimeKind.Local).AddTicks(772),
                             Name = "Employee"
                         },
                         new
                         {
                             Guid = new Guid("4ec90656-e89c-4871-d9e5-08db8a7d0f37"),
-                            CreatedDate = new DateTime(2023, 9, 1, 13, 30, 22, 853, DateTimeKind.Local).AddTicks(165),
-                            ModifiedDate = new DateTime(2023, 9, 1, 13, 30, 22, 853, DateTimeKind.Local).AddTicks(165),
+                            CreatedDate = new DateTime(2023, 9, 4, 13, 22, 38, 355, DateTimeKind.Local).AddTicks(776),
+                            ModifiedDate = new DateTime(2023, 9, 4, 13, 22, 38, 355, DateTimeKind.Local).AddTicks(777),
                             Name = "Trainer"
                         },
                         new
                         {
                             Guid = new Guid("c0689b0a-5c87-46f1-ce19-08db91a71ab9"),
-                            CreatedDate = new DateTime(2023, 9, 1, 13, 30, 22, 853, DateTimeKind.Local).AddTicks(168),
-                            ModifiedDate = new DateTime(2023, 9, 1, 13, 30, 22, 853, DateTimeKind.Local).AddTicks(168),
+                            CreatedDate = new DateTime(2023, 9, 4, 13, 22, 38, 355, DateTimeKind.Local).AddTicks(780),
+                            ModifiedDate = new DateTime(2023, 9, 4, 13, 22, 38, 355, DateTimeKind.Local).AddTicks(781),
                             Name = "Operasional"
                         },
                         new
                         {
                             Guid = new Guid("5fb9adc0-7d08-45d4-cd66-08db9c7a678f"),
-                            CreatedDate = new DateTime(2023, 9, 1, 13, 30, 22, 853, DateTimeKind.Local).AddTicks(171),
-                            ModifiedDate = new DateTime(2023, 9, 1, 13, 30, 22, 853, DateTimeKind.Local).AddTicks(172),
+                            CreatedDate = new DateTime(2023, 9, 4, 13, 22, 38, 355, DateTimeKind.Local).AddTicks(784),
+                            ModifiedDate = new DateTime(2023, 9, 4, 13, 22, 38, 355, DateTimeKind.Local).AddTicks(784),
                             Name = "Admin"
                         });
                 });
@@ -425,6 +471,17 @@ namespace API.Migrations
                     b.HasOne("API.Models.Employee", "Employee")
                         .WithOne("Grade")
                         .HasForeignKey("API.Models.Grade", "Guid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("API.Models.History", b =>
+                {
+                    b.HasOne("API.Models.Employee", "Employee")
+                        .WithMany("Histories")
+                        .HasForeignKey("EmployeeGuid")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -499,6 +556,8 @@ namespace API.Migrations
                     b.Navigation("Account");
 
                     b.Navigation("Grade");
+
+                    b.Navigation("Histories");
 
                     b.Navigation("Interview");
 

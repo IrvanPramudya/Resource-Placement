@@ -2,6 +2,7 @@
 using API.Services;
 using API.Utilities.Handlers;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -9,7 +10,8 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/accounts")]
-    /*[Authorize]*/
+    [Authorize(Roles = "Admin")]
+    [EnableCors]
     public class AccountController : ControllerBase
     {
         private readonly AccountService _accountService;
@@ -21,6 +23,7 @@ namespace API.Controllers
 
 
         [HttpGet("GetDetailAccount/{guid}")]
+        [AllowAnonymous]
         public IActionResult GetDetailAccount(Guid guid)
         {
             var result = _accountService.DetailAccount(guid);

@@ -19,6 +19,7 @@ namespace API.Services
             _accountRepository = accountRepository;
             _accountRoleRepository = accountRoleRepository;
         }
+
         public CountEmployee CountEmployeeinGrade()
         {
             var grade = GetAllEmployeewithGrade();
@@ -55,7 +56,8 @@ namespace API.Services
                             Gender = employee.Gender,
                             NIK = employee.NIK,
                             PhoneNumber = employee.PhoneNumber,
-                            Skill = employee.Skill
+                            Skill = employee.Skill,
+                            Status = employee.Status
                         };
             if (!merge.Any())
             {

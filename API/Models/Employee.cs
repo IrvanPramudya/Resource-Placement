@@ -30,8 +30,10 @@ namespace API.Models
         //Cardinality
         public Account? Account { get; set; }
         public Interview? Interview { get; set; }
+        public IEnumerable<History>? Histories { get; set; }
         public Grade? Grade { get; set; }
         /*public Client? Client { get; set; }*/
         public Placement? Placement { get; set; }
+
     }
 }

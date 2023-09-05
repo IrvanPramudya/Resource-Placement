@@ -1,4 +1,5 @@
-﻿@{
+﻿@using System.Net.Http
+@{
 }
 <div class="col-12 mt-4">
     <p class="text-center h1 fw-bold mb-4 mx-auto mt-1">Employee Ungraded</p>
@@ -50,6 +51,7 @@
 @section Scripts
     {
     <script>
+        const Token = '@Context.Session.GetString("JWToken")'
         const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="modal"]')
         const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
@@ -63,7 +65,10 @@
             salaryInput.value = selectedSalary;
         });
         $.ajax({
-            url: "https://localhost:7273/api/grades/GetUngradedEmployee"
+            url: "https://localhost:7273/api/grades/GetUngradedEmployee",
+            headers: {
+                'Authorization': 'Bearer ' + Token
+            }
         }).done((result) => {
             let gradeCard = ""
             $.each(result.data, (key, val) => {
@@ -111,7 +116,8 @@
                 url: "https://localhost:7273/api/grades",
                 type: "POST",
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + Token
                 },
                 data: JSON.stringify(gradeData),
             }).done(function (result) {

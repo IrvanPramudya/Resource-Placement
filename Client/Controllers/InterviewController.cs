@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Client.Controllers
 {
+    [Authorize(Roles = "Admin,Operasional")]
     public class InterviewController : Controller
     {
         public IActionResult EmployeeAccepted() => View();

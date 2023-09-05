@@ -43,6 +43,7 @@
                         <div class="mb-3">
                             <label for="gender" class="col-form-label">Gender:</label>
                             <select class="form-control" id="gender" required>
+                                <option selected disabled>Select Gender</option>
                                 <option value="0">Female</option>
                                 <option value="1">Male</option>
                             </select>
@@ -128,6 +129,7 @@
 
 @section Scripts{
     <script>
+        const Token = '@Context.Session.GetString("JWToken")'
         const tooltipTriggerList = document.querySelectorAll('[data-bs-placement="top"]')
         const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
@@ -140,7 +142,10 @@
                 ajax: {
                     url: "https://localhost:7273/api/employees",
                     dataType: "JSON",
-                    dataSrc: "data"
+                    dataSrc: "data",
+                    headers: {
+                        'Authorization': 'Bearer ' + Token
+                    }
                 },
                 columns: [
                     {
@@ -235,7 +240,8 @@
                     url: "https://localhost:7273/api/employees",
                     type: "POST",
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + Token
                     },
                     data: JSON.stringify(employeeData),
                 }).done(function (result) {
@@ -270,6 +276,9 @@
                     $.ajax({
                         url: "https://localhost:7273/api/employees?guid=" + guid,
                         type: "DELETE",
+                        headers: {
+                            'Authorization': 'Bearer ' + Token
+                        }
                     }).done(function (result) {
                         Swal.fire({
                             title: 'Deleted',
@@ -288,7 +297,10 @@
             $.ajax({
                 url: "https://localhost:7273/api/employees/" + guid,
                 type: "GET",
-                dataType: "json"
+                dataType: "json",
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                }
             }).done((result) => {
                 console.log(result)
                 $("#guidUpd").val(result.data.guid);
@@ -322,7 +334,10 @@
                 url: "https://localhost:7273/api/employees",
                 type: "PUT",
                 contentType: "application/json",
-                data: JSON.stringify(data)
+                data: JSON.stringify(data),
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                }
             }).done((result) => {
                     Swal.fire({
                         title: 'Success',

@@ -1,5 +1,5 @@
 ﻿@using System.Net.Http
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -12,7 +12,6 @@
     <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
     
     @*Online Style*@
-    
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css" />
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" />
@@ -104,6 +103,12 @@
                         <a asp-controller="ResourcePlacement" asp-action="InterviewIndex">
                             <i class='bx bx-calendar-event'></i>
                             Interview
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-controller="ResourcePlacement" asp-action="HistoryIndex">
+                            <i class='bx bx-calendar-event'></i>
+                            History
                         </a>
                     </li>
 
@@ -222,10 +227,6 @@
                 <span class="badge rounded-pill bg-primary fs-6">Trainer</span>
             }
             <label for="theme-toggle" class="theme-toggle"></label>
-            <a href="#" class="notif">
-                <i class='bx bx-bell'></i>
-                <span class="count">12</span>
-            </a>
             <div class="dropdown">
                 <a class="profile dropdown-toggle"
                         id="dropdownMenuButton"
@@ -278,8 +279,10 @@
     <script src="~/soft-ui/assets/js/core/popper.min.js"></script>
     <script src="~/soft-ui/assets/js/plugins/perfect-scrollbar.min.js"></script>
     <script src="~/soft-ui/assets/js/plugins/smooth-scrollbar.min.js"></script>
+    
     @*Online Library*@
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.0/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>

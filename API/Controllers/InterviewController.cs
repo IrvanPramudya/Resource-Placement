@@ -3,6 +3,7 @@ using API.DTOs.Placements;
 using API.Services;
 using API.Utilities.Handlers;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -10,7 +11,8 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/interviews")]
-    /*[Authorize]*/
+    [Authorize(Roles = "Admin,Operasional")]
+    [EnableCors]
     public class InterviewController : ControllerBase
     {
         private readonly InterviewService _interviewService;
@@ -196,6 +198,7 @@ namespace API.Controllers
             });
         }
         [HttpPut("UpdateFullInterview")]
+        [AllowAnonymous]
         public IActionResult UpdateFullInterview(UpdateInterviewDto interviewDto)
         {
             var result = _interviewService.UpdateFullInterview(interviewDto);
@@ -339,6 +342,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{guid}")]
+        [AllowAnonymous]
         public IActionResult GetByGuid(Guid guid)
         {
             var result = _interviewService.GetByGuid(guid);

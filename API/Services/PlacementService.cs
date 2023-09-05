@@ -1,9 +1,11 @@
 ﻿using API.Contracts;
 using API.Data;
 using API.DTOs.Employees;
+using API.DTOs.Histories;
 using API.DTOs.Placements;
 using API.Models;
 using API.Repositories;
+using API.Utilities.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Services
@@ -15,9 +17,10 @@ namespace API.Services
         private readonly IPlacementRepository _placementRepository;
         private readonly IInterviewRepository _interviewRepository;
         private readonly IPositionRepository _positionRepository;
+        private readonly IHistoryRepository _historyRepository;
         private readonly PlacementDbContext _dbContext;
 
-        public PlacementService(IPlacementRepository placementRepository, IClientRepository clientRepository, IEmployeeRepository employeeRepository, IInterviewRepository interviewRepository, PlacementDbContext dbContext, IPositionRepository positionRepository)
+        public PlacementService(IPlacementRepository placementRepository, IClientRepository clientRepository, IEmployeeRepository employeeRepository, IInterviewRepository interviewRepository, PlacementDbContext dbContext, IPositionRepository positionRepository, IHistoryRepository historyRepository)
         {
             _placementRepository = placementRepository;
             _clientRepository = clientRepository;
@@ -25,6 +28,7 @@ namespace API.Services
             _interviewRepository = interviewRepository;
             _dbContext = dbContext;
             _positionRepository = positionRepository;
+            _historyRepository = historyRepository;
         }
         public IEnumerable<GetEmployeeClientName>? GetEmployeeClientName()
         {

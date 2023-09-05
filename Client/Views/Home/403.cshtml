@@ -6,7 +6,15 @@
 	<h1>403</h1>
 </div>
 <h2>You're Role is not Allowed to Access this Page</h2>
-<a id="countdown403">5</a>
+<a id="countdown403" onclick="loadlogin()">5</a>
 @*<div class="notfound-404">
     <a id="countdown403">5</a>
 </div>*@
+@section Scripts
+    {
+    <script>
+        function loadlogin() {
+            location.href = "/"
+        }
+    </script>
+}

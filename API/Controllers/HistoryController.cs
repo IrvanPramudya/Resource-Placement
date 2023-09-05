@@ -1,4 +1,5 @@
-﻿using API.DTOs.Clients;
+﻿using API.DTOs.Histories;
+using API.DTOs.NewHistoryDto;
 using API.Services;
 using API.Utilities.Handlers;
 using Microsoft.AspNetCore.Authorization;
@@ -9,31 +10,33 @@ using System.Net;
 namespace API.Controllers
 {
     [ApiController]
-    [Route("api/clients")]
-    [Authorize(Roles = "Admin,Operasional")]
+    [Route("api/histories")]
+    [Authorize]
     [EnableCors]
-    public class ClientController : ControllerBase
+    public class HistoryController : ControllerBase
     {
-        private readonly ClientService _clientService;
+        private readonly HistoryService _historyService;
 
-        public ClientController(ClientService clientService)
+        public HistoryController(HistoryService historyService)
         {
-            _clientService = clientService;
+            _historyService = historyService;
         }
-        [HttpGet("GetCountClient")]
-        public IActionResult CountClient()
+
+        [HttpGet("GetLastHistory/{guid}")]
+        public IActionResult GetLastHistory(Guid guid)
         {
-            var result = _clientService.CountClient();
-            if(result == null)
+            var result = _historyService.GetLastHistory(guid);
+            if (result == null)
             {
-                return NotFound(new ResponseHandler<GetCountClient>
+                return NotFound(new ResponseHandler<HistoryDto>
                 {
                     Code = StatusCodes.Status404NotFound,
                     Status = HttpStatusCode.NotFound.ToString(),
                     Message = "Data Not Found"
                 });
             }
-            return Ok(new ResponseHandler<GetCountClient>
+
+            return Ok(new ResponseHandler<HistoryDto>
             {
                 Code = StatusCodes.Status200OK,
                 Status = HttpStatusCode.OK.ToString(),
@@ -41,20 +44,21 @@ namespace API.Controllers
                 Data = result
             });
         }
-        [HttpGet("GetUnavailableClient")]
-        public IActionResult GetUnavailableClient()
+        [HttpGet("GetHistoryByEmployeeGuid/{guid}")]
+        public IActionResult GetHistoryByEmployeeGuid(Guid guid)
         {
-            var result = _clientService.GetAllClient().Where(client=>client.IsAvailable == false);
-            if(!result.Any())
+            var result = _historyService.GetHistoryByEmployeeGuid(guid);
+            if (result == null)
             {
-                return NotFound(new ResponseHandler<GetAvailableClient>
+                return NotFound(new ResponseHandler<HistoryDto>
                 {
                     Code = StatusCodes.Status404NotFound,
                     Status = HttpStatusCode.NotFound.ToString(),
                     Message = "Data Not Found"
                 });
             }
-            return Ok(new ResponseHandler<IEnumerable<GetAvailableClient>>
+
+            return Ok(new ResponseHandler<IEnumerable<HistoryDto>>
             {
                 Code = StatusCodes.Status200OK,
                 Status = HttpStatusCode.OK.ToString(),
@@ -62,20 +66,65 @@ namespace API.Controllers
                 Data = result
             });
         }
-        [HttpGet("GetAvailableClient")]
-        public IActionResult GetAvailableClient()
+        [HttpGet("CountHistoriesbyEmployeeGuid/{guid}")]
+        public IActionResult CountHistoriesbyEmployeeGuid(Guid guid)
         {
-            var result = _clientService.GetAllClient().Where(client=>client.IsAvailable == true);
-            if(!result.Any())
+            var result = _historyService.CountHistoriesbyEmployeeGuid(guid);
+            if (result == null)
             {
-                return NotFound(new ResponseHandler<GetAvailableClient>
+                return NotFound(new ResponseHandler<CountAllHistories>
                 {
                     Code = StatusCodes.Status404NotFound,
                     Status = HttpStatusCode.NotFound.ToString(),
                     Message = "Data Not Found"
                 });
             }
-            return Ok(new ResponseHandler<IEnumerable<GetAvailableClient>>
+
+            return Ok(new ResponseHandler<CountAllHistories>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success Retrieve Data",
+                Data = result
+            });
+        }
+        [HttpGet("CountAllHistories")]
+        public IActionResult CountAllHistories()
+        {
+            var result = _historyService.CountAllHistories();
+            if (result == null)
+            {
+                return NotFound(new ResponseHandler<CountAllHistories>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data Not Found"
+                });
+            }
+
+            return Ok(new ResponseHandler<CountAllHistories>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success Retrieve Data",
+                Data = result
+            });
+        }
+        [HttpGet("GetAllHistorieswithName")]
+        public IActionResult GetAllHistorieswithName()
+        {
+            var result = _historyService.GetAllHistoriesWithName();
+            if (!result.Any())
+            {
+                return NotFound(new ResponseHandler<HistoryDto>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data Not Found"
+                });
+            }
+
+            return Ok(new ResponseHandler<IEnumerable<HistoryDto>>
             {
                 Code = StatusCodes.Status200OK,
                 Status = HttpStatusCode.OK.ToString(),
@@ -86,10 +135,10 @@ namespace API.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var result = _clientService.GetAll();
+            var result = _historyService.GetAll();
             if (!result.Any())
             {
-                return NotFound(new ResponseHandler<ClientDto>
+                return NotFound(new ResponseHandler<HistoryDto>
                 {
                     Code = StatusCodes.Status404NotFound,
                     Status = HttpStatusCode.NotFound.ToString(),
@@ -97,7 +146,7 @@ namespace API.Controllers
                 });
             }
 
-            return Ok(new ResponseHandler<IEnumerable<ClientDto>>
+            return Ok(new ResponseHandler<IEnumerable<HistoryDto>>
             {
                 Code = StatusCodes.Status200OK,
                 Status = HttpStatusCode.OK.ToString(),
@@ -109,10 +158,10 @@ namespace API.Controllers
         [HttpGet("{guid}")]
         public IActionResult GetByGuid(Guid guid)
         {
-            var result = _clientService.GetByGuid(guid);
+            var result = _historyService.GetByGuid(guid);
             if (result is null)
             {
-                return NotFound(new ResponseHandler<ClientDto>
+                return NotFound(new ResponseHandler<HistoryDto>
                 {
                     Code = StatusCodes.Status404NotFound,
                     Status = HttpStatusCode.NotFound.ToString(),
@@ -120,7 +169,7 @@ namespace API.Controllers
                 });
             }
 
-            return Ok(new ResponseHandler<ClientDto>
+            return Ok(new ResponseHandler<HistoryDto>
             {
                 Code = StatusCodes.Status200OK,
                 Status = HttpStatusCode.OK.ToString(),
@@ -130,12 +179,12 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public IActionResult Insert(NewClientDto newClientDto)
+        public IActionResult Insert(NewHistoryDto newHistoryDto)
         {
-            var result = _clientService.Create(newClientDto);
+            var result = _historyService.Create(newHistoryDto);
             if (result is null)
             {
-                return StatusCode(500, new ResponseHandler<ClientDto>
+                return StatusCode(500, new ResponseHandler<HistoryDto>
                 {
                     Code = StatusCodes.Status500InternalServerError,
                     Status = HttpStatusCode.InternalServerError.ToString(),
@@ -143,23 +192,23 @@ namespace API.Controllers
                 });
             }
 
-            return Ok(new ResponseHandler<NewClientDto>
+            return Ok(new ResponseHandler<NewHistoryDto>
             {
                 Code = StatusCodes.Status200OK,
                 Status = HttpStatusCode.OK.ToString(),
                 Message = "Insert Data Success",
-                Data = newClientDto
+                Data = newHistoryDto
             });
         }
 
         [HttpPut]
-        public IActionResult Update(UpdateClientDto clientDto)
+        public IActionResult Update(HistoryDto historyDto)
         {
-            var result = _clientService.Update(clientDto);
+            var result = _historyService.Update(historyDto);
 
             if (result is -1)
             {
-                return NotFound(new ResponseHandler<UpdateClientDto>
+                return NotFound(new ResponseHandler<HistoryDto>
                 {
                     Code = StatusCodes.Status404NotFound,
                     Status = HttpStatusCode.NotFound.ToString(),
@@ -169,7 +218,7 @@ namespace API.Controllers
 
             if (result is 0)
             {
-                return StatusCode(500, new ResponseHandler<UpdateClientDto>
+                return StatusCode(500, new ResponseHandler<HistoryDto>
                 {
                     Code = StatusCodes.Status500InternalServerError,
                     Status = HttpStatusCode.InternalServerError.ToString(),
@@ -177,7 +226,7 @@ namespace API.Controllers
                 });
             }
 
-            return Ok(new ResponseHandler<UpdateClientDto>
+            return Ok(new ResponseHandler<HistoryDto>
             {
                 Code = StatusCodes.Status200OK,
                 Status = HttpStatusCode.OK.ToString(),
@@ -188,11 +237,11 @@ namespace API.Controllers
         [HttpDelete]
         public IActionResult Delete(Guid guid)
         {
-            var result = _clientService.Delete(guid);
+            var result = _historyService.Delete(guid);
 
             if (result is -1)
             {
-                return NotFound(new ResponseHandler<ClientDto>
+                return NotFound(new ResponseHandler<HistoryDto>
                 {
                     Code = StatusCodes.Status404NotFound,
                     Status = HttpStatusCode.NotFound.ToString(),
@@ -202,7 +251,7 @@ namespace API.Controllers
 
             if (result is 0)
             {
-                return StatusCode(500, new ResponseHandler<ClientDto>
+                return StatusCode(500, new ResponseHandler<HistoryDto>
                 {
                     Code = StatusCodes.Status500InternalServerError,
                     Status = HttpStatusCode.InternalServerError.ToString(),
@@ -210,7 +259,7 @@ namespace API.Controllers
                 });
             }
 
-            return Ok(new ResponseHandler<ClientDto>
+            return Ok(new ResponseHandler<HistoryDto>
             {
                 Code = StatusCodes.Status200OK,
                 Status = HttpStatusCode.OK.ToString(),

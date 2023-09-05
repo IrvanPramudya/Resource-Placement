@@ -1,4 +1,5 @@
-﻿@{
+﻿@using System.Net.Http
+@{
     ViewData["Title"] = "Account Role";
     Layout = "AdminLayout";
 }
@@ -82,13 +83,17 @@
 </div>
 @section Scripts{
     <script>
+        const Token = '@Context.Session.GetString("JWToken")'
         const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="modal"]')
         const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
         $(document).ready(function () {
             loadAccountRoleData();
             $.ajax({
-                url: "https://localhost:7273/api/accountroles/GetEmployeehasAccount"
+                url: "https://localhost:7273/api/accountroles/GetEmployeehasAccount",
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                }
             }).done(function (result) {
                 console.log(result)
                 let getName = ""
@@ -99,7 +104,10 @@
                 $('.selectName').html(getName)
             })
             $.ajax({
-                url: "https://localhost:7273/api/roles"
+                url: "https://localhost:7273/api/roles",
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                }
             }).done(function (result) {
                 console.log(result)
                 let getRole = ""
@@ -116,7 +124,10 @@
                 ajax: {
                     url: "https://localhost:7273/api/accountroles/GetAccountRolewithFullName",
                     dataType: "JSON",
-                    dataSrc: "data"
+                    dataSrc: "data",
+                    headers: {
+                        'Authorization': 'Bearer ' + Token
+                    }
                 },
                 columns: [
                     {
@@ -202,7 +213,8 @@
                 url: "https://localhost:7273/api/accountroles",
                 type: "POST",
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + Token
                 },
                 data: JSON.stringify(accountroleData),
             }).done(function (result) {
@@ -236,6 +248,9 @@
                 if (result.isConfirmed) {
                     $.ajax({
                         url: "https://localhost:7273/api/accountroles?guid=" + guid,
+                        headers: {
+                            'Authorization': 'Bearer ' + Token
+                        },
                         type: "DELETE",
                     }).done(function (result) {
                         Swal.fire({
@@ -254,8 +269,14 @@
         function ShowUpdateAccountRole(guid) {
             $.ajax({
                 url: "https://localhost:7273/api/accountroles/" + guid,
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                },
                 type: "GET",
-                dataType: "json"
+                dataType: "json",
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                }
             }).done((result) => {
                 console.log(result)
                 $("#guidUpd").val(result.data.guid);
@@ -270,7 +291,6 @@
 
         function UpdateAccountRole() {
 
-
             let data = {
                 guid: $("#guidUpd").val(),
                 accountGuid: $("#accountguidUpd").val(),
@@ -280,7 +300,10 @@
                 url: "https://localhost:7273/api/accountroles",
                 type: "PUT",
                 contentType: "application/json",
-                data: JSON.stringify(data)
+                data: JSON.stringify(data),
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                }
             }).done((result) => {
                 Swal.fire({
                     title: 'Success',

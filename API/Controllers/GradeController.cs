@@ -2,6 +2,7 @@
 using API.Services;
 using API.Utilities.Handlers;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -9,7 +10,8 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/grades")]
-    /*[Authorize]*/
+    [Authorize(Roles = "Admin,Operasional,Trainer")]
+    [EnableCors]
     public class GradeController : ControllerBase
     {
         private readonly GradeService _gradeService;
@@ -89,7 +91,7 @@ namespace API.Controllers
         [HttpGet("GetGradedEmployee")]
         public IActionResult GetGradedEmployee()
         {
-            var result = _gradeService.GetAllEmployeewithGrade().Where(grade=>grade.GradeName!=null);
+            var result = _gradeService.GetAllEmployeewithGrade().Where(grade=>grade.GradeName!=null && grade.Status == Utilities.Enums.StatusLevel.Idle);
             if (!result.Any())
             {
                 return NotFound(new ResponseHandler<GradewithName>

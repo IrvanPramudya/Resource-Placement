@@ -1,4 +1,5 @@
-﻿@{
+﻿@using System.Net.Http
+@{
     Layout = "AdminLayout";
 }
 
@@ -111,6 +112,7 @@
 </div>
 @section Scripts{
     <script>
+        const Token = '@Context.Session.GetString("JWToken")'
         const tooltipTriggerList = document.querySelectorAll('[data-bs-placement="top"]')
         const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
         $("#interviewDate").flatpickr({
@@ -129,11 +131,23 @@
             ]
         })
 
+        // Ambil elemen input datetime-local
+        var interviewDateInput = document.getElementById("interviewDate");
+
+        // Atur atribut min ke tanggal saat ini
+        var now = new Date();
+        var formattedNow = now.toISOString().substring(0, 16); // Format tanggal sesuai tipe datetime-local
+        interviewDateInput.setAttribute("min", formattedNow);
+
+
         $(document).ready(function () {
             loadInterviewData();
             
             $.ajax({
-                url: "https://localhost:7273/api/interviews/GetRemainingEmployeeinInterview"
+                url: "https://localhost:7273/api/interviews/GetRemainingEmployeeinInterview",
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                }
             }).done(function (result) {
                 console.log(result)
                 let getName = ""
@@ -149,7 +163,10 @@
             })
         });
         $.ajax({
-            url: "https://localhost:7273/api/clients"
+            url: "https://localhost:7273/api/clients",
+            headers: {
+                'Authorization': 'Bearer ' + Token
+            }
         }).done(function (result) {
                 // Assuming the API response contains a property named "totalEmployees"
             console.log(result)
@@ -180,7 +197,10 @@
             $.ajax({
                 url: "https://localhost:7273/api/positions/GetPosition/" + guidClient,
                 type: "GET",
-                dataType: "json"
+                dataType: "json",
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                }
             }).done((result) => {
                 console.log(result)
                 let getPositioninInterview = ""
@@ -214,7 +234,10 @@
                 ajax: {
                     url: "https://localhost:7273/api/interviews/InterviewInformatif",
                     dataType: "JSON",
-                    dataSrc: "data"
+                    dataSrc: "data",
+                    headers: {
+                        'Authorization': 'Bearer ' + Token
+                    }
                 },
                 columns: [
                     {
@@ -279,7 +302,37 @@
                     "<'row'<'col-sm-12'tr>>" + // Tabel
                     "<'row'<'col-md-5'i><'col-md-3 mt-2 mx-auto'l><'col-md-4'p>>", 
                 "buttons": [
-                    'copy', 'csv', 'excel', 'pdf', 'print', 'colvis'
+                    {
+                        extend: 'copy',
+                        text: '<i class="bx bxs-copy"></i>',
+                        className: 'btn btn-custom',
+                        title: 'Copy'
+                    },
+                    {
+                        extend: 'csv',
+                        text: '<i class="bx bxs-file-export"></i>',
+                        className: 'btn btn-custom'
+                    },
+                    {
+                        extend: 'excel',
+                        text: '<i class="bx bx-file-blank"></i>',
+                        className: 'btn btn-custom'
+                    },
+                    {
+                        extend: 'pdf',
+                        text: '<i class="bx bxs-file-pdf"></i>',
+                        className: 'btn btn-custom'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="bx bx-printer"></i>',
+                        className: 'btn btn-custom'
+                    },
+                    {
+                        extend: 'colvis',
+                        text: '<i class="bx bx-show-alt"></i>', // Ganti teks dengan ikon Boxicons
+                        className: 'btn btn-custom-column-vis'
+                    }
                 ],
                 "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                 "pageLength": 25
@@ -299,6 +352,7 @@
                 url: "https://localhost:7273/api/interviews",
                 type: "POST",
                 headers: {
+                    'Authorization': 'Bearer ' + Token,
                     'Content-Type': 'application/json'
                 },
                 data: JSON.stringify(interviewData),
@@ -334,6 +388,9 @@
                     $.ajax({
                         url: "https://localhost:7273/api/interviews?guid=" + guid,
                         type: "DELETE",
+                        headers: {
+                            'Authorization': 'Bearer ' + Token
+                        }
                     }).done(function (result) {
                         Swal.fire({
                             title: 'Deleted',
@@ -344,6 +401,7 @@
                         });
                     }).fail(function (error) {
                         alert("Failed to delete data. Please try again!");
+                        console.log(error)
                     });
                 }
             });
@@ -352,7 +410,10 @@
             $.ajax({
                 url: "https://localhost:7273/api/interviews/" + guid,
                 type: "GET",
-                dataType: "json"
+                dataType: "json",
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                }
             }).done((result) => {
                 console.log(result)
                 $("#guidEmployeeUpd").val(result.data.guid);
@@ -381,7 +442,10 @@
                 url: "https://localhost:7273/api/interviews",
                 type: "PUT",
                 contentType: "application/json",
-                data: JSON.stringify(data)
+                data: JSON.stringify(data),
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                }
             }).done((result) => {
                 Swal.fire({
                     title: 'Success',

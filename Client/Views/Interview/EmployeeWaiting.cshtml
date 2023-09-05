@@ -1,4 +1,5 @@
-﻿@{
+﻿@using System.Net.Http
+@{
 }
 <div class="container-fluid py-4">
     <h1 class="text-center"><span class="badge rounded-pill text-bg-dark">LIST EMPLOYEE WAITING RESPONS</span></h1>
@@ -9,8 +10,12 @@
 
 @section Scripts{
     <script>
+        const Token = '@Context.Session.GetString("JWToken")'
         $.ajax({
-            url: 'https://localhost:7273/api/interviews/GetAllEmployeeWaiting'
+            url: 'https://localhost:7273/api/interviews/GetAllEmployeeWaiting',
+            headers: {
+                'Authorization': 'Bearer ' + Token
+            }
         }).done((result)=>{
             let employeeCard =""
             $.each(result.data,(key,val)=>{

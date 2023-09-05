@@ -6,7 +6,17 @@
 	<h1>401</h1>
 </div>
 <h2>You Are Unauthorized, Please Login First !!!</h2>
-<a id="countdown401">5</a>
+<a id="countdown401" onclick="loadlogin()">5</a>
 @*<div class="notfound-404">
     <a id="countdown401">5</a>
 </div>*@
+
+@section Scripts
+{
+    <script>
+        function loadlogin()
+        {
+            location.href = "/"
+        }
+    </script>
+}
