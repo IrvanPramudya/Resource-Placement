@@ -100,16 +100,17 @@
     </div>
 </div>
 @section Scripts{
-        <script>
-        const Token = '@Context.Session.GetString("JWToken")'
-            $( document ).ajaxComplete(function() {
-            $('[data-bs-placement="top"]').tooltip({
-                "html": true,
-                "delay": {"show": 200, "hide": 0},
+    <script>
+            const Token = '@Context.Session.GetString("JWToken")'
+                $( document ).ajaxComplete(function() {
+                $('[data-bs-placement="top"]').tooltip({
+                    "html": true,
+                    "delay": {"show": 200, "hide": 0},
+                });
+                const tooltipTriggerList = document.querySelectorAll('[data-bs-placement="top"]')
+                const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
             });
-            const tooltipTriggerList = document.querySelectorAll('[data-bs-placement="top"]')
-            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-        });
+            $.fn.dataTable.ext.errMode = 'throw';
 
             const startDateInput = document.getElementById('startDate');
             const endDateInput = document.getElementById('endDate');
@@ -199,6 +200,12 @@
                         headers: {
                             'Authorization': 'Bearer ' + Token
                         }
+                    },
+                    "language": {
+                        "zeroRecords": "No Data Available",
+                        "info": "Showing page _PAGE_ of _PAGES_",
+                        "infoEmpty": "No records available",
+                        "infoFiltered": "(filtered from _MAX_ total records)"
                     },
                     columns: [
                         {

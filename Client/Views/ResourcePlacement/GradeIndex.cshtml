@@ -112,16 +112,17 @@
             const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
         });
 
+        const gradeSelect = document.getElementById('name');
+        const salaryInput = document.getElementById('salary');
 
-            const gradeSelect = document.getElementById('name');
-            const salaryInput = document.getElementById('salary');
+        gradeSelect.addEventListener('change', function () {
+            const selectedOption = gradeSelect.options[gradeSelect.selectedIndex];
+            const selectedSalary = selectedOption.getAttribute('data-salary');
 
-            gradeSelect.addEventListener('change', function () {
-                const selectedOption = gradeSelect.options[gradeSelect.selectedIndex];
-                const selectedSalary = selectedOption.getAttribute('data-salary');
-
-                salaryInput.value = selectedSalary;
-            });
+            salaryInput.value = selectedSalary;
+        });
+        $.fn.dataTable.ext.errMode = 'throw';
+            
     </script>
 
     <script>
@@ -163,9 +164,15 @@
                         url: "https://localhost:7273/api/grades/GetEmployeeName",
                         dataType: "JSON",
                         dataSrc: "data",
-                    headers: {
-                        'Authorization': 'Bearer ' + Token
-                    }
+                        headers: {
+                            'Authorization': 'Bearer ' + Token
+                        }
+                    },
+                    "language": {
+                        "zeroRecords": "No Data Available",
+                        "info": "Showing page _PAGE_ of _PAGES_",
+                        "infoEmpty": "No records available",
+                        "infoFiltered": "(filtered from _MAX_ total records)"
                     },
                     columns: [
                         {
