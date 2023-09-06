@@ -76,8 +76,9 @@
             }
         }).done((result) => {
             let gradeCard = ""
+            let modalCard = ""
             $.each(result.data, (key, val) => {
-                gradeCard += `<div class="col-xl-3 col-md-6 mb-xl-0 mb-4 ms-2 cursor-pointer" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Add Grade for ${val.employeeName}">
+                gradeCard += `<div class="col-xl-3 col-md-6 mb-xl-0 mb-4 ms-2 cursor-pointer" onclick="getGuid('${val.guid}')" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Add Grade for ${val.employeeName}">
                                                  <div class="card card-blog card-plain"  data-bs-toggle="modal" data-bs-target="#modalAddGrade">
                                                 <div class="position-relative">
                                                     <a class="d-block shadow-xl border-radius-xl">
@@ -104,12 +105,21 @@
                                                 </div>
                                             </div>
                                         </div>`
-                $("#inputGuid").html(`<input type="hidden" value="${val.guid}" id="guidEmployee" />`)
             })
             $("#gradeCard").html(gradeCard)
             
         })
-
+        function getGuid(Guid)
+        {
+            $.ajax({
+                url: "https://localhost:7273/api/grades/GetUngradedEmployee",
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                }
+            }).done((result)=>{
+                $("#inputGuid").append(`<input type="hidden" value="${Guid}" id="guidEmployee" />`)
+            })
+        }
         function addGrade() {
             var gradeData = {
                 guid: $("#guidEmployee").val(),

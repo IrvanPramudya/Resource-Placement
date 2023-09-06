@@ -139,12 +139,6 @@
                             Placement
                         </a>
                     </li>
-                <div class="dropdown">
-                    &nbsp;&nbsp;&nbsp;&nbsp;<a class="dropbtn mb-2">
-                        <i class='bx bx-task'></i> Interview Menu
-                        </a>
-                    <div class="dropdown-content">
-                        <ul>
                             <li>
                                 <a asp-controller="Interview" asp-action="EmployeeAccepted">
                                     <i class='bx bx-user-check'></i>
@@ -175,13 +169,6 @@
                                     Client Reject
                                 </a>
                             </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="dropdown">
-                    &nbsp;&nbsp;&nbsp;&nbsp;<a class="dropbtn mb-2"><i class='bx bx-user'></i> Employee Menu</a>
-                    <div class="dropdown-content">
-                        <ul>
                             <li>
                                 <a asp-controller="Employee" asp-action="EmployeeSite">
                                     <i class='bx bx-user-pin'></i>
@@ -194,9 +181,6 @@
                                     Employee Idle
                                 </a>
                             </li>
-                        </ul>
-                    </div>
-                </div>
 
                 }
                 @if(User.IsInRole("Admin")||User.IsInRole("Employee"))
