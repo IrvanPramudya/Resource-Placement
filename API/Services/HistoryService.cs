@@ -55,22 +55,18 @@ namespace API.Services
         }
         public HistoryDto? GetLastHistory(Guid guid)
         {
-            var histories = GetAllHistoriesWithName().Where(history=>history.EmployeeGuid == guid).LastOrDefault();
-            var history = new HistoryDto
+            var histories = GetAllHistoriesWithName().Where(history=>history.EmployeeGuid == guid);
+            var counthistories = histories.Count();
+            var lasthistory = new HistoryDto();
+            foreach(var item in histories)
             {
-                EmployeeGuid = histories.EmployeeGuid,
-                Guid = histories.Guid,
-                ClientGuid = histories.ClientGuid,
-                PositionGuid = histories.PositionGuid,
-                FullName = histories.FullName,
-                ClientName = histories.ClientName,
-                PositionName = histories.PositionName,
-                InterviewDate = histories.InterviewDate,
-                IsAccepted = histories.IsAccepted,
-                Status = histories.Status,
-                Email = histories.Email
-            };
-            return history;
+                if(counthistories == 2)
+                {
+                    lasthistory = item;
+                }
+                counthistories--;
+            }
+            return lasthistory;
         }
         public IEnumerable<HistoryDto>? GetHistoryByEmployeeGuid(Guid guid)
         {
@@ -131,7 +127,8 @@ namespace API.Services
                                 InterviewDate = history.InterviewDate,
                                 IsAccepted = history.IsAccepted,
                                 Status = history.Status,
-                                Email = employee.Email
+                                Email = employee.Email,
+                                Counter = 0
                                 
                             };
             return histories;

@@ -16,6 +16,7 @@ namespace API.DTOs.Histories
         public string ClientName { get; set; }
         public string PositionName { get; set; }
         public string Email { get; set; }
+        public int Counter { get; set; }
 
         public static implicit operator History(HistoryDto history)
         {
