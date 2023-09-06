@@ -58,13 +58,18 @@ namespace API.Services
             var histories = GetAllHistoriesWithName().Where(history=>history.EmployeeGuid == guid);
             var counthistories = histories.Count();
             var lasthistory = new HistoryDto();
+            lasthistory = histories.FirstOrDefault();
             foreach(var item in histories)
             {
                 if(counthistories == 2)
                 {
                     lasthistory = item;
                 }
-                counthistories--;
+                if(item.Status == Utilities.Enums.InterviewLevel.AcceptedbyClient)
+                {
+                    lasthistory = item;
+                }
+                counthistories--;   
             }
             return lasthistory;
         }

@@ -113,7 +113,7 @@ namespace API.Controllers
         [HttpGet("GetGradedEmployee")]
         public IActionResult GetGradedEmployee()
         {
-            var result = _gradeService.GetAllEmployeewithGrade().Where(grade=>grade.GradeName!=null && grade.Status == Utilities.Enums.StatusLevel.Idle);
+            var result = _gradeService.GetAllEmployeewithGrade().Where(grade=>grade.GradeName!=null);
             if (!result.Any())
             {
                 return NotFound(new ResponseHandler<GradewithName>
