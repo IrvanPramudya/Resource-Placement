@@ -361,48 +361,7 @@ namespace API.Services
             {
                 transaction.Rollback();
                 return null;
->>>>>>> Stashed changes
             }
-
-                });
-                _positionRepository.Clear();
-                var employee = _employeeRepository.GetByGuid(interview.Guid);
-                var client = _clientRepository.GetByGuid(interview.ClientGuid);
-                var formattedDate = interview.InterviewDate.ToString("dddd, dd/MM/yy HH:mm");
-                var gender = employee.Gender == 0 ? "Female" : "Male";
-
-                _emailHandler.SendEmail(employee.Email, $"Interview Schedule with {client.Name}",
-                    $"Congratulations you've been given chance to get interview with {client.Name} on {formattedDate} " +
-                    $"and this is the remarks that our company give : {interview.Text}.<br /> Please be Prepared and Keep up the Spirit");
-                _emailHandler.SendEmail(client.Email, $"Interview Schedule with {employee.FirstName} {employee.LastName}",
-                    $"For the honours of our Company we want you to check Interview Schedule that arranged earlier this is " +
-                    $"few data of the schedule<br /> " +
-                    $"<table style='border:1px'>" +
-                        $"<tr>" +
-                            $"<th>Employee Name</th>    " +
-                            $"<th>Gender</th>    " +
-                            $"<th>Skill</th>    " +
-                            $"<th>Interview Date</th>    " +
-                            $"<th>Note</th>" +
-                        $"</tr>" +
-                        $"<tr>    " +
-                            $"<td>{employee.FirstName} {employee.LastName}</td>    " +
-                            $"<td>{gender}</td>    " +
-                            $"<td>{employee.Skill}</td>    " +
-                            $"<td>{formattedDate}</td>    " +
-                            $"<td>{interview.Text}</td>" +
-                        $"</tr>" +
-                    $"</table>"+
-                    $"<br /> Thank your for the attention hope we will get better at our collaboration");
-                transaction.Commit();
-                return (InterviewDto)interview; // Interview is found;
-            }
-            catch
-            {
-                transaction.Rollback();
-                return null;
-            }
-
         }
 
         public int Update(NewInterviewDto interviewDto)

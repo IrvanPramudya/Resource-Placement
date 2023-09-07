@@ -15,21 +15,13 @@ namespace API.Services
         private readonly IPlacementRepository _placementRepository;
         private readonly IClientRepository _clientRepository;
         private readonly IEmployeeRepository _employeeRepository;
-        private readonly IPlacementRepository _placementRepository;
         private readonly IInterviewRepository _interviewRepository;
         private readonly IPositionRepository _positionRepository;
         private readonly IHistoryRepository _historyRepository;
         private readonly PlacementDbContext _dbContext;
 
-        public PlacementService(IPlacementRepository placementRepository, IClientRepository clientRepository, IEmployeeRepository employeeRepository, IInterviewRepository interviewRepository, PlacementDbContext dbContext, IPositionRepository positionRepository, IHistoryRepository historyRepository)
-        {
-            _placementRepository = placementRepository;
-            _clientRepository = clientRepository;
-        private readonly IPositionRepository _positionRepository;
-        private readonly IInterviewRepository _interviewRepository;
-        private readonly PlacementDbContext _dbContext;
 
-        public PlacementService(IPlacementRepository placementRepository, IClientRepository clientRepository, IEmployeeRepository employeeRepository, IInterviewRepository interviewRepository, PlacementDbContext dbContext, IPositionRepository positionRepository)
+        public PlacementService(IPlacementRepository placementRepository, IClientRepository clientRepository, IEmployeeRepository employeeRepository, IInterviewRepository interviewRepository, PlacementDbContext dbContext, IPositionRepository positionRepository, IHistoryRepository historyRepository)
         {
             _placementRepository = placementRepository;
             _clientRepository = clientRepository;
@@ -124,7 +116,6 @@ namespace API.Services
                 return null; // Placement is null or not found;
             }
 
-            return (PlacementDto)placement; // Placement is found;
             using var transaction = _dbContext.Database.BeginTransaction();
             try
             {

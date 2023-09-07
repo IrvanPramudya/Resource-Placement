@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace API.Migrations
 {
-    public partial class NewTableAddingHistory : Migration
+    public partial class CreateNewTable : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -163,7 +163,6 @@ namespace API.Migrations
                     position_guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     is_accepted = table.Column<bool>(type: "bit", nullable: true),
                     status = table.Column<int>(type: "int", nullable: false),
->>>>>>>> Stashed changes:API/Migrations/20230901023059_newtable.cs
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     modified_date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -245,10 +244,10 @@ namespace API.Migrations
                 columns: new[] { "guid", "created_date", "modified_date", "name" },
                 values: new object[,]
                 {
-                    { new Guid("4ec90656-e89c-4871-d9e5-08db8a7d0f37"), new DateTime(2023, 9, 4, 13, 22, 38, 355, DateTimeKind.Local).AddTicks(776), new DateTime(2023, 9, 4, 13, 22, 38, 355, DateTimeKind.Local).AddTicks(777), "Trainer" },
-                    { new Guid("5fb9adc0-7d08-45d4-cd66-08db9c7a678f"), new DateTime(2023, 9, 4, 13, 22, 38, 355, DateTimeKind.Local).AddTicks(784), new DateTime(2023, 9, 4, 13, 22, 38, 355, DateTimeKind.Local).AddTicks(784), "Admin" },
-                    { new Guid("ae259a90-e2e8-442f-ce18-08db91a71ab9"), new DateTime(2023, 9, 4, 13, 22, 38, 355, DateTimeKind.Local).AddTicks(756), new DateTime(2023, 9, 4, 13, 22, 38, 355, DateTimeKind.Local).AddTicks(772), "Employee" },
-                    { new Guid("c0689b0a-5c87-46f1-ce19-08db91a71ab9"), new DateTime(2023, 9, 4, 13, 22, 38, 355, DateTimeKind.Local).AddTicks(780), new DateTime(2023, 9, 4, 13, 22, 38, 355, DateTimeKind.Local).AddTicks(781), "Operasional" }
+                    { new Guid("4ec90656-e89c-4871-d9e5-08db8a7d0f37"), new DateTime(2023, 9, 7, 10, 54, 21, 370, DateTimeKind.Local).AddTicks(22), new DateTime(2023, 9, 7, 10, 54, 21, 370, DateTimeKind.Local).AddTicks(22), "Trainer" },
+                    { new Guid("5fb9adc0-7d08-45d4-cd66-08db9c7a678f"), new DateTime(2023, 9, 7, 10, 54, 21, 370, DateTimeKind.Local).AddTicks(30), new DateTime(2023, 9, 7, 10, 54, 21, 370, DateTimeKind.Local).AddTicks(30), "Admin" },
+                    { new Guid("ae259a90-e2e8-442f-ce18-08db91a71ab9"), new DateTime(2023, 9, 7, 10, 54, 21, 370, DateTimeKind.Local).AddTicks(7), new DateTime(2023, 9, 7, 10, 54, 21, 370, DateTimeKind.Local).AddTicks(17), "Employee" },
+                    { new Guid("c0689b0a-5c87-46f1-ce19-08db91a71ab9"), new DateTime(2023, 9, 7, 10, 54, 21, 370, DateTimeKind.Local).AddTicks(26), new DateTime(2023, 9, 7, 10, 54, 21, 370, DateTimeKind.Local).AddTicks(26), "Operasional" }
                 });
 
             migrationBuilder.CreateIndex(

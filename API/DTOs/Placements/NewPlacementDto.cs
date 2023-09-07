@@ -14,8 +14,6 @@ namespace API.DTOs.Placements
             {
                 StartDate = placement.StartDate,
                 EndDate = placement.EndDate,
-                EmployeeGuid = placement.EmployeeGuid,
-                ClientGuid = placement.ClientGuid,
                 Guid = placement.Guid,
                 CreatedDate = DateTime.Now,
                 ModifiedDate = DateTime.Now,
@@ -28,8 +26,6 @@ namespace API.DTOs.Placements
             {
                 StartDate = placement.StartDate,
                 EndDate = placement.EndDate,
-                EmployeeGuid = placement.EmployeeGuid,
-                ClientGuid = placement.ClientGuid,
                 Guid = placement.Guid,
 
             };
