@@ -43,6 +43,7 @@
                         <div class="mb-3">
                             <label for="gender" class="col-form-label">Gender:</label>
                             <select class="form-control" id="gender" required>
+                                <option selected disabled>Select Gender</option>
                                 <option value="0">Female</option>
                                 <option value="1">Male</option>
                             </select>
@@ -128,11 +129,26 @@
 
 @section Scripts{
     <script>
-        const tooltipTriggerList = document.querySelectorAll('[data-bs-placement="top"]')
-        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+        const Token = '@Context.Session.GetString("JWToken")'
+        $( document ).ajaxComplete(function() {
+            $('[data-bs-placement="top"]').tooltip({
+                "html": true,
+                "delay": {"show": 200, "hide": 0},
+            });
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-placement="top"]')
+            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+        });
+        $.fn.dataTable.ext.errMode = 'throw';
+
+    </script>
+
+    <script>
 
         $(document).ready(function () {
             loadEmployeeData();
+            var dataTableButtons = $('.dt-button');
+
+            dataTableButtons.removeClass('dt-button');
         });
 
         function loadEmployeeData() {
@@ -140,7 +156,16 @@
                 ajax: {
                     url: "https://localhost:7273/api/employees",
                     dataType: "JSON",
-                    dataSrc: "data"
+                    dataSrc: "data",
+                    headers: {
+                        'Authorization': 'Bearer ' + Token
+                    }
+                },
+                "language": {
+                    "zeroRecords": "No Data Available",
+                    "info": "Showing page _PAGE_ of _PAGES_",
+                    "infoEmpty": "No records available",
+                    "infoFiltered": "(filtered from _MAX_ total records)"
                 },
                 columns: [
                     {
@@ -187,34 +212,39 @@
                     {
                         extend: 'copy',
                         text: '<i class="bx bxs-copy"></i>',
-                        className: 'btn btn-custom',
-                        title:'Copy'
+                        className: 'btn btn-primary',
+                        titleAttr: 'Copy Table'
                     },
                     {
                         extend: 'csv',
                         text: '<i class="bx bxs-file-export"></i>',
-                        className: 'btn btn-custom'
+                        className: 'btn btn-success',
+                        titleAttr: 'Import to CSV'
                     },
                     {
                         extend: 'excel',
                         text: '<i class="bx bx-file-blank"></i>',
-                        className: 'btn btn-custom'
+                        className: 'btn btn-warning',
+                        titleAttr: 'Import to Excel'
                     },
                     {
                         extend: 'pdf',
                         text: '<i class="bx bxs-file-pdf"></i>',
-                        className: 'btn btn-custom'
+                        className: 'btn btn-dark',
+                        titleAttr: 'Import to PDF'
                     },
                     {
                         extend: 'print',
                         text: '<i class="bx bx-printer"></i>',
-                        className: 'btn btn-custom'
+                        className: 'btn btn-secondary',
+                        titleAttr: 'Print Table'
                     },
                     {
                         extend: 'colvis',
                         text: '<i class="bx bx-show-alt"></i>', // Ganti teks dengan ikon Boxicons
-                        className: 'btn btn-custom-column-vis'
-                    }
+                        className: 'btn btn-custom-column-vis btn-outline-info',
+                        titleAttr: 'Column Visibility'
+                    },
                 ],
                 "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                 "pageLength": 25
@@ -235,7 +265,8 @@
                     url: "https://localhost:7273/api/employees",
                     type: "POST",
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + Token
                     },
                     data: JSON.stringify(employeeData),
                 }).done(function (result) {
@@ -270,6 +301,9 @@
                     $.ajax({
                         url: "https://localhost:7273/api/employees?guid=" + guid,
                         type: "DELETE",
+                        headers: {
+                            'Authorization': 'Bearer ' + Token
+                        }
                     }).done(function (result) {
                         Swal.fire({
                             title: 'Deleted',
@@ -288,7 +322,10 @@
             $.ajax({
                 url: "https://localhost:7273/api/employees/" + guid,
                 type: "GET",
-                dataType: "json"
+                dataType: "json",
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                }
             }).done((result) => {
                 console.log(result)
                 $("#guidUpd").val(result.data.guid);
@@ -322,7 +359,10 @@
                 url: "https://localhost:7273/api/employees",
                 type: "PUT",
                 contentType: "application/json",
-                data: JSON.stringify(data)
+                data: JSON.stringify(data),
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                }
             }).done((result) => {
                     Swal.fire({
                         title: 'Success',

@@ -6,10 +6,7 @@ namespace API.DTOs.Placements
     {
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public Guid EmployeeGuid { get; set; }
-        public Guid ClientGuid { get; set; }
         public Guid Guid { get; set; }
->>>>>>> Stashed changes
 
         public static implicit operator Placement(NewPlacementDto placement)
         {

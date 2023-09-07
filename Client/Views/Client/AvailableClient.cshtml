@@ -1,4 +1,5 @@
-﻿@{
+﻿@using System.Net.Http
+@{
 }
     <section class="min-vh-100 mb-8">
         <div class="page-header align-items-start min-vh-50 pt-5 pb-11 m-3 border-radius-lg" style="background-image: url('~/soft-ui/assets/img/curved-images/curved14.jpg');">
@@ -21,27 +22,31 @@
  @section Scripts
  {
      <script>
+        const Token = '@Context.Session.GetString("JWToken")'
          $.ajax({
-             url:"https://localhost:7273/api/clients/GetAvailableClient"
+             url:"https://localhost:7273/api/clients/GetAvailableClient",
+            headers: {
+                'Authorization': 'Bearer ' + Token
+            }
          }).done((result)=>{
              let clientCard = ""
              $.each(result.data,(key,val)=>{
-                 clientCard += `<div class="col-xl-4 col-lg-5 col-md-7 mx-auto">
+                 clientCard += `<div class="col-xl-4 col-lg-5 col-md-7 mx-auto my-2">
                                     <div class="card z-index-0">
                                         <div class="card-header text-center pt-4">
                                             <h5><span class="badge rounded-pill text-bg-dark">${val.name}</span></h5>     
                                         </div>
                                         <div class="row px-xl-5 px-sm-4 px-3">
-                                            <div class="col-6">Email</div>
-                                            <div class="col-6">${val.email}</div>
+                                            <div class="col-4">Email</div>
+                                            <div class="col-8">${val.email}</div>
                                         </div>
                                         <div class="row px-xl-5 px-sm-4 px-3">
-                                            <div class="col-6">Position</div>
-                                            <div class="col-6">${val.positionName}</div>
+                                            <div class="col-4">Position</div>
+                                            <div class="col-8">${val.positionName}</div>
                                         </div>
                                         <div class="row px-xl-5 px-sm-4 px-3">
-                                            <div class="col-6">Capacity</div>
-                                            <div class="col-6">${val.capacity}</div>
+                                            <div class="col-4">Capacity</div>
+                                            <div class="col-8">${val.capacity}</div>
                                         </div>
                                     </div>
                                 </div>`

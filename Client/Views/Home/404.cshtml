@@ -7,8 +7,24 @@
 </div>
 <h2>We are sorry, Page not found!</h2>
 <p>The page you are looking for might have been removed had its name changed or is temporarily unavailable.</p>
-<a id="countdown404">5</a>
+<a id="countdown404" data-bs-placement="top" data-bs-title="Back to Login" onclick="loadlogin()">5</a>
 @*<div class="notfound-404">
 	<a id="countdown404">5</a>
 </div>*@
 
+@section Scripts
+    {
+    <script>
+        $(document).ajaxComplete(function () {
+            $('[data-bs-placement="top"]').tooltip({
+                "html": true,
+                "delay": { "show": 200, "hide": 0 },
+            });
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-placement="top"]')
+            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+        });
+        function loadlogin() {
+            location.href = "/"
+        }
+    </script>
+}

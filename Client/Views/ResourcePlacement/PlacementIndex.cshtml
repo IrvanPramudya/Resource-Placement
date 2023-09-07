@@ -1,4 +1,5 @@
-﻿@{
+﻿@using System.Net.Http
+@{
     ViewData["Title"] = "Placement";
     Layout = "AdminLayout";
 }
@@ -34,10 +35,6 @@
                         <div class="mb-3">
                             <label for="employeeGuid" class="form-label">Employee Guid</label>
                             <select class="form-select selectNameinPlacement" aria-label="Default select example" id="guid"></select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="clientGuid" class="form-label">Client Name</label>
-                            <select class="form-select selectClientinPlacement" aria-label="Default select example" id="clientGuid"></select>
                         </div>
                     </form>
                 </div>
@@ -103,9 +100,17 @@
     </div>
 </div>
 @section Scripts{
-        <script>
-            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="modal"]')
-            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    <script>
+            const Token = '@Context.Session.GetString("JWToken")'
+                $( document ).ajaxComplete(function() {
+                $('[data-bs-placement="top"]').tooltip({
+                    "html": true,
+                    "delay": {"show": 200, "hide": 0},
+                });
+                const tooltipTriggerList = document.querySelectorAll('[data-bs-placement="top"]')
+                const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+            });
+            $.fn.dataTable.ext.errMode = 'throw';
 
             const startDateInput = document.getElementById('startDate');
             const endDateInput = document.getElementById('endDate');
@@ -123,11 +128,35 @@
                 // Set nilai tanggal akhir
                 endDateInput.value = formattedEndDate;
             });
+            $("#startDate").flatpickr({
+                enableTime: true,
+                time_24hr: true,
+                altInput: true,
+                minTime: "09:00",
+                maxTime: "18:00",
+                altFormat: "F j, Y H:i",
+                dateFormat: "Y-m-dTH:i",
+                minDate: "today",
+                disable: [
+                    function (date) {
+                        return (date.getDay() === 0 || date.getDay() === 6);
+                    }
+                ]
+            })
+    </script>
+
+    <script>
 
             $(document).ready(function () {
                 loadPlacementData();
+            var dataTableButtons = $('.dt-button');
+
+            dataTableButtons.removeClass('dt-button');
                 $.ajax({
-                url: "https://localhost:7273/api/interviews/GetRemainingEmployeeinPlacement"
+                url: "https://localhost:7273/api/interviews/GetRemainingEmployeeinPlacement",
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                }
                 }).done(function (result) {
                     console.log(result)
                     let getName = ""
@@ -136,9 +165,16 @@
                         getName += ` <option value="${val.guid}">${val.fullName}</option>`
                     })
                     $('.selectNameinPlacement').html(getName)
+                    $('#guid').select2({
+                        theme: "bootstrap-5",
+                        dropdownParent: $('#modalAddPlacement')
+                    });
                 })
                 $.ajax({
-                    url: "https://localhost:7273/api/clients"
+                    url: "https://localhost:7273/api/clients",
+                    headers: {
+                        'Authorization': 'Bearer ' + Token
+                }
                 }).done(function (result) {
                     // Assuming the API response contains a property named "totalEmployees"
                     console.log(result)
@@ -148,6 +184,10 @@
                         getClientinInterview += ` <option value="${val.guid}">${val.name}</option>`
                     })
                     $('.selectClientinPlacement').html(getClientinInterview)
+                $('#clientGuidUpd').select2({
+                        theme: "bootstrap-5",
+                        dropdownParent: $('#modalUpdatePlacement')
+                    });
                 })
             });
 
@@ -156,7 +196,16 @@
                     ajax: {
                         url: "https://localhost:7273/api/placements/GetEmployeeClientName",
                         dataType: "JSON",
-                        dataSrc: "data"
+                        dataSrc: "data",
+                        headers: {
+                            'Authorization': 'Bearer ' + Token
+                        }
+                    },
+                    "language": {
+                        "zeroRecords": "No Data Available",
+                        "info": "Showing page _PAGE_ of _PAGES_",
+                        "infoEmpty": "No records available",
+                        "infoFiltered": "(filtered from _MAX_ total records)"
                     },
                     columns: [
                         {
@@ -183,7 +232,7 @@
                         {
                             data: null,
                             render: function (data, type, row) {
-                            return `<button onclick="ShowUpdatePlacment('${row.guid}')" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modalUpdatePlacement" data-bs-placement="top" title="Update Data"><i class='bx bx-edit'></i></button>` +
+                            return `<button onclick="ShowUpdatePlacement('${row.guid}')" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modalUpdatePlacement" data-bs-placement="top" title="Update Data"><i class='bx bx-edit'></i></button>` +
                                 `   <button onclick="deletePlacement('${row.guid}')" class="btn btn-danger" data-bs-toggle="modal" data-bs-placement="top" title="Delete Data"><i class='bx bxs-trash-alt'></i></button>`;
                             }
                         }
@@ -193,7 +242,42 @@
                     "<'row'<'col-sm-12'tr>>" + // Tabel
                     "<'row'<'col-md-5'i><'col-md-3 mt-2 mx-auto'l><'col-md-4'p>>",
                 "buttons": [
-                    'copy', 'csv', 'excel', 'pdf', 'print', 'colvis'
+                    {
+                        extend: 'copy',
+                        text: '<i class="bx bxs-copy"></i>',
+                        className: 'btn btn-primary',
+                        titleAttr: 'Copy Table'
+                    },
+                    {
+                        extend: 'csv',
+                        text: '<i class="bx bxs-file-export"></i>',
+                        className: 'btn btn-success',
+                        titleAttr: 'Import to CSV'
+                    },
+                    {
+                        extend: 'excel',
+                        text: '<i class="bx bx-file-blank"></i>',
+                        className: 'btn btn-warning',
+                        titleAttr: 'Import to Excel'
+                    },
+                    {
+                        extend: 'pdf',
+                        text: '<i class="bx bxs-file-pdf"></i>',
+                        className: 'btn btn-dark',
+                        titleAttr: 'Import to PDF'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="bx bx-printer"></i>',
+                        className: 'btn btn-secondary',
+                        titleAttr: 'Print Table'
+                    },
+                    {
+                        extend: 'colvis',
+                        text: '<i class="bx bx-show-alt"></i>', // Ganti teks dengan ikon Boxicons
+                        className: 'btn btn-custom-column-vis btn-outline-info',
+                        titleAttr: 'Column Visibility'
+                    },
                 ],
                 "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                 "pageLength": 25
@@ -205,13 +289,13 @@
                     startDate: $("#startDate").val(),
                     endDate: $("#endDate").val(),
                     guid: $("#guid").val(),
-                    clientGuid: $("#clientGuid").val(),
                 };
 
                 $.ajax({
                     url: "https://localhost:7273/api/placements",
                     type: "POST",
                     headers: {
+                        'Authorization': 'Bearer ' + Token,
                         'Content-Type': 'application/json'
                     },
                     data: JSON.stringify(placementData),
@@ -247,6 +331,9 @@
                         $.ajax({
                             url: "https://localhost:7273/api/placements?guid=" + guid,
                             type: "DELETE",
+                            headers: {
+                                'Authorization': 'Bearer ' + Token
+                            }
                         }).done(function (result) {
                             Swal.fire({
                                 title: 'Deleted',
@@ -261,11 +348,14 @@
                     }
                 });
             }
-            function UpdatePlacement(guid) {
+            function ShowUpdatePlacement(guid) {
                 $.ajax({
                     url: "https://localhost:7273/api/placements/" + guid,
                     type: "GET",
-                    dataType: "json"
+                    dataType: "json",
+                    headers: {
+                        'Authorization': 'Bearer ' + Token
+                    }
                 }).done((result) => {
                     console.log(result)
                     $("#guidUpd").val(result.data.guid);
@@ -291,7 +381,10 @@
                     url: "https://localhost:7273/api/placements",
                     type: "PUT",
                     contentType: "application/json",
-                    data: JSON.stringify(data)
+                    data: JSON.stringify(data),
+                    headers: {
+                        'Authorization': 'Bearer ' + Token
+                    }
                 }).done((result) => {
                     Swal.fire({
                         title: 'Success',

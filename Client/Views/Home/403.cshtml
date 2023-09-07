@@ -6,7 +6,23 @@
 	<h1>403</h1>
 </div>
 <h2>You're Role is not Allowed to Access this Page</h2>
-<a id="countdown403">5</a>
+<a id="countdown403" data-bs-placement="top" data-bs-title="Back to Login" onclick="loadlogin()">5</a>
 @*<div class="notfound-404">
     <a id="countdown403">5</a>
 </div>*@
+@section Scripts
+    {
+    <script>
+        $(document).ajaxComplete(function () {
+            $('[data-bs-placement="top"]').tooltip({
+                "html": true,
+                "delay": { "show": 200, "hide": 0 },
+            });
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-placement="top"]')
+            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+        });
+        function loadlogin() {
+            location.href = "/"
+        }
+    </script>
+}

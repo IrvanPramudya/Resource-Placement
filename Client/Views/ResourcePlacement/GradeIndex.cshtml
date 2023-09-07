@@ -1,4 +1,5 @@
-﻿@{
+﻿@using System.Net.Http
+@{
     ViewData["Title"] = "Grade";
     Layout = "AdminLayout";
 }
@@ -30,7 +31,7 @@
                         <div class="mb-3">
                             <label for="name" class="form-label">Grade</label>
                             <select class="form-select" aria-label="Default select example" id="name">
-                                <option selected>Pilih Grade</option>
+                                <option selected disabled>Select Grade</option>
                                 <option value="A" data-salary="5500000">Grade A</option>
                                 <option value="B" data-salary="5000000">Grade B</option>
                             </select>
@@ -100,19 +101,31 @@
 </div>
 @section Scripts{
     <script src="~/js/Grade.js" asp-append-version="true"></script>
-        <script>
-            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="modal"]')
-            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-
-            const gradeSelect = document.getElementById('name');
-            const salaryInput = document.getElementById('salary');
-
-            gradeSelect.addEventListener('change', function () {
-                const selectedOption = gradeSelect.options[gradeSelect.selectedIndex];
-                const selectedSalary = selectedOption.getAttribute('data-salary');
-
-                salaryInput.value = selectedSalary;
+    <script>
+        const Token = '@Context.Session.GetString("JWToken")'
+            $( document ).ajaxComplete(function() {
+            $('[data-bs-placement="top"]').tooltip({
+                "html": true,
+                "delay": {"show": 200, "hide": 0},
             });
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-placement="top"]')
+            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+        });
+
+        const gradeSelect = document.getElementById('name');
+        const salaryInput = document.getElementById('salary');
+
+        gradeSelect.addEventListener('change', function () {
+            const selectedOption = gradeSelect.options[gradeSelect.selectedIndex];
+            const selectedSalary = selectedOption.getAttribute('data-salary');
+
+            salaryInput.value = selectedSalary;
+        });
+        $.fn.dataTable.ext.errMode = 'throw';
+            
+    </script>
+
+    <script>
 
             $(document).ready(function () {
                 $('#nameUpd').change(function () {
@@ -123,8 +136,14 @@
 
             $(document).ready(function () {
                 loadGradeData();
+            var dataTableButtons = $('.dt-button');
+
+            dataTableButtons.removeClass('dt-button');
             $.ajax({
-                url: "https://localhost:7273/api/employees/GetEmployeeOuterJoin"
+                url: "https://localhost:7273/api/employees/GetEmployeeOuterJoin",
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                }
             }).done(function (result) {
                 console.log(result)
                 let getName = ""
@@ -133,6 +152,10 @@
                     getName += ` <option value="${val.guid}">${val.fullName}</option>`
                 })
                 $('.selectNameinGrade').html(getName)
+                $('#guidEmployee').select2({
+                    theme: "bootstrap-5",
+                    dropdownParent: $('#modalAddGrade')
+                });
             })
             });
             function loadGradeData() {
@@ -140,7 +163,16 @@
                     ajax: {
                         url: "https://localhost:7273/api/grades/GetEmployeeName",
                         dataType: "JSON",
-                        dataSrc: "data"
+                        dataSrc: "data",
+                        headers: {
+                            'Authorization': 'Bearer ' + Token
+                        }
+                    },
+                    "language": {
+                        "zeroRecords": "No Data Available",
+                        "info": "Showing page _PAGE_ of _PAGES_",
+                        "infoEmpty": "No records available",
+                        "infoFiltered": "(filtered from _MAX_ total records)"
                     },
                     columns: [
                         {
@@ -188,33 +220,39 @@
                     {
                         extend: 'copy',
                         text: '<i class="bx bxs-copy"></i>',
-                        className: 'btn btn-custom'
+                        className: 'btn btn-primary',
+                        titleAttr: 'Copy Table'
                     },
                     {
                         extend: 'csv',
                         text: '<i class="bx bxs-file-export"></i>',
-                        className: 'btn btn-custom'
+                        className: 'btn btn-success',
+                        titleAttr: 'Import to CSV'
                     },
                     {
                         extend: 'excel',
                         text: '<i class="bx bx-file-blank"></i>',
-                        className: 'btn btn-custom'
+                        className: 'btn btn-warning',
+                        titleAttr: 'Import to Excel'
                     },
                     {
                         extend: 'pdf',
                         text: '<i class="bx bxs-file-pdf"></i>',
-                        className: 'btn btn-custom'
+                        className: 'btn btn-dark',
+                        titleAttr: 'Import to PDF'
                     },
                     {
                         extend: 'print',
                         text: '<i class="bx bx-printer"></i>',
-                        className: 'btn btn-custom'
+                        className: 'btn btn-secondary',
+                        titleAttr: 'Print Table'
                     },
                     {
                         extend: 'colvis',
                         text: '<i class="bx bx-show-alt"></i>', // Ganti teks dengan ikon Boxicons
-                        className: 'btn btn-custom-column-vis'
-                    }
+                        className: 'btn btn-custom-column-vis btn-outline-info',
+                        titleAttr: 'Column Visibility'
+                    },
                 ],
                 "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                 "pageLength": 25
@@ -232,7 +270,8 @@
                     url: "https://localhost:7273/api/grades",
                     type: "POST",
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + Token
                     },
                     data: JSON.stringify(gradeData),
                 }).done(function (result) {
@@ -267,6 +306,9 @@
                         $.ajax({
                             url: "https://localhost:7273/api/grades?guid=" + guid,
                             type: "DELETE",
+                            headers: {
+                                'Authorization': 'Bearer ' + Token
+                            }
                         }).done(function (result) {
                             Swal.fire({
                                 title: 'Deleted',
@@ -285,7 +327,10 @@
                 $.ajax({
                     url: "https://localhost:7273/api/grades/" + guid,
                     type: "GET",
-                    dataType: "json"
+                    dataType: "json",
+                    headers: {
+                        'Authorization': 'Bearer ' + Token
+                    }
                 }).done((result) => {
                     console.log(result)
                     $("#guidUpd").val(result.data.guid);
@@ -311,7 +356,10 @@
                     url: "https://localhost:7273/api/grades",
                     type: "PUT",
                     contentType: "application/json",
-                    data: JSON.stringify(data)
+                    data: JSON.stringify(data),
+                    headers: {
+                        'Authorization': 'Bearer ' + Token
+                    }
                 }).done((result) => {
                     Swal.fire({
                         title: 'Success',

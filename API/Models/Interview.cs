@@ -25,6 +25,5 @@ namespace API.Models
         //Cardinality
         public Employee? Employee { get; set; }
         public Client? Client { get; set; }
-        /*public Position? Position { get; set; }*/
     }
 }

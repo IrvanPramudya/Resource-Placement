@@ -2,6 +2,7 @@
 using API.Services;
 using API.Utilities.Handlers;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -9,7 +10,8 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/clients")]
-    /*[Authorize]*/
+    [Authorize(Roles = "Admin,Operasional")]
+    [EnableCors]
     public class ClientController : ControllerBase
     {
         private readonly ClientService _clientService;

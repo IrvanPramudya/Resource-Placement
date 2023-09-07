@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace API.Migrations
 {
-    public partial class newtable : Migration
+    public partial class NewTableAddingHistory : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -127,6 +127,31 @@ namespace API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "tb_tr_histories",
+                columns: table => new
+                {
+                    guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    employee_guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    client_guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    position_guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    interview_date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    status = table.Column<int>(type: "int", nullable: false),
+                    is_accepted = table.Column<bool>(type: "bit", nullable: true),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    modified_date = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_tb_tr_histories", x => x.guid);
+                    table.ForeignKey(
+                        name: "FK_tb_tr_histories_tb_m_employees_employee_guid",
+                        column: x => x.employee_guid,
+                        principalTable: "tb_m_employees",
+                        principalColumn: "guid",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "tb_tr_interview",
                 columns: table => new
                 {
@@ -135,8 +160,6 @@ namespace API.Migrations
                     text = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     comment = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     client_guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-<<<<<<<< Updated upstream:API/Migrations/20230817091138_CreateTable.cs
-========
                     position_guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     is_accepted = table.Column<bool>(type: "bit", nullable: true),
                     status = table.Column<int>(type: "int", nullable: false),
@@ -222,17 +245,10 @@ namespace API.Migrations
                 columns: new[] { "guid", "created_date", "modified_date", "name" },
                 values: new object[,]
                 {
-<<<<<<<< Updated upstream:API/Migrations/20230817091138_CreateTable.cs
-                    { new Guid("4ec90656-e89c-4871-d9e5-08db8a7d0f37"), new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4550), new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4551), "Trainer" },
-                    { new Guid("5fb9adc0-7d08-45d4-cd66-08db9c7a678f"), new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4558), new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4559), "Admin" },
-                    { new Guid("ae259a90-e2e8-442f-ce18-08db91a71ab9"), new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4537), new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4547), "Employee" },
-                    { new Guid("c0689b0a-5c87-46f1-ce19-08db91a71ab9"), new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4555), new DateTime(2023, 8, 17, 16, 11, 38, 192, DateTimeKind.Local).AddTicks(4555), "Operasional" }
-========
-                    { new Guid("4ec90656-e89c-4871-d9e5-08db8a7d0f37"), new DateTime(2023, 9, 1, 9, 30, 59, 622, DateTimeKind.Local).AddTicks(3012), new DateTime(2023, 9, 1, 9, 30, 59, 622, DateTimeKind.Local).AddTicks(3012), "Trainer" },
-                    { new Guid("5fb9adc0-7d08-45d4-cd66-08db9c7a678f"), new DateTime(2023, 9, 1, 9, 30, 59, 622, DateTimeKind.Local).AddTicks(3018), new DateTime(2023, 9, 1, 9, 30, 59, 622, DateTimeKind.Local).AddTicks(3019), "Admin" },
-                    { new Guid("ae259a90-e2e8-442f-ce18-08db91a71ab9"), new DateTime(2023, 9, 1, 9, 30, 59, 622, DateTimeKind.Local).AddTicks(2997), new DateTime(2023, 9, 1, 9, 30, 59, 622, DateTimeKind.Local).AddTicks(3007), "Employee" },
-                    { new Guid("c0689b0a-5c87-46f1-ce19-08db91a71ab9"), new DateTime(2023, 9, 1, 9, 30, 59, 622, DateTimeKind.Local).AddTicks(3015), new DateTime(2023, 9, 1, 9, 30, 59, 622, DateTimeKind.Local).AddTicks(3016), "Operasional" }
->>>>>>>> Stashed changes:API/Migrations/20230901023059_newtable.cs
+                    { new Guid("4ec90656-e89c-4871-d9e5-08db8a7d0f37"), new DateTime(2023, 9, 4, 13, 22, 38, 355, DateTimeKind.Local).AddTicks(776), new DateTime(2023, 9, 4, 13, 22, 38, 355, DateTimeKind.Local).AddTicks(777), "Trainer" },
+                    { new Guid("5fb9adc0-7d08-45d4-cd66-08db9c7a678f"), new DateTime(2023, 9, 4, 13, 22, 38, 355, DateTimeKind.Local).AddTicks(784), new DateTime(2023, 9, 4, 13, 22, 38, 355, DateTimeKind.Local).AddTicks(784), "Admin" },
+                    { new Guid("ae259a90-e2e8-442f-ce18-08db91a71ab9"), new DateTime(2023, 9, 4, 13, 22, 38, 355, DateTimeKind.Local).AddTicks(756), new DateTime(2023, 9, 4, 13, 22, 38, 355, DateTimeKind.Local).AddTicks(772), "Employee" },
+                    { new Guid("c0689b0a-5c87-46f1-ce19-08db91a71ab9"), new DateTime(2023, 9, 4, 13, 22, 38, 355, DateTimeKind.Local).AddTicks(780), new DateTime(2023, 9, 4, 13, 22, 38, 355, DateTimeKind.Local).AddTicks(781), "Operasional" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -263,6 +279,11 @@ namespace API.Migrations
                 column: "role_guid");
 
             migrationBuilder.CreateIndex(
+                name: "IX_tb_tr_histories_employee_guid",
+                table: "tb_tr_histories",
+                column: "employee_guid");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_tb_tr_interview_client_guid",
                 table: "tb_tr_interview",
                 column: "client_guid");
@@ -283,6 +304,9 @@ namespace API.Migrations
 
             migrationBuilder.DropTable(
                 name: "tb_tr_account_roles");
+
+            migrationBuilder.DropTable(
+                name: "tb_tr_histories");
 
             migrationBuilder.DropTable(
                 name: "tb_tr_interview");

@@ -1,4 +1,5 @@
-﻿@{
+﻿@using System.Net.Http
+@{
     ViewData["Title"] = "Position";
     Layout = "AdminLayout";
 }
@@ -25,7 +26,8 @@
                     <form>
                         <div class="mb-3">
                             <label for="clientGuid" class="form-label">Client Name</label>
-                            <select class="form-select clientSelect" aria-label="Default select example" id="clientGuid">
+                            <select class="js-example-basic-single clientSelect" aria-label="Default select example" id="clientGuid">
+                                <option value="default">Select a client...</option>
                             </select>
                         </div>
                         <div class="mb-3">
@@ -75,7 +77,8 @@
                     </div>
                     <div class="mb-3">
                         <label for="clientGuid" class="form-label">Client Name</label>
-                        <select class="form-select clientSelect" aria-label="Default select example" id="clientGuidUpd">
+                        <select class="js-example-basic-single clientSelect" aria-label="Default select example" id="clientGuidUpd">
+                            <option value="default">Select a client...</option>
                         </select>
                     </div>
                     <div class="mb-3">
@@ -98,21 +101,49 @@
 @section Scripts{
     <script src="~/js/Position.js" asp-append-version="true"></script>
         <script>
-            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="modal"]')
+        const Token = '@Context.Session.GetString("JWToken")'
+            $( document ).ajaxComplete(function() {
+            $('[data-bs-placement="top"]').tooltip({
+                "html": true,
+                "delay": {"show": 200, "hide": 0},
+            });
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-placement="top"]')
             const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+        });
+        $.fn.dataTable.ext.errMode = 'throw';
+
+    </script>
+
+    <script>
 
             $(document).ready(function () {
                 loadPositionData();
+            var dataTableButtons = $('.dt-button');
+
+            dataTableButtons.removeClass('dt-button');
                 $.ajax({
-                    url: "https://localhost:7273/api/clients"
+                    url: "https://localhost:7273/api/clients",
+                    headers: {
+                        'Authorization': 'Bearer ' + Token
+                    }
                 }).done((result) => {
                     let selectClient = ""
                     $.each(result.data, (key, val) => {
                         console.log(val)
                         selectClient += ` <option value="${val.guid}">${val.name}</option>`
                     })
-                    $('.clientSelect').html(selectClient)
+                    $(".clientSelect").append(selectClient)
+                    
                 })
+                $('#clientGuid').select2({
+                    theme:"bootstrap-5",
+                    dropdownParent: $('#modalAddPosition')
+                });
+                $('#clientGuidUpd').select2({
+                    theme:"bootstrap-5",
+                    dropdownParent: $('#modalUpdatePosition')
+                });
+                
             });
 
 
@@ -122,7 +153,16 @@
                     ajax: {
                         url: "https://localhost:7273/api/positions/GetClientName",
                         dataType: "JSON",
-                        dataSrc: "data"
+                        dataSrc: "data",
+                        headers: {
+                            'Authorization': 'Bearer ' + Token
+                        }
+                    },
+                    "language": {
+                        "zeroRecords": "No Data Available",
+                        "info": "Showing page _PAGE_ of _PAGES_",
+                        "infoEmpty": "No records available",
+                        "infoFiltered": "(filtered from _MAX_ total records)"
                     },
                     columns: [
                         {
@@ -150,33 +190,39 @@
                     {
                         extend: 'copy',
                         text: '<i class="bx bxs-copy"></i>',
-                        className: 'btn btn-custom',
+                        className: 'btn btn-primary',
+                        titleAttr: 'Copy Table'
                     },
                     {
                         extend: 'csv',
                         text: '<i class="bx bxs-file-export"></i>',
-                        className: 'btn btn-custom',
+                        className: 'btn btn-success',
+                        titleAttr: 'Import to CSV'
                     },
                     {
                         extend: 'excel',
                         text: '<i class="bx bx-file-blank"></i>',
-                        className: 'btn btn-custom',
+                        className: 'btn btn-warning',
+                        titleAttr: 'Import to Excel'
                     },
                     {
                         extend: 'pdf',
                         text: '<i class="bx bxs-file-pdf"></i>',
-                        className: 'btn btn-custom',
+                        className: 'btn btn-dark',
+                        titleAttr: 'Import to PDF'
                     },
                     {
                         extend: 'print',
                         text: '<i class="bx bx-printer"></i>',
-                        className: 'btn btn-custom',
+                        className: 'btn btn-secondary',
+                        titleAttr: 'Print Table'
                     },
                     {
                         extend: 'colvis',
                         text: '<i class="bx bx-show-alt"></i>', // Ganti teks dengan ikon Boxicons
-                        className: 'btn btn-custom-column-vis'
-                    }
+                        className: 'btn btn-custom-column-vis btn-outline-info',
+                        titleAttr: 'Column Visibility'
+                    },
                 ],
                 "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                 "pageLength": 25
@@ -195,6 +241,7 @@
                     url: "https://localhost:7273/api/positions",
                     type: "POST",
                     headers: {
+                        'Authorization': 'Bearer ' + Token,
                         'Content-Type': 'application/json'
                     },
                     data: JSON.stringify(positionData),
@@ -230,6 +277,9 @@
                         $.ajax({
                             url: "https://localhost:7273/api/positions?guid=" + guid,
                             type: "DELETE",
+                            headers: {
+                                'Authorization': 'Bearer ' + Token
+                            }
                         }).done(function (result) {
                             Swal.fire({
                                 title: 'Deleted',
@@ -247,6 +297,9 @@
             function ShowUpdatePosition(guid) {
                 $.ajax({
                     url: "https://localhost:7273/api/positions/" + guid,
+                    headers: {
+                        'Authorization': 'Bearer ' + Token
+                    },
                     type: "GET",
                     dataType: "json"
                 }).done((result) => {
@@ -272,6 +325,9 @@
                 };
                 $.ajax({
                     url: "https://localhost:7273/api/positions",
+                    headers: {
+                        'Authorization': 'Bearer ' + Token
+                    },
                     type: "PUT",
                     contentType: "application/json",
                     data: JSON.stringify(data)

@@ -1,7 +1,9 @@
 ﻿using API.DTOs.Interviews;
+using API.DTOs.Placements;
 using API.Services;
 using API.Utilities.Handlers;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -9,7 +11,8 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/interviews")]
-    /*[Authorize]*/
+    [Authorize(Roles = "Admin,Operasional")]
+    [EnableCors]
     public class InterviewController : ControllerBase
     {
         private readonly InterviewService _interviewService;
@@ -19,6 +22,27 @@ namespace API.Controllers
             _interviewService = interviewService;
         }
 
+        [HttpGet("CountEmployeeClientInterview")]
+        public IActionResult CountEmployeeinInterview()
+        {
+            var data = _interviewService.GetCountedInterview();
+            if (data == null)
+            {
+                return StatusCode(404, new ResponseHandler<GetCountedClient>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data is not Found",
+                });
+            }
+            return Ok(new ResponseHandler<IEnumerable<GetCountedClient>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Data Success Retrieved",
+                Data = data
+            });
+        }
         [HttpGet("GetAllEmployee")]
         public IActionResult GetAllEmployee()
         {
@@ -174,6 +198,7 @@ namespace API.Controllers
             });
         }
         [HttpPut("UpdateFullInterview")]
+        [AllowAnonymous]
         public IActionResult UpdateFullInterview(UpdateInterviewDto interviewDto)
         {
             var result = _interviewService.UpdateFullInterview(interviewDto);
@@ -317,6 +342,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{guid}")]
+        [AllowAnonymous]
         public IActionResult GetByGuid(Guid guid)
         {
             var result = _interviewService.GetByGuid(guid);

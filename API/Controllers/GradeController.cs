@@ -2,6 +2,7 @@
 using API.Services;
 using API.Utilities.Handlers;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -9,7 +10,8 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/grades")]
-    /*[Authorize]*/
+    [Authorize(Roles = "Admin,Operasional,Trainer")]
+    [EnableCors]
     public class GradeController : ControllerBase
     {
         private readonly GradeService _gradeService;
@@ -19,6 +21,28 @@ namespace API.Controllers
             _gradeService = gradeService;
         }
 
+        [HttpGet("CountResultEmployee")]
+        public IActionResult CountResultEmployee()
+        {
+            var result = _gradeService.CountGradeResult();
+            if (result == null)
+            {
+                return NotFound(new ResponseHandler<CountGradeResult>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data Not Found"
+                });
+            }
+
+            return Ok(new ResponseHandler<CountGradeResult>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success Retrieve Data",
+                Data = result
+            });
+        }
         [HttpGet("CountEmployeeinGrade")]
         public IActionResult CountEmployeeinGrade()
         {

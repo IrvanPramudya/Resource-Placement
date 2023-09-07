@@ -1,9 +1,11 @@
 ﻿using API.Contracts;
 using API.Data;
 using API.DTOs.Employees;
+using API.DTOs.Histories;
 using API.DTOs.Placements;
 using API.Models;
 using API.Repositories;
+using API.Utilities.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Services
@@ -15,9 +17,11 @@ namespace API.Services
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IPlacementRepository _placementRepository;
         private readonly IInterviewRepository _interviewRepository;
+        private readonly IPositionRepository _positionRepository;
+        private readonly IHistoryRepository _historyRepository;
         private readonly PlacementDbContext _dbContext;
 
-        public PlacementService(IPlacementRepository placementRepository, IClientRepository clientRepository, IEmployeeRepository employeeRepository, IInterviewRepository interviewRepository, PlacementDbContext dbContext)
+        public PlacementService(IPlacementRepository placementRepository, IClientRepository clientRepository, IEmployeeRepository employeeRepository, IInterviewRepository interviewRepository, PlacementDbContext dbContext, IPositionRepository positionRepository, IHistoryRepository historyRepository)
         {
             _placementRepository = placementRepository;
             _clientRepository = clientRepository;
@@ -33,8 +37,9 @@ namespace API.Services
             _interviewRepository = interviewRepository;
             _dbContext = dbContext;
             _positionRepository = positionRepository;
+            _historyRepository = historyRepository;
         }
-        public IEnumerable<GetEmployeeClientName> GetEmployeeClientName()
+        public IEnumerable<GetEmployeeClientName>? GetEmployeeClientName()
         {
             var merge = from e in _employeeRepository.GetAll()
                         join p in _placementRepository.GetAll() on e.Guid equals p.Guid
@@ -52,28 +57,6 @@ namespace API.Services
                             EmployeeName = e.FirstName + " " +e.LastName,
                             ClientName = c.Name,
                             PositionName = pos.Name,
-                            
-                        };
-            if (!merge.Any())
-            {
-                return null;
-            }
-            return merge;
-        }
-        public IEnumerable<GetEmployeeClientName> GetEmployeeClientName()
-        {
-            var merge = from e in _employeeRepository.GetAll()
-                        join p in _placementRepository.GetAll() on e.Guid equals p.Guid
-                        join c in _clientRepository.GetAll() on p.ClientGuid equals c.Guid
-                        select new GetEmployeeClientName
-                        {
-                            Guid = p.Guid,
-                            EmployeeGuid = e.Guid,
-                            ClientGuid = c.Guid,
-                            StartDate = p.StartDate,
-                            EndDate = p.EndDate,
-                            EmployeeName = e.FirstName + " " +e.LastName,
-                            ClientName = c.Name
                             
                         };
             if (!merge.Any())
@@ -135,8 +118,8 @@ namespace API.Services
 
         public PlacementDto? Create(NewPlacementDto newPlacementDto)
         {
-            var placement = _placementRepository.Create(newPlacementDto);
-            if (placement is null)
+            var interview = _interviewRepository.GetByGuid(newPlacementDto.Guid);
+            if (interview is null)
             {
                 return null; // Placement is null or not found;
             }
@@ -145,6 +128,7 @@ namespace API.Services
             using var transaction = _dbContext.Database.BeginTransaction();
             try
             {
+                
                 Placement createplacement = newPlacementDto;
                 createplacement.ClientGuid = interview.ClientGuid;
                 createplacement.PositionGuid = interview.PositionGuid;

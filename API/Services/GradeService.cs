@@ -12,15 +12,30 @@ namespace API.Services
         private readonly IAccountRoleRepository _accountRoleRepository;
         private readonly IEmployeeRepository _employeeRepository;
 
-        public GradeService(IGradeRepository gradeRepository)
-        {
-            _gradeRepository = gradeRepository;
         public GradeService(IGradeRepository gradeRepository, IEmployeeRepository employeeRepository, IAccountRepository accountRepository, IAccountRoleRepository accountRoleRepository)
         {
             _gradeRepository = gradeRepository;
             _employeeRepository = employeeRepository;
             _accountRepository = accountRepository;
             _accountRoleRepository = accountRoleRepository;
+        }
+
+        public CountGradeResult? CountGradeResult()
+        {
+            var grade = GetAllEmployeewithGrade();
+            var newgrade = new CountGradeResult();
+            foreach (var item in grade)
+            {
+                if (item.GradeName == "A")
+                {
+                    newgrade.CountGradeA++;
+                }
+                if(item.GradeName == "B")
+                {
+                    newgrade.CountGradeB++;
+                }
+            }
+            return newgrade;
         }
         public CountEmployee CountEmployeeinGrade()
         {
@@ -58,7 +73,8 @@ namespace API.Services
                             Gender = employee.Gender,
                             NIK = employee.NIK,
                             PhoneNumber = employee.PhoneNumber,
-                            Skill = employee.Skill
+                            Skill = employee.Skill,
+                            Status = employee.Status
                         };
             if (!merge.Any())
             {

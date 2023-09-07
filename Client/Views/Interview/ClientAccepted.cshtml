@@ -1,4 +1,5 @@
-﻿@{
+﻿@using System.Net.Http
+@{
 }
 <div class="container-fluid py-4">
     <h1 class="text-center"><span class="badge rounded-pill text-bg-dark">LIST CLIENT ACCEPTED EMPLOYEE</span></h1>
@@ -17,13 +18,14 @@
                     <form>
                         <div class="mb-3" id="inputGuid"> </div>
                         <div class="mb-3" id="inputclientGuid"></div>
+                        <div class="mb-3" id="interviewDate"></div>
                         <div class="mb-3 date-container">
                             <label for="startDate" class="form-label">Start Date</label>
                             <input type="datetime-local" class="form-control" id="startDate" placeholder="StartDate">
                         </div>
                         <div class="mb-3">
                             <label for="endDate" class="form-label">End Date</label>
-                            <input type="datetime-local" class="form-control" id="endDate" placeholder="EndDate">
+                            <input type="datetime-local" class="form-control" id="endDate" placeholder="EndDate" readonly>
                         </div>
                         @*<div class="mb-3">
                             <label for="employeeGuid" class="form-label">Employee Guid</label>
@@ -46,6 +48,15 @@
 
 @section Scripts{
     <script>
+        const Token = '@Context.Session.GetString("JWToken")'
+        $( document ).ajaxComplete(function() {
+            $('[data-bs-placement="top"]').tooltip({
+                "html": true,
+                "delay": {"show": 200, "hide": 0},
+            });
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-placement="top"]')
+            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+        });
         const startDateInput = document.getElementById('startDate');
         const endDateInput = document.getElementById('endDate');
 
@@ -62,13 +73,19 @@
             // Set nilai tanggal akhir
             endDateInput.value = formattedEndDate;
         });
+        
+        
         $.ajax({
-            url: 'https://localhost:7273/api/interviews/GetAllEmployeeAcceptedbyClient'
+            url: 'https://localhost:7273/api/interviews/GetAllEmployeeAcceptedbyClient',
+            headers: {
+                'Authorization': 'Bearer ' + Token
+            }
         }).done((result) => {
             let employeeCard = ""
+            let modalCard = ""
             $.each(result.data, (key, val) => {
-                employeeCard += `<div class="col-lg-4">
-                                                    <div class="card h-100 p-3" data-bs-toggle="modal" data-bs-target="#modalAddPlacement">
+                employeeCard += `<div class="col-lg-4" data-bs-placement="top"  onclick="getGuid('${val.guid}','${val.clientGuid}','${val.interviewDate}')" data-bs-custom-class="custom-tooltip" data-bs-title="Take ${val.fullName} to Placement">
+                                                <div class="card h-100 p-3" data-bs-toggle="modal" data-bs-target="#modalAddPlacement" >
                                                 <div class="overflow-hidden position-relative border-radius-lg bg-cover h-100" style="background-image: url('~/soft-ui/assets/img/ivancik.jpg');">
                                                     <span class="mask bg-gradient-dark"></span>
                                                     <div class="card-body position-relative z-index-1 d-flex flex-column h-100 p-3">
@@ -90,12 +107,48 @@
                                                 </div>
                                             </div>
                                         </div>`
-                $("#inputGuid").html(`<input type="hidden" value="${val.guid}" id="guidEmployee" />`)
-                $("#inputclientGuid").html(`<input type="hidden" value="${val.clientGuid}" id="clientGuid" />`)
 
             })
             $("#employeeCard").html(employeeCard)
         })
+        function getGuid(Guid,clientGuid,interviewDate) {
+            $.ajax({
+                url: "https://localhost:7273/api/grades/GetUngradedEmployee",
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                }
+            }).done((result) => {
+                $("#inputGuid").append(`<input type="hidden" value="${Guid}" id="guidEmployee" />`)
+                $("#inputclientGuid").html(`<input type="hidden" value="${clientGuid}" id="clientGuid" />`)
+                $("#interviewDate").html(`<input type="hidden" value="${interviewDate}" id="interviewDateEmployee" />`)
+                getinterviewDate()
+
+            })
+        }
+        function getinterviewDate()
+        {
+            var interviewGuid = $("#interviewDateEmployee").val()
+            console.log(interviewGuid)
+            $("#startDate").flatpickr({
+                enableTime: true,
+                time_24hr: true,
+                altInput: true,
+                minTime: "09:00",
+                maxTime: "18:00",
+                altFormat: "F j, Y H:i",
+                dateFormat: "Y-m-dTH:i",
+                disable: [
+                    function (date) {
+                        return (date.getDay() === 0 || date.getDay() === 6);
+                    },
+                    function (date) {
+                        var interviewDate = new Date(interviewGuid);
+
+                        return date < interviewDate;
+                    },
+                ],
+            })
+        }
         function addPlacement() {
             var placementData = {
                 startDate: $("#startDate").val(),
@@ -108,7 +161,8 @@
                 url: "https://localhost:7273/api/placements",
                 type: "POST",
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + Token
                 },
                 data: JSON.stringify(placementData),
             }).done(function (result) {

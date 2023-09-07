@@ -1,4 +1,5 @@
-﻿@{
+﻿@using System.Net.Http
+@{
     ViewData["Title"] = "Account Role";
     Layout = "AdminLayout";
 }
@@ -82,13 +83,31 @@
 </div>
 @section Scripts{
     <script>
-        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="modal"]')
-        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+        const Token = '@Context.Session.GetString("JWToken")'
 
+        $( document ).ajaxComplete(function() {
+            $('[data-bs-placement="top"]').tooltip({
+                "html": true,
+                "delay": {"show": 200, "hide": 0},
+            });
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-placement="top"]')
+            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+        });
+    </script>
+
+    <script>    
         $(document).ready(function () {
             loadAccountRoleData();
+
+            var dataTableButtons = $('.dt-button');
+
+            dataTableButtons.removeClass('dt-button');
+
             $.ajax({
-                url: "https://localhost:7273/api/accountroles/GetEmployeehasAccount"
+                url: "https://localhost:7273/api/accountroles/GetEmployeehasAccount",
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                }
             }).done(function (result) {
                 console.log(result)
                 let getName = ""
@@ -99,7 +118,10 @@
                 $('.selectName').html(getName)
             })
             $.ajax({
-                url: "https://localhost:7273/api/roles"
+                url: "https://localhost:7273/api/roles",
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                }
             }).done(function (result) {
                 console.log(result)
                 let getRole = ""
@@ -116,7 +138,10 @@
                 ajax: {
                     url: "https://localhost:7273/api/accountroles/GetAccountRolewithFullName",
                     dataType: "JSON",
-                    dataSrc: "data"
+                    dataSrc: "data",
+                    headers: {
+                        'Authorization': 'Bearer ' + Token
+                    }
                 },
                 columns: [
                     {
@@ -159,33 +184,39 @@
                     {
                         extend: 'copy',
                         text: '<i class="bx bxs-copy"></i>',
-                        className: 'btn btn-custom'
+                        className: 'btn btn-primary',
+                        titleAttr: 'Copy Table'
                     },
                     {
                         extend: 'csv',
                         text: '<i class="bx bxs-file-export"></i>',
-                        className: 'btn btn-custom'
+                        className: 'btn btn-success',
+                        titleAttr: 'Import to CSV'
                     },
                     {
                         extend: 'excel',
                         text: '<i class="bx bx-file-blank"></i>',
-                        className: 'btn btn-custom'
+                        className: 'btn btn-warning',
+                        titleAttr: 'Import to Excel'
                     },
                     {
                         extend: 'pdf',
                         text: '<i class="bx bxs-file-pdf"></i>',
-                        className: 'btn btn-custom'
+                        className: 'btn btn-dark',
+                        titleAttr: 'Import to PDF'
                     },
                     {
                         extend: 'print',
                         text: '<i class="bx bx-printer"></i>',
-                        className: 'btn btn-custom'
+                        className: 'btn btn-secondary',
+                        titleAttr: 'Print Table'
                     },
                     {
                         extend: 'colvis',
                         text: '<i class="bx bx-show-alt"></i>', // Ganti teks dengan ikon Boxicons
-                        className: 'btn btn-custom-column-vis'
-                    }
+                        className: 'btn btn-custom-column-vis btn-outline-info',
+                        titleAttr: 'Column Visibility'
+                    },
                 ],
                 "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                 "pageLength": 25
@@ -202,7 +233,8 @@
                 url: "https://localhost:7273/api/accountroles",
                 type: "POST",
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + Token
                 },
                 data: JSON.stringify(accountroleData),
             }).done(function (result) {
@@ -236,6 +268,9 @@
                 if (result.isConfirmed) {
                     $.ajax({
                         url: "https://localhost:7273/api/accountroles?guid=" + guid,
+                        headers: {
+                            'Authorization': 'Bearer ' + Token
+                        },
                         type: "DELETE",
                     }).done(function (result) {
                         Swal.fire({
@@ -254,8 +289,14 @@
         function ShowUpdateAccountRole(guid) {
             $.ajax({
                 url: "https://localhost:7273/api/accountroles/" + guid,
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                },
                 type: "GET",
-                dataType: "json"
+                dataType: "json",
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                }
             }).done((result) => {
                 console.log(result)
                 $("#guidUpd").val(result.data.guid);
@@ -270,7 +311,6 @@
 
         function UpdateAccountRole() {
 
-
             let data = {
                 guid: $("#guidUpd").val(),
                 accountGuid: $("#accountguidUpd").val(),
@@ -280,7 +320,10 @@
                 url: "https://localhost:7273/api/accountroles",
                 type: "PUT",
                 contentType: "application/json",
-                data: JSON.stringify(data)
+                data: JSON.stringify(data),
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                }
             }).done((result) => {
                 Swal.fire({
                     title: 'Success',

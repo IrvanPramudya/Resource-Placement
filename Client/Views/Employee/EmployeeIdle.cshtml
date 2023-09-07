@@ -1,4 +1,5 @@
-﻿@{
+﻿@using System.Net.Http
+@{
 }
 <div class="col-12 mt-4">
     <p class="text-center h1 fw-bold mb-4 mx-auto mt-1">Employee Idle</p>
@@ -52,8 +53,21 @@
 </div>
 @section Scripts{
     <script>
+        const Token = '@Context.Session.GetString("JWToken")'
+        $( document ).ajaxComplete(function() {
+            $('[data-bs-placement="top"]').tooltip({
+                "html": true,
+                "delay": {"show": 200, "hide": 0},
+            });
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-placement="top"]')
+            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+        });
         $.ajax({
-            url: "https://localhost:7273/api/clients"
+            url: "https://localhost:7273/api/clients",
+            headers: {
+                'Authorization': 'Bearer ' + Token,
+                'Content-Type': 'application/json'
+            }
         }).done(function (result) {
             // Assuming the API response contains a property named "totalEmployees"
             console.log(result)
@@ -69,12 +83,34 @@
                     loadPositionbyClientGuid(selectedGuid);
                 }
             });
+            $('#guidClient').select2({
+                theme: "bootstrap-5",
+                dropdownParent: $('#modalAddInterview')
+            });
+        })
+        $("#interviewDate").flatpickr({
+            enableTime: true,
+            time_24hr: true,
+            altInput: true,
+            minTime: "09:00",
+            maxTime: "18:00",
+            altFormat: "F j, Y H:i",
+            dateFormat: "Y-m-dTH:i",
+            minDate: "today",
+            disable: [
+                function (date) {
+                    return (date.getDay() === 0 || date.getDay() === 6);
+                }
+            ]
         })
         function loadPositionbyClientGuid(guidClient) {
             $.ajax({
                 url: "https://localhost:7273/api/positions/GetPosition/" + guidClient,
                 type: "GET",
-                dataType: "json"
+                dataType: "json",
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                }
             }).done((result) => {
                 console.log(result)
                 let getPositioninInterview = ""
@@ -83,18 +119,26 @@
                                                 <option value="default">Select a position...</option>
                                             </select>`
                 $.each(result.data, (key, val) => {
-                    getPositioninInterview += ` <option value="${val.guid}">${val.positionName}</option>`
+                    getPositioninInterview += ` <option value="${val.guid}">${val.positionName} (${val.capacity})</option>`
                 })
                 $('#selectPosition').html(selectLabel)
                 $('.selectPositioninInterview').append(getPositioninInterview)
-        })
+
+                $('#positionGuid').select2({
+                    theme: "bootstrap-5",
+                    dropdownParent: $('#modalAddInterview')
+                });
+            })
         }
         $.ajax({
-            url: "https://localhost:7273/api/employees/GetAllEmployeeinIdle"
+            url: "https://localhost:7273/api/employees/GetAllEmployeeinIdle",
+            headers: {
+                'Authorization': 'Bearer ' + Token
+            }
         }).done((result)=>{
             let cardEmployee =""
             $.each(result.data,(key,val)=>{
-                cardEmployee += `<div class="col-xl-3 col-md-6 mb-xl-0 mb-4 ms-2">
+                cardEmployee += `<div class="col-xl-3 col-md-6 mb-xl-0 mb-4 ms-2 cursor-pointer"  onclick="getGuid('${val.employeeGuid}')" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Make an Interview for ${val.fullName}">
                                     <div class="card card-blog card-plain" data-bs-toggle="modal" data-bs-target="#modalAddInterview">
                                 <div class="position-relative">
                                     <a class="d-block shadow-xl border-radius-xl">
@@ -129,10 +173,19 @@
                                 </div>
                             </div>
                         </div>`
-                $("#inputGuid").html(`<input type="hidden" value="${val.employeeGuid}" id="guidEmployee" />`)
             })
             $("#employeeCard").html(cardEmployee)
         })
+        function getGuid(Guid) {
+            $.ajax({
+                url: "https://localhost:7273/api/grades/GetUngradedEmployee",
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                }
+            }).done((result) => {
+                $("#inputGuid").append(`<input type="hidden" value="${Guid}" id="guidEmployee" />`)
+            })
+        }
         function addInterview() {
             var interviewData = {
                 guid: $("#guidEmployee").val(),
@@ -146,6 +199,7 @@
                 url: "https://localhost:7273/api/interviews",
                 type: "POST",
                 headers: {
+                    'Authorization': 'Bearer ' + Token,
                     'Content-Type': 'application/json'
                 },
                 data: JSON.stringify(interviewData),

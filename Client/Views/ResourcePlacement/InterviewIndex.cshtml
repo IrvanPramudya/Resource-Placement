@@ -1,4 +1,5 @@
-﻿@{
+﻿@using System.Net.Http
+@{
     Layout = "AdminLayout";
 }
 
@@ -28,11 +29,11 @@
                         </div>
                         <div class="mb-3">
                             <label for="interviewDate" class="form-label"> Interview Date</label>
-                            <input type="datetime-local" class="form-control" id="interviewDate" placeholder="Interview Date">
+                            <input type="datetime-local" class="form-control" id="interviewDate" placeholder="Interview Date" required>
                         </div>
                         <div class="mb-3">
                             <label for="clientGuid" class="form-label"> Client Name</label>
-                            <select class="form-select selectClientinInterview" aria-label="Default select example" id="guidClient">
+                            <select class="form-select selectClientinInterview" aria-label="Default select example" id="guidClient" required>
                                 <option value="default">Select a client...</option>
                             </select>
                         </div>
@@ -41,7 +42,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="text" class="form-label">Notes</label>
-                            <input type="text" class="form-control" id="text" placeholder="Text">
+                            <input type="text" class="form-control" id="text" placeholder="Text" required>
                         </div>
                     </form>
                 </div>
@@ -111,14 +112,55 @@
 </div>
 @section Scripts{
     <script>
-        const tooltipTriggerList = document.querySelectorAll('[data-bs-placement="top"]')
-        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+        const Token = '@Context.Session.GetString("JWToken")'
+        $.fn.dataTable.ext.errMode = 'throw';
+        $("#interviewDate").flatpickr({
+            enableTime: true,
+            time_24hr: true,
+            altInput: true,
+            minTime: "09:00",
+            maxTime: "18:00",
+            altFormat: "F j, Y H:i",
+            dateFormat: "Y-m-dTH:i",
+            minDate: "today",
+            disable: [
+                function (date) {
+                    return (date.getDay() === 0 || date.getDay() === 6 );
+                }
+            ]
+        })
 
+        // Ambil elemen input datetime-local
+        var interviewDateInput = document.getElementById("interviewDate");
+
+        // Atur atribut min ke tanggal saat ini
+        var now = new Date();
+        var formattedNow = now.toISOString().substring(0, 16); // Format tanggal sesuai tipe datetime-local
+        interviewDateInput.setAttribute("min", formattedNow);
+    </script>
+
+    <script>
+        
+        $( document ).ajaxComplete(function() {
+            $('[data-bs-placement="top"]').tooltip({
+                "html": true,
+                "delay": {"show": 200, "hide": 0},
+            });
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-placement="top"]')
+            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+        });
         $(document).ready(function () {
             loadInterviewData();
+            
+            var dataTableButtons = $('.dt-button');
 
+            dataTableButtons.removeClass('dt-button');
+            
             $.ajax({
-                url: "https://localhost:7273/api/interviews/GetRemainingEmployeeinInterview"
+                url: "https://localhost:7273/api/interviews/GetRemainingEmployeeinInterview",
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                }
             }).done(function (result) {
                 console.log(result)
                 let getName = ""
@@ -127,19 +169,34 @@
                     getName += ` <option value="${val.guid}">${val.fullName}</option>`
                 })
                 $('.selectNameinInterview').html(getName)
+                $('#guidEmployee').select2({
+                    theme: "bootstrap-5",
+                    dropdownParent: $('#modalAddInterview')
+                });
             })
         });
-            $.ajax({
-                url: "https://localhost:7273/api/clients"
-            }).done(function (result) {
+        $.ajax({
+            url: "https://localhost:7273/api/clients",
+            headers: {
+                'Authorization': 'Bearer ' + Token
+            }
+        }).done(function (result) {
                 // Assuming the API response contains a property named "totalEmployees"
+            console.log(result)
+            let getClientinInterview = ""
+            $.each(result.data, (key, val) => {
                 console.log(result)
-                let getClientinInterview = ""
-                $.each(result.data, (key, val) => {
-                    console.log(result)
-                    getClientinInterview += ` <option value="${val.guid}">${val.name}</option>`
-                })
-            $('.selectClientinInterview').append(getClientinInterview);
+                getClientinInterview += ` <option value="${val.guid}">${val.name}</option>`
+            })
+            $('.selectClientinInterview').append(getClientinInterview)
+            $('#guidClient').select2({
+                theme: "bootstrap-5",
+                dropdownParent: $('#modalAddInterview')
+            });
+            $('#clientGuidUpd').select2({
+                theme: "bootstrap-5",
+                dropdownParent: $('#modalUpdateInterview')
+            });
             $('.selectClientinInterview').on('change', function () {
                 const selectedGuid = $(this).val();
                 if (selectedGuid !== 'default') {
@@ -153,7 +210,10 @@
             $.ajax({
                 url: "https://localhost:7273/api/positions/GetPosition/" + guidClient,
                 type: "GET",
-                dataType: "json"
+                dataType: "json",
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                }
             }).done((result) => {
                 console.log(result)
                 let getPositioninInterview = ""
@@ -166,20 +226,37 @@
                                         <option value="default">Select a position...</option>
                                     </select>`
                 $.each(result.data, (key, val) => {
-                    getPositioninInterview += ` <option value="${val.guid}">${val.positionName}</option>`
-            })
+                    getPositioninInterview += ` <option value="${val.guid}">${val.positionName} (${val.capacity})</option>`
+                })
                 $('#selectPosition').html(selectLabel)
                 $('#selectPositionUpd').html(selectLabelUpd)
                 $('.selectPositioninInterview').append(getPositioninInterview)
+                $('#positionGuid').select2({
+                    theme: "bootstrap-5",
+                    dropdownParent: $('#modalAddInterview')
+                });
+                $('#positionGuidUpd').select2({
+                    theme: "bootstrap-5",
+                    dropdownParent: $('#modalUpdateInterview')
+                });
             })
         }
-
+        
         function loadInterviewData() {
             $('#interviewTable').DataTable({
                 ajax: {
                     url: "https://localhost:7273/api/interviews/InterviewInformatif",
                     dataType: "JSON",
-                    dataSrc: "data"
+                    dataSrc: "data",
+                    headers: {
+                        'Authorization': 'Bearer ' + Token
+                    }
+                },
+                "language": {
+                    "zeroRecords": "No Data Available",
+                    "info": "Showing page _PAGE_ of _PAGES_",
+                    "infoEmpty": "No records available",
+                    "infoFiltered": "(filtered from _MAX_ total records)"
                 },
                 columns: [
                     {
@@ -240,11 +317,46 @@
                     }
                 ],
                 "dom":
-                    "<'row'<'col-md-8'B><'col-md-4'f>>" + 
+                    "<'row'<'col-md-8' B><'col-md-4'f>>" + 
                     "<'row'<'col-sm-12'tr>>" + // Tabel
                     "<'row'<'col-md-5'i><'col-md-3 mt-2 mx-auto'l><'col-md-4'p>>", 
                 "buttons": [
-                    'copy', 'csv', 'excel', 'pdf', 'print', 'colvis'
+                    {
+                        extend: 'copy',
+                        text: '<i class="bx bxs-copy"></i>',
+                        className: 'btn btn-primary',
+                        titleAttr: 'Copy Table'
+                    },
+                    {
+                        extend: 'csv',
+                        text: '<i class="bx bxs-file-export"></i>',
+                        className: 'btn btn-success',
+                        titleAttr: 'Import to CSV'
+                    },
+                    {
+                        extend: 'excel',
+                        text: '<i class="bx bx-file-blank"></i>',
+                        className: 'btn btn-warning',
+                        titleAttr: 'Import to Excel'
+                    },
+                    {
+                        extend: 'pdf',
+                        text: '<i class="bx bxs-file-pdf"></i>',
+                        className: 'btn btn-dark',
+                        titleAttr: 'Import to PDF'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="bx bx-printer"></i>',
+                        className: 'btn btn-secondary',
+                        titleAttr: 'Print Table'
+                    },
+                    {
+                        extend: 'colvis',
+                        text: '<i class="bx bx-show-alt"></i>', // Ganti teks dengan ikon Boxicons
+                        className: 'btn btn-custom-column-vis btn-outline-info',
+                        titleAttr: 'Column Visibility'
+                    },
                 ],
                 "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                 "pageLength": 25
@@ -264,6 +376,7 @@
                 url: "https://localhost:7273/api/interviews",
                 type: "POST",
                 headers: {
+                    'Authorization': 'Bearer ' + Token,
                     'Content-Type': 'application/json'
                 },
                 data: JSON.stringify(interviewData),
@@ -299,6 +412,9 @@
                     $.ajax({
                         url: "https://localhost:7273/api/interviews?guid=" + guid,
                         type: "DELETE",
+                        headers: {
+                            'Authorization': 'Bearer ' + Token
+                        }
                     }).done(function (result) {
                         Swal.fire({
                             title: 'Deleted',
@@ -309,6 +425,7 @@
                         });
                     }).fail(function (error) {
                         alert("Failed to delete data. Please try again!");
+                        console.log(error)
                     });
                 }
             });
@@ -317,7 +434,10 @@
             $.ajax({
                 url: "https://localhost:7273/api/interviews/" + guid,
                 type: "GET",
-                dataType: "json"
+                dataType: "json",
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                }
             }).done((result) => {
                 console.log(result)
                 $("#guidEmployeeUpd").val(result.data.guid);
@@ -346,7 +466,10 @@
                 url: "https://localhost:7273/api/interviews",
                 type: "PUT",
                 contentType: "application/json",
-                data: JSON.stringify(data)
+                data: JSON.stringify(data),
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                }
             }).done((result) => {
                 Swal.fire({
                     title: 'Success',
@@ -364,5 +487,6 @@
                 console.log(error)
             })
         }
+
     </script>
 }

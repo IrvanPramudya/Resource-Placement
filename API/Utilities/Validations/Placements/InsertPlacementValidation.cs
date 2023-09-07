@@ -11,8 +11,6 @@ namespace API.Utilities.Validations.Placements
             RuleFor(Placement=>Placement.EndDate)
                 .NotEmpty().WithMessage("End Date Required")
                 .GreaterThan(Placement=>Placement.StartDate.AddDays(30));
-            RuleFor(Placement => Placement.EmployeeGuid).NotEmpty().WithMessage("Employee Guid Required");
-            RuleFor(Placement => Placement.ClientGuid).NotEmpty().WithMessage("Client Guid Required");
             RuleFor(Placement => Placement.Guid).NotEmpty().WithMessage("Employee Guid Required");
         }
     }
