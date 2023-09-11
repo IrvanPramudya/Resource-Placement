@@ -69,29 +69,38 @@
          }).done((result)=>{
              let clientCard = ""
              $.each(result.data,(key,val)=>{
-                clientCard += `<div class="cursor-pointer col-xl-4 col-lg-5 col-md-7 mx-auto mt-2" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Add Position for ${val.name}" data-bs-toggle="modal" data-bs-target="#modalAddPosition">
+                clientCard += `<div class="cursor-pointer col-xl-4 col-lg-5 col-md-7 mx-auto mt-2" onclick="getGuid('${val.clientGuid}')" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Add Position for ${val.name}" data-bs-toggle="modal" data-bs-target="#modalAddPosition">
                                     <div class="card z-index-0">
                                         <div class="card-header text-center pt-4">
                                              <h5><span class="badge rounded-pill text-bg-danger">${val.name}</span></h5>
                                         </div>
                                         <div class="card-body">
                                             <div class="row">
-                                                <div class="col-6">Email</div>
-                                                <div class="col-6">${val.email}</div>
+                                                <div class="col-4">Email</div>
+                                                <div class="col-8">${val.email}</div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-6">Capacity</div>
-                                                <div class="col-6">${val.capacity}</div>
+                                                <div class="col-4">Capacity</div>
+                                                <div class="col-8">${val.capacity}</div>
                                             </div>
                                         </div>
                                     </div>
                                </div>
                               `
-                $("#inputclientGuid").html(`<input type="hidden" value="${val.clientGuid}" id="clientGuid" />`)
              })
              $("#clientCard").html(clientCard)
              
          })
+        function getGuid(Guid) {
+            $.ajax({
+                url: "https://localhost:7273/api/grades/GetUngradedEmployee",
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                }
+            }).done((result) => {
+                $("#inputclientGuid").append(`<input type="hidden" value="${Guid}" id="clientGuid" />`)
+            })
+        }
         function addPosition() {
             var positionData = {
                 clientGuid: $("#clientGuid").val(),

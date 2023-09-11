@@ -82,9 +82,10 @@
             }
         }).done((result) => {
             let employeeCard = ""
+            let modalCard = ""
             $.each(result.data, (key, val) => {
-                employeeCard += `<div class="col-lg-4" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Take ${val.fullName} to Placement">
-                                                <div class="card h-100 p-3" data-bs-toggle="modal" data-bs-target="#modalAddPlacement" onclick="getinterviewDate()">
+                employeeCard += `<div class="col-lg-4" data-bs-placement="top"  onclick="getGuid('${val.guid}','${val.clientGuid}','${val.interviewDate}')" data-bs-custom-class="custom-tooltip" data-bs-title="Take ${val.fullName} to Placement">
+                                                <div class="card h-100 p-3" data-bs-toggle="modal" data-bs-target="#modalAddPlacement" >
                                                 <div class="overflow-hidden position-relative border-radius-lg bg-cover h-100" style="background-image: url('~/soft-ui/assets/img/ivancik.jpg');">
                                                     <span class="mask bg-gradient-dark"></span>
                                                     <div class="card-body position-relative z-index-1 d-flex flex-column h-100 p-3">
@@ -106,13 +107,24 @@
                                                 </div>
                                             </div>
                                         </div>`
-                $("#inputGuid").html(`<input type="hidden" value="${val.guid}" id="guidEmployee" />`)
-                $("#inputclientGuid").html(`<input type="hidden" value="${val.clientGuid}" id="clientGuid" />`)
-                $("#interviewDate").html(`<input type="hidden" value="${val.interviewDate}" id="interviewDateEmployee" />`)
 
             })
             $("#employeeCard").html(employeeCard)
         })
+        function getGuid(Guid,clientGuid,interviewDate) {
+            $.ajax({
+                url: "https://localhost:7273/api/grades/GetUngradedEmployee",
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                }
+            }).done((result) => {
+                $("#inputGuid").append(`<input type="hidden" value="${Guid}" id="guidEmployee" />`)
+                $("#inputclientGuid").html(`<input type="hidden" value="${clientGuid}" id="clientGuid" />`)
+                $("#interviewDate").html(`<input type="hidden" value="${interviewDate}" id="interviewDateEmployee" />`)
+                getinterviewDate()
+
+            })
+        }
         function getinterviewDate()
         {
             var interviewGuid = $("#interviewDateEmployee").val()

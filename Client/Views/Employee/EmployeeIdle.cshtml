@@ -138,7 +138,7 @@
         }).done((result)=>{
             let cardEmployee =""
             $.each(result.data,(key,val)=>{
-                cardEmployee += `<div class="col-xl-3 col-md-6 mb-xl-0 mb-4 ms-2 cursor-pointer" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Make an Interview for ${val.fullName}">
+                cardEmployee += `<div class="col-xl-3 col-md-6 mb-xl-0 mb-4 ms-2 cursor-pointer"  onclick="getGuid('${val.employeeGuid}')" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Make an Interview for ${val.fullName}">
                                     <div class="card card-blog card-plain" data-bs-toggle="modal" data-bs-target="#modalAddInterview">
                                 <div class="position-relative">
                                     <a class="d-block shadow-xl border-radius-xl">
@@ -173,10 +173,19 @@
                                 </div>
                             </div>
                         </div>`
-                $("#inputGuid").html(`<input type="hidden" value="${val.employeeGuid}" id="guidEmployee" />`)
             })
             $("#employeeCard").html(cardEmployee)
         })
+        function getGuid(Guid) {
+            $.ajax({
+                url: "https://localhost:7273/api/grades/GetUngradedEmployee",
+                headers: {
+                    'Authorization': 'Bearer ' + Token
+                }
+            }).done((result) => {
+                $("#inputGuid").append(`<input type="hidden" value="${Guid}" id="guidEmployee" />`)
+            })
+        }
         function addInterview() {
             var interviewData = {
                 guid: $("#guidEmployee").val(),

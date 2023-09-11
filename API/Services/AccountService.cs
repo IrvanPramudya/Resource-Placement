@@ -43,7 +43,7 @@ namespace API.Services
         }
         public GetAccountDetail? DetailAccount(Guid id)
         {
-            var merge = from employee in _employeeRepository.GetAll()
+            var merge = from employee in _employeeRepository.GetAll() where employee.Guid == id
                         join grade in _gradeRepository.GetAll() on employee.Guid equals grade.Guid into GrdGrp
                         from grade in GrdGrp.DefaultIfEmpty()
                         join account in _accountRepository.GetAll() on employee.Guid equals account.Guid
@@ -58,7 +58,6 @@ namespace API.Services
                         from position in PosGrp.DefaultIfEmpty()
                         join role in _roleRepository.GetAll() on accountrole.RoleGuid equals role.Guid into RoleGrp
                         from role in RoleGrp.DefaultIfEmpty()
-                        where employee.Guid == id
                         select new GetAccountDetail
                         {
                             FullName = employee.FirstName + " " + employee.LastName,

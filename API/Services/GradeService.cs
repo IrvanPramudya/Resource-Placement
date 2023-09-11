@@ -30,7 +30,7 @@ namespace API.Services
                 {
                     newgrade.CountGradeA++;
                 }
-                else
+                if(item.GradeName == "B")
                 {
                     newgrade.CountGradeB++;
                 }

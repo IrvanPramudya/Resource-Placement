@@ -12,13 +12,14 @@ namespace API.Services
 {
     public class PlacementService
     {
+        private readonly IPlacementRepository _placementRepository;
         private readonly IClientRepository _clientRepository;
         private readonly IEmployeeRepository _employeeRepository;
-        private readonly IPlacementRepository _placementRepository;
         private readonly IInterviewRepository _interviewRepository;
         private readonly IPositionRepository _positionRepository;
         private readonly IHistoryRepository _historyRepository;
         private readonly PlacementDbContext _dbContext;
+
 
         public PlacementService(IPlacementRepository placementRepository, IClientRepository clientRepository, IEmployeeRepository employeeRepository, IInterviewRepository interviewRepository, PlacementDbContext dbContext, IPositionRepository positionRepository, IHistoryRepository historyRepository)
         {
@@ -114,6 +115,7 @@ namespace API.Services
             {
                 return null; // Placement is null or not found;
             }
+
             using var transaction = _dbContext.Database.BeginTransaction();
             try
             {
@@ -154,7 +156,6 @@ namespace API.Services
                 transaction.Rollback();
                 return null;
             }
-            
         }
 
         public int Update(PlacementDto placementDto)

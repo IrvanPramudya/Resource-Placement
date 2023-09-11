@@ -362,7 +362,6 @@ namespace API.Services
                 transaction.Rollback();
                 return null;
             }
-
         }
 
         public int Update(NewInterviewDto interviewDto)

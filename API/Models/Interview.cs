@@ -21,6 +21,7 @@ namespace API.Models
         [Column("status")]
         public InterviewLevel Status { get; set; }
 
+
         //Cardinality
         public Employee? Employee { get; set; }
         public Client? Client { get; set; }
